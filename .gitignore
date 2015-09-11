@@ -1,0 +1,5 @@
+.ctags
+tags
+vendor
+composer.lock
+phpunit.xml
