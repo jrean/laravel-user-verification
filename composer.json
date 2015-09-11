@@ -1,0 +1,13 @@
+{
+    "name": "jrean/larave-user-verification",
+    "description": "User Email Verification For Laravel 5",
+    "keywords": ["laravel", "framework", "user verification", "email verification"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean Ragouin",
+            "email": "go@askjong.com"
+        }
+    ]
+
+}
