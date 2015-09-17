@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Jrean\\LaravelUserVerification\\": "src/"
+            "Jrean\\UserVerification\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jrean\\Tests\\LaravelUserVerification\\": "tests/"
+            "Jrean\\Tests\\UserVerification\\": "tests/"
         }
     },
     "config": {
