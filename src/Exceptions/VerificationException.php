@@ -9,6 +9,5 @@ class VerificationException extends \Exception
      *
      * @var string
      */
-    protected $message = 'You must provide an Eloquent User instance.';
-
+    protected $message = 'The model instance provided is not compliant with this package.';
 }
