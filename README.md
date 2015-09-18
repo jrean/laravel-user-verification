@@ -174,10 +174,10 @@ represent the verification token to verify.
 
 Do something if the verification fails.
 
-#### Attributes/Properties
+#### Custom attributes/properties
 
-The five (5) following protected attributes/properties should be extended and customized
-to your needs.
+To customize the package behaviour and the redirects you can implement and
+customize five (5) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
@@ -195,7 +195,7 @@ Where to redirect after a successful verification token verification.
 
 Where to redirect after a failling verification token verification.
 
-* `$verifiationErrorView = '';`
+* `$verifiationErrorView = 'errors.user-verification';`
 
 Name of the view returned by the getVerificationError method.
 

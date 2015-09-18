@@ -106,6 +106,6 @@ trait VerifiesUsers
      */
     public function verificationErrorView()
     {
-        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'user-verification';
+        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'errors.user-verification';
     }
 }
