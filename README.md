@@ -153,8 +153,6 @@ over the four (4) previous listed public methods.
 ### Trait
 
 The package also offers a trait for a quick implementation.
-The trait contains three (3) public methods and four (4) protected
-attributes/properties. Feel free to extend/overwrite/customize.
 
 #### Actions
 
