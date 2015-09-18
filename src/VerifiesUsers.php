@@ -7,41 +7,6 @@ use Jrean\UserVerification\Facades\UserVerification;
 trait VerifiesUsers
 {
     /**
-     * Where to reditect if the user is already verified.
-     *
-     * @var string
-     */
-    protected $redirectIfVerified = '/';
-
-    /**
-     * Where to redirect after a successful verification token generation.
-     *
-     * @var string
-     */
-    protected $redirectAfterTokenGeneration = '/';
-
-    /**
-     * Where to redirect after a successful verification token verification.
-     *
-     * @var string
-     */
-    protected $redirectAfterVerification = '/';
-
-    /**
-     *  Where to redirect after a failling verification token verification.
-     *
-     * @var string
-     */
-    protected $redirectIfVerificationFails = '/auth/verification/error';
-
-    /**
-     * Name of the view returned by the getVerificationError method.
-     *
-     * @var mixed
-     */
-    protected $verificationErrorView = '';
-
-    /**
      * Handle the verification token generation.
      *
      * @return Response
@@ -54,7 +19,7 @@ trait VerifiesUsers
 
         UserVerification::send($user);
 
-        return redirect($this->redirectAfterTokenGeneration);
+        return redirect($this->redirectAfterTokenGeneration());
     }
 
     /**
@@ -68,14 +33,14 @@ trait VerifiesUsers
         $user = auth()->user();
 
         if (UserVerification::isVerified($user)) {
-            return redirect($this->redirectIfVerified);
+            return redirect($this->redirectIfVerified());
         }
 
         if ( ! UserVerification::process($user, $token)) {
-            return redirect($this->redirectIfVerificationFails);
+            return redirect($this->redirectIfVerificationFails());
         }
 
-        return redirect($this->redirectAfterVerification);
+        return redirect($this->redirectAfterVerification());
     }
 
     /**
@@ -88,9 +53,59 @@ trait VerifiesUsers
         $user = auth()->user();
 
         if ( ! UserVerification::isVerified($user)) {
-            return view($this->verificationErrorView);
+            return view($this->verificationErrorView());
         }
 
-        return redirect($this->redirectIfVerified);
+        return redirect($this->redirectIfVerified());
+    }
+
+    /**
+     * Where to reditect if the user is already verified.
+     *
+     * @return string
+     */
+    public function redirectIfVerified()
+    {
+        return property_exists($this, 'redirectIfVerified') ? $this->redirectIfVerified : '/';
+    }
+
+    /**
+     * Where to redirect after a successful verification token generation.
+     *
+     * @return string
+     */
+    public function redirectAfterTokenGeneration()
+    {
+        return property_exists($this, 'redirectAfterTokenGeneration') ? $this->redirectAfterTokenGeneration : '/';
+    }
+
+    /**
+     * Where to redirect after a successful verification token verification.
+     *
+     * @return string
+     */
+    public function redirectAfterVerification()
+    {
+        return property_exists($this, 'redirectAfterVerification') ? $this->redirectAfterVerification : '/';
+    }
+
+    /**
+     * Where to redirect after a failling verification token verification.
+     *
+     * @return string
+     */
+    public function redirectIfVerificationFails()
+    {
+        return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : '/auth/verification/error';
+    }
+
+    /**
+     * Name of the view returned by the getVerificationError method.
+     *
+     * @return string
+     */
+    public function verificationErrorView()
+    {
+        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'user-verification';
     }
 }
