@@ -213,7 +213,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 - Import the `VerifiesUsers` trait
 - Overwrite and customize the redirect path attributes/properties
 - Overwrite and customize the view name for the getVerificationError method
-- Create the view according to the defined path.
+- Create the verification error view according to the defined path.
 - Overwrite the postRegister method
 
 ```
