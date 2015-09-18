@@ -2,10 +2,9 @@
 
 namespace Jrean\UserVerification;
 
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Database\Schema\Builder;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Jrean\UserVerification\VerificationException;
 
 class UserVerification
@@ -27,8 +26,8 @@ class UserVerification
     /**
      * Constructor.
      *
-     * @param \Illuminate\Contracts\Mail\Mailer $mailer
-     * @param \Illuminate\Database\Schema\Builder $schema
+     * @param  \Illuminate\Contracts\Mail\Mailer $mailer
+     * @param  \Illuminate\Database\Schema\Builder $schema
      *
      * @return void
      */
@@ -40,7 +39,7 @@ class UserVerification
     }
 
     /**
-     * Generate a verification token for that user.
+     * Generate and save a verification token the given user.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable $model
      * @return boolean
@@ -51,7 +50,7 @@ class UserVerification
     }
 
     /**
-     * Send by email the verification token.
+     * Send by email a link containing the verification token.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable $model
      * @returnt boolean
