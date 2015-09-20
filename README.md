@@ -219,6 +219,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 ```
     ...
 
+    use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
 
     ...
