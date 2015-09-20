@@ -2,9 +2,11 @@
 
 namespace Jrean\UserVerification;
 
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Mail\Mailer as MailerContract;
+use Illuminate\Mail\Message;
+use Illuminate\Database\Schema\Builder;
+use Illuminate\Support\Str;
 use Jrean\UserVerification\VerificationException;
 
 class UserVerification
@@ -144,7 +146,7 @@ class UserVerification
      */
     protected function generateToken()
     {
-        return md5(uniqid(mt_rand(), true));
+        return hash_hmac('sha256', Str::random(40), config('app.key'));
     }
 
     /**
