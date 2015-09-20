@@ -133,7 +133,7 @@ The package public API offers four (4) methods.
 
 Generate and save a verification token the given user.
 
-* `send(AuthenticatableContract $model)`
+* `send(AuthenticatableContract $model, $subject = null)`
 
 Send by email a link containing the verification token.
 
@@ -250,7 +250,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         UserVerification::generate($user);
 
-        UserVerification::send($user);
+        UserVerification::send($user, 'My Custom Email Subject');
 
         return redirect($this->redirectPath());
     }

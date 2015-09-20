@@ -53,15 +53,16 @@ class UserVerification
      * Send by email a link containing the verification token.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @returnt boolean
+     * @param  string $subject
+     * @return boolean
      */
-    public function send(AuthenticatableContract $model)
+    public function send(AuthenticatableContract $model, $subject = null)
     {
         if ( ! $this->isCompliant($model)) {
             throw new VerificationException;
         }
 
-        return (boolean) $this->emailVerificationLink($model);
+        return (boolean) $this->emailVerificationLink($model, $subject);
     }
 
     /**
@@ -124,13 +125,15 @@ class UserVerification
      * Prepare and send the email with the verification token link.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $token
+     * @param  string $subject
      * @return mixed
      */
-    protected function emailVerificationLink(AuthenticatableContract $model)
+    protected function emailVerificationLink(AuthenticatableContract $model, $subject)
     {
-        return $this->mailer->send('emails.user-verification', compact('model'), function ($m) use ($model) {
-            $m->to($model->email)->subject('Confirm your email address');
+        return $this->mailer->send('emails.user-verification', compact('model'), function ($m) use ($model, $subject) {
+            $m->to($model->email);
+
+            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
         });
     }
 
