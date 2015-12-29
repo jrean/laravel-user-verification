@@ -27,7 +27,8 @@ trait VerifiesUsers
     /**
      * Handle the user verification.
      *
-     * @param  string $token
+     * @param string $token
+     *
      * @return Response
      */
     public function getVerification($token)
@@ -38,7 +39,7 @@ trait VerifiesUsers
             return redirect($this->redirectIfVerified());
         }
 
-        if ( ! UserVerification::process($user, $token)) {
+        if (!UserVerification::process($user, $token)) {
             return redirect($this->redirectIfVerificationFails());
         }
 
