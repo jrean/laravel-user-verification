@@ -4,10 +4,8 @@ namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
-use Illuminate\Mail\Message;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Str;
-use Jrean\UserVerification\VerificationException;
 
 class UserVerification
 {
@@ -21,15 +19,15 @@ class UserVerification
     /**
      * Schema builder instance.
      *
-     * @var \Illuminate\Database\Schema\Builder $schema
+     * @var \Illuminate\Database\Schema\Builder
      */
     protected $schema;
 
     /**
      * Constructor.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer $mailer
-     * @param  \Illuminate\Database\Schema\Builder $schema
+     * @param \Illuminate\Contracts\Mail\Mailer   $mailer
+     * @param \Illuminate\Database\Schema\Builder $schema
      *
      * @return void
      */
@@ -43,8 +41,9 @@ class UserVerification
     /**
      * Generate and save a verification token the given user.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     *
+     * @return bool
      */
     public function generate(AuthenticatableContract $model)
     {
@@ -54,14 +53,15 @@ class UserVerification
     /**
      * Send by email a link containing the verification token.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $subject
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     * @param string                                     $subject
+     *
+     * @return bool
      */
     public function send(AuthenticatableContract $model, $subject = null)
     {
-        if ( ! $this->isCompliant($model)) {
-            throw new VerificationException;
+        if (!$this->isCompliant($model)) {
+            throw new VerificationException();
         }
 
         return (boolean) $this->emailVerificationLink($model, $subject);
@@ -70,13 +70,14 @@ class UserVerification
     /**
      * Process the token verification.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $token
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     * @param string                                     $token
+     *
+     * @return bool
      */
     public function process(AuthenticatableContract $model, $token)
     {
-        if ( ! $this->compareToken($model->verification_token, $token)) {
+        if (!$this->compareToken($model->verification_token, $token)) {
             return false;
         }
 
@@ -88,8 +89,9 @@ class UserVerification
     /**
      * Check if the user is verified.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     *
+     * @return bool
      */
     public function isVerified(AuthenticatableContract $model)
     {
@@ -100,6 +102,7 @@ class UserVerification
      * Update and save the model instance has verified.
      *
      * @param AuthenticatableContract $model
+     *
      * @return void
      */
     protected function wasVerified(AuthenticatableContract $model)
@@ -114,9 +117,10 @@ class UserVerification
     /**
      * Compare the verification token given by the user with the one stored.
      *
-     * @param  string $storedToken
-     * @param  string $requestToken
-     * @return boolean
+     * @param string $storedToken
+     * @param string $requestToken
+     *
+     * @return bool
      */
     protected function compareToken($storedToken, $requestToken)
     {
@@ -126,8 +130,9 @@ class UserVerification
     /**
      * Prepare and send the email with the verification token link.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $subject
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     * @param string                                     $subject
+     *
      * @return mixed
      */
     protected function emailVerificationLink(AuthenticatableContract $model, $subject)
@@ -152,15 +157,17 @@ class UserVerification
     /**
      * Update and save the model instance with the verification token.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $token
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     * @param string                                     $token
+     *
      * @throws \Jrean\UserVerification\Exceptions\VerificationException
+     *
+     * @return bool
      */
     protected function saveToken(AuthenticatableContract $model, $token)
     {
-        if ( ! $this->isCompliant($model)) {
-            throw new VerificationException;
+        if (!$this->isCompliant($model)) {
+            throw new VerificationException();
         }
 
         $model->verification_token = $token;
@@ -172,8 +179,9 @@ class UserVerification
      * Determine if the given model table has the verified and verification_token
      * columns.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     *
+     * @return bool
      */
     protected function isCompliant(AuthenticatableContract $model)
     {
@@ -190,9 +198,10 @@ class UserVerification
     /**
      * Check if the given model talbe has the given column.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable $model
-     * @param  string $column
-     * @return boolean
+     * @param \Illuminate\Contracts\Auth\Authenticatable $model
+     * @param string                                     $column
+     *
+     * @return bool
      */
     protected function hasColumn(AuthenticatableContract $model, $column)
     {
