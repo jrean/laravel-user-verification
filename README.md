@@ -210,11 +210,13 @@ The following code sample aims to showcase a quick and basic implementation.
 
 Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
-- Import the `VerifiesUsers` trait
-- Overwrite and customize the redirect path attributes/properties
+- Import the `VerifiesUsers` trait (mandatory)
+- Overwrite and customize the redirect path attributes/properties (not
+    mandatory)
 - Overwrite and customize the view name for the getVerificationError method
-- Create the verification error view according to the defined path.
-- Overwrite the postRegister method
+    (not mandatory)
+- Create the verification error view according to the defined path (mandatory)
+- Overwrite the postRegister method (mandatory)
 
 ```
     ...
@@ -268,7 +270,7 @@ Edit the `app\Http\routes.php` file.
 ## Contribute
 
 This package is (yet) under active development and refactoring.
-Please, feel free to comment, contribute and help. Units testing are on the way.
+Please, feel free to comment, contribute and help.
 
 ## License
 
