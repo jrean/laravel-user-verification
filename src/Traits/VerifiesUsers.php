@@ -38,7 +38,7 @@ trait VerifiesUsers
             return redirect($this->redirectIfVerified());
         }
 
-        if ( ! UserVerification::process($user, $token)) {
+        if (!UserVerification::process($user, $token)) {
             return redirect($this->redirectIfVerificationFails());
         }
 

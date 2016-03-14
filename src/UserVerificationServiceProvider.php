@@ -20,8 +20,7 @@ class UserVerificationServiceProvider extends ServiceProvider
     /**
      * Register the user verification.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     protected function registerUserVerification(Application $app)
