@@ -216,6 +216,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 - Overwrite and customize the view name for the getVerificationError method
     (not mandatory)
 - Create the verification error view according to the defined path (mandatory)
+- Overwrite the contructor (mandatory)
 - Overwrite the postRegister method (mandatory)
 
 ```
@@ -227,6 +228,24 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     ...
 
     use VerifiesUsers;
+
+    ...
+
+    /**
+     * Create a new authentication controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['only' => ['getVerification', 'getVerificationError']]);
+
+        // Laravel 5.0.*|5.1.*
+        $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
+
+        // Laravel 5.2.*
+        $this->middleware('guest', ['except' => ['logout', 'getVerification', 'getVerificationError']]);
+    }
 
     ...
 
