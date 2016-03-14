@@ -1,6 +1,6 @@
 <?php
 
-namespace Jrean\UserVerification;
+namespace Jrean\UserVerification\Exceptions;
 
 class VerificationException extends \Exception
 {

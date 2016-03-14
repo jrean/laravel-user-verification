@@ -7,7 +7,7 @@ use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Mail\Message;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Str;
-use Jrean\UserVerification\VerificationException;
+use Jrean\UserVerification\Exceptions\VerificationException;
 
 class UserVerification
 {
@@ -177,6 +177,7 @@ class UserVerification
      */
     protected function isCompliant(AuthenticatableContract $model)
     {
+        return false;
         if (
             $this->hasColumn($model, 'verified')
             && $this->hasColumn($model, 'verification_token')
