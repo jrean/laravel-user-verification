@@ -15,6 +15,7 @@ To get the latest version of Laravel User Verification, simply add the following
 the require block of your composer.json file:
 
     "jrean/laravel-user-verification": "dev-master"
+    "jrean/laravel-user-verification": "2.0"
 
 or
 
@@ -116,11 +117,11 @@ an e-mail with a link that points to the getVerification method (typically
 routed at /auth/verification/{token}) of the AuthController. You will need to
 create a view for this e-mail at
 resources/views/emails/user-verification.blade.php. The view will receive the
-$model variable which contains the user information such as the verification
+`$user` variable which contains the user information such as the verification
 token. Here is an example e-mail view to get you started:
 
 ```
-Click here to verify your account {{ url('auth/verification/' . $model->verification_token)  }}
+Click here to verify your account {{ url('auth/verification/' . $model->verification_token) }}
 ```
 
 ## Usage
@@ -129,19 +130,19 @@ Click here to verify your account {{ url('auth/verification/' . $model->verifica
 
 The package public API offers four (4) methods.
 
-* `generate(AuthenticatableContract $model)`
+* `generate(AuthenticatableContract $user)`
 
 Generate and save a verification token the given user.
 
-* `send(AuthenticatableContract $model, $subject = null)`
+* `send(AuthenticatableContract $user, $subject = null)`
 
 Send by email a link containing the verification token.
 
-* `process(AuthenticatableContract $model, $token)`
+* `process(AuthenticatableContract $user, $token)`
 
 Process the token verification for the given user.
 
-* `isVerified(AuthenticatableContract $model)`
+* `isVerified(AuthenticatableContract $user)`
 
 Check if the given user is verified.
 
@@ -197,12 +198,20 @@ Where to redirect after a failling verification token verification.
 
 Name of the view returned by the getVerificationError method.
 
+* `$userTable = 'users';`
+
+Name of the default table used for managing users.
+
 ## Example
 
 This package whishes to let you be creative while offering you a predefined
 path. The following examples assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
 documentation.
+This package doesn't require the user to be authenticated to perform the
+verification. You are free to implement any flow you may want to achieve.
+Note that by default the behaviour of Laravel is to return an authenticated
+user straight after the registration.
 
 ### Example 1
 
@@ -216,8 +225,8 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 - Overwrite and customize the view name for the getVerificationError method
     (not mandatory)
 - Create the verification error view according to the defined path (mandatory)
-- Overwrite the contructor (mandatory)
-- Overwrite the postRegister method (mandatory)
+- Overwrite the contructor (not mandatory)
+- Overwrite the postRegister/register method (mandatory)
 
 ```
     ...
@@ -238,13 +247,11 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
      */
     public function __construct()
     {
-        $this->middleware('auth', ['only' => ['getVerification', 'getVerificationError']]);
-
         // Laravel 5.0.*|5.1.*
-        $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
+        $this->middleware('guest', ['except' => ['getLogout']]);
 
         // Laravel 5.2.*
-        $this->middleware('guest', ['except' => ['logout', 'getVerification', 'getVerificationError']]);
+        $this->middleware('guest', ['except' => ['logout']]);
     }
 
     ...
@@ -267,7 +274,8 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         $user = $this->create($request->all());
 
-        Auth::login($user);
+        // Authenticating the user is not mandatory at all.
+        //Auth::login($user);
 
         UserVerification::generate($user);
 
