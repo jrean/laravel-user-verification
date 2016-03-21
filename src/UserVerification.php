@@ -6,6 +6,8 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 use Jrean\UserVerification\Exceptions\VerificationException;
 
 class UserVerification
@@ -27,8 +29,8 @@ class UserVerification
     /**
      * Constructor.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer   $mailer
-     * @param  \Illuminate\Database\Schema\Builder $schema
+     * @param  \Illuminate\Contracts\Mail\Mailer    $mailer
+     * @param  \Illuminate\Database\Schema\Builder  $schema
      * @return void
      */
     public function __construct(MailerContract $mailer, Builder $schema)
@@ -39,46 +41,60 @@ class UserVerification
     }
 
     /**
-     * Generate and save a verification token the given user.
+     * Generate and save a verification token.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
      */
-    public function generate(AuthenticatableContract $model)
+    public function generate(AuthenticatableContract $user)
     {
-        return $this->saveToken($model, $this->generateToken());
+        return $this->saveToken($user, $this->generateToken($user->email));
     }
 
     /**
      * Send by email a link containing the verification token.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
      * @return bool
      */
-    public function send(AuthenticatableContract $model, $subject = null)
+    public function send(AuthenticatableContract $user, $subject = null)
     {
-        if (! $this->isCompliant($model)) {
+        if (! $this->isCompliant($user)) {
             throw new VerificationException();
         }
 
-        return (boolean) $this->emailVerificationLink($model, $subject);
+        return (boolean) $this->emailVerificationLink($user, $subject);
+    }
+
+    /**
+     * Generate, save and send by email a link containing the verification token.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @return bool
+     */
+    public function generateAndSend(AuthenticatableContract $user, $subject = null)
+    {
+        $token = $this->generate($user);
+
+        return $this->send($user, $subject);
     }
 
     /**
      * Process the token verification.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  stdClass  $user
      * @param  string  $token
      * @return bool
      */
-    public function process(AuthenticatableContract $model, $token)
+    public function process($user, $token)
     {
-        if (! $this->compareToken($model->verification_token, $token)) {
+        if (! $this->compareToken($user->verification_token, $token)) {
             return false;
         }
 
-        $this->wasVerified($model);
+        $this->wasVerified($user);
 
         return true;
     }
@@ -86,27 +102,43 @@ class UserVerification
     /**
      * Check if the user is verified.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  stdClass  $user
      * @return bool
      */
-    public function isVerified(AuthenticatableContract $model)
+    public function isVerified($user)
     {
-        return $model->verified == true;
+        return $user->verified == true;
     }
 
     /**
-     * Update and save the model instance has verified.
+     * Update and save the user has verified.
      *
-     * @param  AuthenticatableContract  $model
+     * @param  stdClass  $user
      * @return void
      */
-    protected function wasVerified(AuthenticatableContract $model)
+    protected function wasVerified($user)
     {
-        $model->verification_token = null;
+        $user->verification_token = null;
 
-        $model->verified = true;
+        $user->verified = true;
 
-        $model->save();
+        $this->updateUser($user);
+    }
+
+    /**
+     * Update and save user object.
+     *
+     * @param  stdClass  $user
+     * @return void
+     */
+    protected function updateUser($user)
+    {
+        DB::table($user->table)
+            ->where('email', $user->email)
+            ->update([
+                'verification_token' => $user->verification_token,
+                'verified' => $user->verified
+            ]);
     }
 
     /**
@@ -124,14 +156,14 @@ class UserVerification
     /**
      * Prepare and send the email with the verification token link.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
      * @return mixed
      */
-    protected function emailVerificationLink(AuthenticatableContract $model, $subject)
+    protected function emailVerificationLink(AuthenticatableContract $user, $subject)
     {
-        return $this->mailer->send('emails.user-verification', compact('model'), function ($m) use ($model, $subject) {
-            $m->to($model->email);
+        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject) {
+            $m->to($user->email);
 
             $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
         });
@@ -140,45 +172,57 @@ class UserVerification
     /**
      * Generate the verification token.
      *
+     * @param  string  $email
      * @return string
      */
-    protected function generateToken()
+    protected function generateToken($email)
     {
-        return hash_hmac('sha256', Str::random(40), config('app.key'));
+        return Crypt::encrypt($email);
+    }
+
+    /**
+     * Decrypt the token to get the email.
+     *
+     * @param  string  $token
+     * @return string
+     */
+    public function decryptEmailFromToken($token)
+    {
+        return Crypt::decrypt($token);
     }
 
     /**
      * Update and save the model instance with the verification token.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $token
      * @return bool
      *
      * @throws \Jrean\UserVerification\Exceptions\VerificationException
      */
-    protected function saveToken(AuthenticatableContract $model, $token)
+    protected function saveToken(AuthenticatableContract $user, $token)
     {
-        if (! $this->isCompliant($model)) {
+        if (! $this->isCompliant($user)) {
             throw new VerificationException();
         }
 
-        $model->verification_token = $token;
+        $user->verification_token = $token;
 
-        return $model->save();
+        return $user->save();
     }
 
     /**
      * Determine if the given model table has the verified and verification_token
      * columns.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return  bool
      */
-    protected function isCompliant(AuthenticatableContract $model)
+    protected function isCompliant(AuthenticatableContract $user)
     {
         if (
-            $this->hasColumn($model, 'verified')
-            && $this->hasColumn($model, 'verification_token')
+            $this->hasColumn($user, 'verified')
+            && $this->hasColumn($user, 'verification_token')
         ) {
             return true;
         }
@@ -189,12 +233,52 @@ class UserVerification
     /**
      * Check if the given model talbe has the given column.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $model
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $column
      * @return bool
      */
-    protected function hasColumn(AuthenticatableContract $model, $column)
+    protected function hasColumn(AuthenticatableContract $user, $column)
     {
-        return $this->schema->hasColumn($model->getTable(), $column);
+        return $this->schema->hasColumn($user->getTable(), $column);
     }
+
+    /**
+     * Get user object.
+     *
+     * @param  string  $token
+     * @param  string  $table
+     * @return stdClass
+     */
+    public function getUser($token, $table)
+    {
+        return $this->getUserByEmail($this->getEmail($token), $table);
+    }
+
+    /**
+     * Fetch the user by email.
+     *
+     * @param  string  $email
+     * @param  string  $table
+     * @return stdClass
+     */
+    protected function getUserByEmail($email, $table)
+    {
+        $user = DB::table($table)->where('email', $email)->first();
+
+        $user->table = $table;
+
+        return $user;
+    }
+
+    /**
+     * Decrypt token and extract email.
+     *
+     * @param  string  $token
+     * @return string
+     */
+    protected function getEmail($token)
+    {
+        return $this->decryptEmailFromToken($token);
+    }
+
 }

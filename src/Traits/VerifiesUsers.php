@@ -9,36 +9,20 @@ trait VerifiesUsers
     use RedirectsUsers;
 
     /**
-     * Handle the verification token generation.
-     *
-     * @return Response
-     */
-    public function getVerificationToken()
-    {
-        $user = auth()->user();
-
-        UserVerification::generate($user);
-
-        UserVerification::send($user);
-
-        return redirect($this->redirectAfterTokenGeneration());
-    }
-
-    /**
      * Handle the user verification.
      *
-     * @param  string $token
+     * @param  string  $token
      * @return Response
      */
     public function getVerification($token)
     {
-        $user = auth()->user();
+        $user = UserVerification::getUser($token, $this->userTable());
 
         if (UserVerification::isVerified($user)) {
             return redirect($this->redirectIfVerified());
         }
 
-        if (!UserVerification::process($user, $token)) {
+        if (! UserVerification::process($user, $token)) {
             return redirect($this->redirectIfVerificationFails());
         }
 
@@ -52,10 +36,6 @@ trait VerifiesUsers
      */
     public function getVerificationError()
     {
-        if (UserVerification::isVerified(auth()->user())) {
-            return redirect($this->redirectIfVerified());
-        }
-
         return view($this->verificationErrorView());
     }
 
@@ -67,5 +47,15 @@ trait VerifiesUsers
     public function verificationErrorView()
     {
         return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'errors.user-verification';
+    }
+
+    /**
+     * Get the verification error view name.
+     *
+     * @return string
+     */
+    public function userTable()
+    {
+        return property_exists($this, 'userTable') ? $this->userTable : 'users';
     }
 }
