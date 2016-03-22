@@ -157,17 +157,13 @@ The package also offers a trait for a quick implementation.
 
 #### Actions
 
-The three following methods are endpoints you can join by defining the proper
+The two following methods are endpoints you can join by defining the proper
 route(s) of your choice.
-
-* `getVerificationToken()`
-
-Handle the verification token generation.
 
 * `getVerification($token)`
 
-Handle the user verification. It requires a string parameter that should
-represent the verification token to verify.
+Handle the user verification. It requires a string parameter representing the
+verification token to verify.
 
 * `getVerificationError()`
 
@@ -176,7 +172,7 @@ Do something if the verification fails.
 #### Custom attributes/properties
 
 To customize the package behaviour and the redirects you can implement and
-customize five (5) attributes/properties:
+customize five (6) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
@@ -192,7 +188,7 @@ Where to redirect after a successful verification token verification.
 
 * `$redirectIfVerificationFails = '/auth/verification/error';`
 
-Where to redirect after a failling verification token verification.
+Where to redirect after a failling token verification.
 
 * `$verifiationErrorView = 'errors.user-verification';`
 
@@ -296,8 +292,9 @@ Edit the `app\Http\routes.php` file.
 
 ## Contribute
 
-This package is (yet) under active development and refactoring.
-Please, feel free to comment, contribute and help.
+This package is (yet) under development and refactoring but is ready for
+production. Please, feel free to comment, contribute and help. I will be happy
+to get some help to deliver tests.
 
 ## License
 
