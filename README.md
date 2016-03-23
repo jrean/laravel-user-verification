@@ -3,7 +3,7 @@ easily handle a user verification flow and validate its email.
 
 ## About
 
-- Generate and store a verification token for a registered and authenticated user.
+- Generate and store a verification token for a registered user.
 - Send an email with the verification token link.
 - Handle the verification.
 - Set the user as verified.
