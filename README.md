@@ -121,7 +121,7 @@ resources/views/emails/user-verification.blade.php. The view will receive the
 token. Here is an example e-mail view to get you started:
 
 ```
-Click here to verify your account {{ url('auth/verification/' . $model->verification_token) }}
+Click here to verify your account {{ url('auth/verification/' . $user->verification_token) }}
 ```
 
 ## Usage
