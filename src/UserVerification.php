@@ -260,10 +260,16 @@ class UserVerification
      * @param  string  $email
      * @param  string  $table
      * @return stdClass
+     *
+     * @throws \Jrean\UserVerification\Exceptions\UserNotFoundException
      */
     protected function getUserByEmail($email, $table)
     {
         $user = DB::table($table)->where('email', $email)->first();
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
 
         $user->table = $table;
 
@@ -280,5 +286,4 @@ class UserVerification
     {
         return $this->decryptEmailFromToken($token);
     }
-
 }
