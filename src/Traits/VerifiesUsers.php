@@ -50,7 +50,7 @@ trait VerifiesUsers
     }
 
     /**
-     * Get the verification error view name.
+     * Get the user table name.
      *
      * @return string
      */
