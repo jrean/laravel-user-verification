@@ -255,7 +255,7 @@ class UserVerification
      */
     protected function getUserByEmail($email, $table)
     {
-        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token']);
+        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token', 'table']);
 
         if ($user === null) {
             throw new UserNotFoundException();
