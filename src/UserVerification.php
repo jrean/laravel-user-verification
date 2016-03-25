@@ -99,6 +99,18 @@ class UserVerification
     }
 
     /**
+     * Get user object.
+     *
+     * @param  string  $token
+     * @param  string  $table
+     * @return stdClass
+     */
+    public function getUser($token, $table)
+    {
+        return $this->getUserByEmail($this->getEmail($token), $table);
+    }
+
+    /**
      * Update and save the user as verified.
      *
      * @param  stdClass  $user
@@ -230,18 +242,6 @@ class UserVerification
     protected function hasColumn(AuthenticatableContract $user, $column)
     {
         return $this->schema->hasColumn($user->getTable(), $column);
-    }
-
-    /**
-     * Get user object.
-     *
-     * @param  string  $token
-     * @param  string  $table
-     * @return stdClass
-     */
-    protected function getUser($token, $table)
-    {
-        return $this->getUserByEmail($this->getEmail($token), $table);
     }
 
     /**
