@@ -68,20 +68,6 @@ class UserVerification
     }
 
     /**
-     * Generate, save and send by email a link containing the verification token.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $subject
-     * @return bool
-     */
-    public function generateAndSend(AuthenticatableContract $user, $subject = null)
-    {
-        $token = $this->generate($user);
-
-        return $this->send($user, $subject);
-    }
-
-    /**
      * Process the token verification.
      *
      * @param  stdClass  $user
