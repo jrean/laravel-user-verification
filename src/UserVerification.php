@@ -81,10 +81,9 @@ class UserVerification
             return false;
         }
 
-        // test
-        dd($this->wasVerified($user));
+        $this->wasVerified($user);
 
-        /* return true; */
+        return true;
     }
 
     /**
