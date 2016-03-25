@@ -42,7 +42,7 @@ class UserVerification
     }
 
     /**
-     * Generate and save a verification token.
+     * Generate and save a verification token for the given user.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
@@ -69,7 +69,7 @@ class UserVerification
     }
 
     /**
-     * Process the token verification.
+     * Process the token verification for the given token.
      *
      * @param  stdClass  $user
      * @param  string  $token
@@ -81,9 +81,10 @@ class UserVerification
             return false;
         }
 
-        $this->wasVerified($user);
+        // test
+        dd($this->wasVerified($user));
 
-        return true;
+        /* return true; */
     }
 
     /**
@@ -98,7 +99,7 @@ class UserVerification
     }
 
     /**
-     * Update and save the user has verified.
+     * Update and save the user as verified.
      *
      * @param  stdClass  $user
      * @return void
@@ -173,7 +174,7 @@ class UserVerification
      * @param  string  $token
      * @return string
      */
-    public function decryptEmailFromToken($token)
+    protected function decryptEmailFromToken($token)
     {
         return Crypt::decrypt($token);
     }
@@ -238,7 +239,7 @@ class UserVerification
      * @param  string  $table
      * @return stdClass
      */
-    public function getUser($token, $table)
+    protected function getUser($token, $table)
     {
         return $this->getUserByEmail($this->getEmail($token), $table);
     }
@@ -254,7 +255,7 @@ class UserVerification
      */
     protected function getUserByEmail($email, $table)
     {
-        $user = DB::table($table)->where('email', $email)->first();
+        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token']);
 
         if ($user === null) {
             throw new UserNotFoundException();

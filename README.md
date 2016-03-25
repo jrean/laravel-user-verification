@@ -5,7 +5,7 @@ easily handle a user verification flow and validate its email.
 
 - Generate and store a verification token for a registered user.
 - Send an email with the verification token link.
-- Handle the verification.
+- Handle the verification of the token.
 - Set the user as verified.
 
 ## Installation
@@ -15,7 +15,7 @@ To get the latest version of Laravel User Verification, simply add the following
 the require block of your composer.json file:
 
     "jrean/laravel-user-verification": "dev-master"
-    "jrean/laravel-user-verification": "2.0"
+    "jrean/laravel-user-verification": "2.*"
 
 or
 
@@ -94,7 +94,7 @@ Once the migration is generated, edit the file in `database/migration` with the 
 
 ```
 
-Where `:table` is replaced by the table of your choice.
+Where `:table` is replaced by the table name of your choice.
 
 Migrate the migration with the following command:
 
@@ -108,17 +108,13 @@ This package offers to send an email with a link containing the verification tok
 
 Please refer to the Laravel documentation for the proper email component configuration.
 
-[Laravel Email](http://laravel.com/docs/5.1/mail)
-
 #### View
 
-When a user submits a request to register or when you decide, they will receive
-an e-mail with a link that points to the getVerification method (typically
-routed at /auth/verification/{token}) of the AuthController. You will need to
-create a view for this e-mail at
+The user will receive an e-mail with a link leading to the getVerification
+method (endpoint). You will need to create a view for this e-mail at
 resources/views/emails/user-verification.blade.php. The view will receive the
-`$user` variable which contains the user information such as the verification
-token. Here is an example e-mail view to get you started:
+`$user` variable which contains the user details such as the verification
+token. Here is an sample e-mail view to get you started:
 
 ```
 Click here to verify your account {{ url('auth/verification/' . $user->verification_token) }}
@@ -132,7 +128,7 @@ The package public API offers four (4) methods.
 
 * `generate(AuthenticatableContract $user)`
 
-Generate and save a verification token the given user.
+Generate and save a verification token for the given user.
 
 * `send(AuthenticatableContract $user, $subject = null)`
 
@@ -155,7 +151,7 @@ over the four (4) previous listed public methods.
 
 The package also offers a trait for a quick implementation.
 
-#### Actions
+#### Endpoints
 
 The two following methods are endpoints you can join by defining the proper
 route(s) of your choice.
@@ -201,7 +197,7 @@ Name of the default table used for managing users.
 ## Example
 
 This package whishes to let you be creative while offering you a predefined
-path. The following examples assume you have configured Laravel for the
+path. The following sample assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
 documentation.
 This package doesn't require the user to be authenticated to perform the
@@ -209,7 +205,7 @@ verification. You are free to implement any flow you may want to achieve.
 Note that by default the behaviour of Laravel is to return an authenticated
 user straight after the registration.
 
-### Example 1
+### Example
 
 The following code sample aims to showcase a quick and basic implementation.
 
@@ -243,6 +239,8 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
      */
     public function __construct()
     {
+        // Based on the workflow you want you may update the following lines.
+
         // Laravel 5.0.*|5.1.*
         $this->middleware('guest', ['except' => ['getLogout']]);
 
@@ -288,6 +286,11 @@ Edit the `app\Http\routes.php` file.
 ```
     Route::get('auth/verification/error', 'Auth\AuthController@getVerificationError');
     Route::get('auth/verification/{token}', 'Auth\AuthController@getVerification');
+
+    or
+
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 ## Contribute
