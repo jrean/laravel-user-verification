@@ -2,12 +2,14 @@
 
 namespace Jrean\UserVerification\Exceptions;
 
-class UserNotFoundException extends \Exception
+use Exception;
+
+class UserNotFoundException extends Exception
 {
     /**
      * The exception description.
      *
      * @var string
      */
-    protected $message = 'No user found for that email adresse.';
+    protected $message = 'No user found for the given email adresse.';
 }

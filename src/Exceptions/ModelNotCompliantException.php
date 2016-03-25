@@ -2,7 +2,9 @@
 
 namespace Jrean\UserVerification\Exceptions;
 
-class VerificationException extends \Exception
+use Exception;
+
+class ModelNotCompliantException extends Exception
 {
     /**
      * The exception description.

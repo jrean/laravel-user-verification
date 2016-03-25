@@ -8,7 +8,8 @@ use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
-use Jrean\UserVerification\Exceptions\VerificationException;
+use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
+use Jrean\UserVerification\Exceptions\UserNotFoundException;
 
 class UserVerification
 {
@@ -184,13 +185,15 @@ class UserVerification
      * @param  string  $token
      * @return bool
      *
-     * @throws \Jrean\UserVerification\Exceptions\VerificationException
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
     protected function saveToken(AuthenticatableContract $user, $token)
     {
         if (! $this->isCompliant($user)) {
-            throw new VerificationException();
+            throw new ModelNotCompliantException();
         }
+
+        $user->verified = false;
 
         $user->verification_token = $token;
 
