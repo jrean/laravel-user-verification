@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Jrean\UserVerification\Facades\UserVerification;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
+use Jrean\UserVerification\Exceptions\TokenMismatchException;
 
 trait VerifiesUsers
 {
@@ -28,6 +29,8 @@ trait VerifiesUsers
             return redirect($this->redirectIfVerificationFails());
         } catch (UserIsVerifiedException $e) {
             return redirect($this->redirectIfVerified());
+        } catch (TokenMismatchException $e) {
+            return redirect($this->redirectIfVerificationFails());
         }
 
         return redirect($this->redirectAfterVerification());

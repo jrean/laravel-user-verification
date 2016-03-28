@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
+use Jrean\UserVerification\Exceptions\TokenMismatchException;
 
 class UserVerification
 {

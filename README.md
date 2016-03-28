@@ -120,6 +120,28 @@ token. Here is an sample e-mail view to get you started:
 Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
+### Errors
+
+This package throws several exceptions.
+
+* `ModelNotCompliantException`
+The model instance provided is not compliant with this package.
+
+* `TokenMismatchException`
+Wrong verification token.
+
+* `UserIsVerifiedException`
+This user is already verified.
+
+* `UserNotFoundException`
+No user found for the given e-mail adresse.
+
+#### View
+
+Create a view for the default verification error route at
+resources/views/errors/user-verification.blade.php. Customize this view to your
+needs.
+
 ## Usage
 
 ### API
