@@ -52,6 +52,16 @@ class UserVerification
     }
 
     /**
+     * Generate the verification token.
+     *
+     * @return string|bool
+     */
+    protected function generateToken()
+    {
+        return hash_hmac('sha256', Str::random(40), config('app.key'));
+    }
+
+    /**
      * Update and save the model instance with the verification token.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
@@ -71,16 +81,6 @@ class UserVerification
         $user->verification_token = $token;
 
         return $user->save();
-    }
-
-    /**
-     * Generate the verification token.
-     *
-     * @return string
-     */
-    protected function generateToken()
-    {
-        return hash_hmac('sha256', Str::random(40), config('app.key'));
     }
 
     /**
@@ -111,7 +111,7 @@ class UserVerification
      */
     public function process($email, $token, $userTable)
     {
-        $user = $this->getUser($email, $userTable);
+        $user = $this->getUserByEmail($email, $userTable);
 
         $this->isVerified($user);
 
@@ -121,19 +121,7 @@ class UserVerification
     }
 
     /**
-     * Get the user instance.
-     *
-     * @param  string  $email
-     * @param  string  $table
-     * @return stdClass
-     */
-    protected function getUser($email, $table)
-    {
-        return $this->getUserByEmail($email, $table);
-    }
-
-    /**
-     * Fetch the user by e-mail.
+     * Get the user by e-mail.
      *
      * @param  string  $email
      * @param  string  $table
@@ -143,7 +131,9 @@ class UserVerification
      */
     protected function getUserByEmail($email, $table)
     {
-        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token']);
+        $user = DB::table($table)
+            ->where('email', $email)
+            ->first(['id', 'email', 'verified', 'verification_token']);
 
         if ($user === null) {
             throw new UserNotFoundException();
@@ -241,14 +231,9 @@ class UserVerification
      */
     protected function isCompliant(AuthenticatableContract $user)
     {
-        if (
-            $this->hasColumn($user, 'verified')
-            && $this->hasColumn($user, 'verification_token')
-        ) {
-            return true;
-        }
-
-        return false;
+        return $this->hasColumn($user, 'verified')
+            && $this->hasColumn($user, 'verification_token') ?
+            true : false;
     }
 
     /**
