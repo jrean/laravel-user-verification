@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -29,7 +33,7 @@ class UserVerification
     protected $schema;
 
     /**
-     * Constructor.
+     * Create a new instance.
      *
      * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
      * @param  \Illuminate\Database\Schema\Builder  $schema

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Foundation\Application;
@@ -26,7 +30,10 @@ class UserVerificationServiceProvider extends ServiceProvider
     protected function registerUserVerification(Application $app)
     {
         $app->bind('user.verification', function ($app) {
-            return new UserVerification(app()->make('mailer'), app()->make('db')->connection()->getSchemaBuilder());
+            return new UserVerification(
+                $app->make('mailer'),
+                $app->make('db')->connection()->getSchemaBuilder()
+            );
         });
 
         $app->alias('user.verification', UserVerification::class);

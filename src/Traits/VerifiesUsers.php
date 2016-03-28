@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification\Traits;
 
 use Illuminate\Http\Request;
