@@ -89,11 +89,13 @@ class UserVerification
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
      * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
     public function send(AuthenticatableContract $user, $subject = null)
     {
         if (! $this->isCompliant($user)) {
-            throw new VerificationException();
+            throw new ModelNotCompliantException();
         }
 
         return (boolean) $this->emailVerificationLink($user, $subject);
