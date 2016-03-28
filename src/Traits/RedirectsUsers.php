@@ -41,6 +41,6 @@ trait RedirectsUsers
      */
     public function redirectIfVerificationFails()
     {
-        return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : '/auth/verification/error';
+        return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : '/verification/error';
     }
 }

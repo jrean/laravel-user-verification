@@ -117,14 +117,14 @@ resources/views/emails/user-verification.blade.php. The view will receive the
 token. Here is an sample e-mail view to get you started:
 
 ```
-Click here to verify your account {{ url('auth/verification/' . $user->verification_token) }}
+Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
 ## Usage
 
 ### API
 
-The package public API offers four (4) methods.
+The package public API offers three (3) methods.
 
 * `generate(AuthenticatableContract $user)`
 
@@ -138,14 +138,10 @@ Send by email a link containing the verification token.
 
 Process the token verification for the given user.
 
-* `isVerified(AuthenticatableContract $user)`
-
-Check if the given user is verified.
-
 ### Facade
 
 The package offers a facade callable with `UserVerification::`. You can use it
-over the four (4) previous listed public methods.
+over the three (3) previous listed public methods.
 
 ### Trait
 
@@ -156,7 +152,7 @@ The package also offers a trait for a quick implementation.
 The two following methods are endpoints you can join by defining the proper
 route(s) of your choice.
 
-* `getVerification($token)`
+* `getVerification(Request $request, $token)`
 
 Handle the user verification. It requires a string parameter representing the
 verification token to verify.
@@ -281,14 +277,10 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
 Edit the `app\Http\routes.php` file.
 
-- Define two new routes
+- Define two new routes. Routes are customizable.
+Don't forget to update the previous listed redirect attributes.
 
 ```
-    Route::get('auth/verification/error', 'Auth\AuthController@getVerificationError');
-    Route::get('auth/verification/{token}', 'Auth\AuthController@getVerification');
-
-    or
-
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
     Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```

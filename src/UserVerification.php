@@ -5,11 +5,11 @@ namespace Jrean\UserVerification;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Database\Schema\Builder;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
+use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
 
 class UserVerification
 {
@@ -30,14 +30,13 @@ class UserVerification
     /**
      * Constructor.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer    $mailer
+     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
      * @param  \Illuminate\Database\Schema\Builder  $schema
      * @return void
      */
     public function __construct(MailerContract $mailer, Builder $schema)
     {
         $this->mailer = $mailer;
-
         $this->schema = $schema;
     }
 
@@ -49,11 +48,43 @@ class UserVerification
      */
     public function generate(AuthenticatableContract $user)
     {
-        return $this->saveToken($user, $this->generateToken($user->email));
+        return $this->saveToken($user, $this->generateToken());
     }
 
     /**
-     * Send by email a link containing the verification token.
+     * Update and save the model instance with the verification token.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $token
+     * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
+     */
+    protected function saveToken(AuthenticatableContract $user, $token)
+    {
+        if (! $this->isCompliant($user)) {
+            throw new ModelNotCompliantException();
+        }
+
+        $user->verified = false;
+
+        $user->verification_token = $token;
+
+        return $user->save();
+    }
+
+    /**
+     * Generate the verification token.
+     *
+     * @return string
+     */
+    protected function generateToken()
+    {
+        return hash_hmac('sha256', Str::random(40), config('app.key'));
+    }
+
+    /**
+     * Send by e-mail a link containing the verification token.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
@@ -69,48 +100,91 @@ class UserVerification
     }
 
     /**
-     * Process the token verification for the given token.
+     * Process the user verification for the given e-mail and token.
      *
-     * @param  stdClass  $user
+     * @param  string  $email
      * @param  string  $token
-     * @return bool
+     * @param  string  $userTable
+     * @return void
      */
-    public function process($user, $token)
+    public function process($email, $token, $userTable)
     {
-        if (! $this->compareToken($user->verification_token, $token)) {
-            return false;
-        }
+        $user = $this->getUser($email, $userTable);
+
+        $this->isVerified($user);
+
+        $this->verifyToken($user->verification_token, $token);
 
         $this->wasVerified($user);
-
-        return true;
     }
 
     /**
-     * Check if the user is verified.
+     * Get the user instance.
      *
-     * @param  stdClass  $user
-     * @return bool
-     */
-    public function isVerified($user)
-    {
-        return $user->verified == true;
-    }
-
-    /**
-     * Get user object.
-     *
-     * @param  string  $token
+     * @param  string  $email
      * @param  string  $table
      * @return stdClass
      */
-    public function getUser($token, $table)
+    protected function getUser($email, $table)
     {
-        return $this->getUserByEmail($this->getEmail($token), $table);
+        return $this->getUserByEmail($email, $table);
     }
 
     /**
-     * Update and save the user as verified.
+     * Fetch the user by e-mail.
+     *
+     * @param  string  $email
+     * @param  string  $table
+     * @return stdClass
+     *
+     * @throws \Jrean\UserVerification\Exceptions\UserNotFoundException
+     */
+    protected function getUserByEmail($email, $table)
+    {
+        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token']);
+
+        if ($user === null) {
+            throw new UserNotFoundException();
+        }
+
+        $user->table = $table;
+
+        return $user;
+    }
+
+    /**
+     * Check if the given user is verified.
+     *
+     * @param  stdClass  $user
+     * @return void
+     *
+     * @throws \Jrean\UserVerification\Exceptions\UserIsVerifiedException
+     */
+    protected function isVerified($user)
+    {
+        if ($user->verified == true) {
+            throw new UserIsVerifiedException();
+        }
+    }
+
+    /**
+     * Compare the two given tokens.
+     *
+     * @param  string  $storedToken
+     * @param  string  $requestToken
+     * @return void
+     *
+     * @throws \Jrean\UserVerification\Exceptions\TokenMismatchException
+     */
+    protected function verifyToken($storedToken, $requestToken)
+    {
+        if ($storedToken != $requestToken) {
+            throw new TokenMismatchException();
+        }
+    }
+
+    /**
+     * Update and save the given user as verified.
      *
      * @param  stdClass  $user
      * @return void
@@ -141,19 +215,7 @@ class UserVerification
     }
 
     /**
-     * Compare the verification token given by the user with the one stored.
-     *
-     * @param  string  $storedToken
-     * @param  string  $requestToken
-     * @return bool
-     */
-    protected function compareToken($storedToken, $requestToken)
-    {
-        return $storedToken == $requestToken;
-    }
-
-    /**
-     * Prepare and send the email with the verification token link.
+     * Prepare and send the e-mail with the verification token link.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
@@ -166,50 +228,6 @@ class UserVerification
 
             $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
         });
-    }
-
-    /**
-     * Generate the verification token.
-     *
-     * @param  string  $email
-     * @return string
-     */
-    protected function generateToken($email)
-    {
-        return Crypt::encrypt($email);
-    }
-
-    /**
-     * Decrypt the token to get the email.
-     *
-     * @param  string  $token
-     * @return string
-     */
-    protected function decryptEmailFromToken($token)
-    {
-        return Crypt::decrypt($token);
-    }
-
-    /**
-     * Update and save the model instance with the verification token.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $token
-     * @return bool
-     *
-     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
-     */
-    protected function saveToken(AuthenticatableContract $user, $token)
-    {
-        if (! $this->isCompliant($user)) {
-            throw new ModelNotCompliantException();
-        }
-
-        $user->verified = false;
-
-        $user->verification_token = $token;
-
-        return $user->save();
     }
 
     /**
@@ -241,38 +259,5 @@ class UserVerification
     protected function hasColumn(AuthenticatableContract $user, $column)
     {
         return $this->schema->hasColumn($user->getTable(), $column);
-    }
-
-    /**
-     * Fetch the user by email.
-     *
-     * @param  string  $email
-     * @param  string  $table
-     * @return stdClass
-     *
-     * @throws \Jrean\UserVerification\Exceptions\UserNotFoundException
-     */
-    protected function getUserByEmail($email, $table)
-    {
-        $user = DB::table($table)->where('email', $email)->first(['id', 'email', 'verified', 'verification_token', 'table']);
-
-        if ($user === null) {
-            throw new UserNotFoundException();
-        }
-
-        $user->table = $table;
-
-        return $user;
-    }
-
-    /**
-     * Decrypt token and extract email.
-     *
-     * @param  string  $token
-     * @return string
-     */
-    protected function getEmail($token)
-    {
-        return $this->decryptEmailFromToken($token);
     }
 }
