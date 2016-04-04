@@ -1,7 +1,7 @@
 **jrean/laravel-user-verification** is a PHP package built for Laravel 5 to
 easily handle a user verification flow and validate its email.
 
-[![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![Latest Unstable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/unstable)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
+[![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
 ## About
 
@@ -104,13 +104,18 @@ Migrate the migration with the following command:
 php artisan migrate
 ```
 
-### Email
+### Exception
+
+If the table representing the user is not updated and then a user instance is
+given to the package a `ModelNotCompliantException` will be thrown.
+
+## E-mail
 
 This package offers to send an email with a link containing the verification token.
 
 Please refer to the Laravel documentation for the proper email component configuration.
 
-#### View
+### E-mail View
 
 The user will receive an e-mail with a link leading to the getVerification
 method (endpoint). You will need to create a view for this e-mail at
@@ -122,7 +127,7 @@ token. Here is an sample e-mail view to get you started:
 Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
-### Errors
+## Errors
 
 This package throws several exceptions.
 
@@ -138,7 +143,7 @@ This user is already verified.
 * `UserNotFoundException`
 No user found for the given e-mail adresse.
 
-#### View
+### Error View
 
 Create a view for the default verification error route at
 resources/views/errors/user-verification.blade.php. Customize this view to your
@@ -169,7 +174,11 @@ over the three (3) previous listed public methods.
 
 ### Trait
 
-The package also offers a trait for a quick implementation.
+The package also offers two (2) traits for a quick implementation.
+
+`Jrean\UserVerification\Traits\VerifiesUsers`
+
+`Jrean\UserVerification\Traits\RedirectsUsers`
 
 #### Endpoints
 
