@@ -161,11 +161,11 @@ Generate and save a verification token for the given user.
 
 * `send(AuthenticatableContract $user, $subject = null)`
 
-Send by email a link containing the verification token.
+Send by e-mail a link containing the verification token.
 
-* `process(AuthenticatableContract $user, $token)`
+* `process($email, $token, $userTable)`
 
-Process the token verification for the given user.
+Process the token verification for the given e-mail and token.
 
 ### Facade
 
