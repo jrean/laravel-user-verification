@@ -1,12 +1,12 @@
 **jrean/laravel-user-verification** is a PHP package built for Laravel 5 to
-easily handle a user verification flow and validate its email.
+easily handle a user verification flow and validate its e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
 ## About
 
 - Generate and store a verification token for a registered user.
-- Send an email with the verification token link.
+- Send an e-mail with the verification token link.
 - Handle the verification of the token.
 - Set the user as verified.
 
@@ -17,14 +17,21 @@ To get the latest version of Laravel User Verification, simply add the following
 the require block of your composer.json file:
 
     "jrean/laravel-user-verification": "dev-master"
+
+    or
+
+    "jrean/laravel-user-verification": "2.2.*"
+
+    or
+
     "jrean/laravel-user-verification": "2.*"
 
-or
+You'll then need to run `composer install` or `composer update` to download the
+package and have the autoloader updated.
+
+Or run the following command:
 
     "composer require jrean/laravel-user-verification"
-
-You'll then need to run `composer install` or `composer update` to download it and
-have the autoloader updated.
 
 ### Add the Service Provider
 
@@ -44,8 +51,10 @@ Open up `config/app.php` and add the following to the `aliases` key:
 
 Prior to use this package the table representing the user must be updated with
 two new columns, "verified" and "verification_token". It is mandatory to add
-the two columns on the same table and where the user's email is
-stored. Last but not least, the model must implement the authenticatable
+the two columns on the same table and where the user's e-mail is
+stored.
+
+Last but not least, the model must implement the authenticatable
 interface `Illuminate\Contracts\Auth\Authenticatable` which is the default with
 the Eloquent User model.
 
@@ -111,9 +120,9 @@ given to the package a `ModelNotCompliantException` will be thrown.
 
 ## E-mail
 
-This package offers to send an email with a link containing the verification token.
+This package offers to send an e-mail with a link containing the verification token.
 
-Please refer to the Laravel documentation for the proper email component configuration.
+Please refer to the Laravel documentation for the proper e-mail component configuration.
 
 ### E-mail View
 
@@ -302,7 +311,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom Email Subject');
+        UserVerification::send($user, 'My Custom E-mail Subject');
 
         return redirect($this->redirectPath());
     }
