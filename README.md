@@ -117,11 +117,11 @@ Please refer to the Laravel documentation for the proper email component configu
 
 ### E-mail View
 
-The user will receive an e-mail with a link leading to the getVerification
+The user will receive an e-mail with a link leading to the 'getVerificationi()'
 method (endpoint). You will need to create a view for this e-mail at
-resources/views/emails/user-verification.blade.php. The view will receive the
+`resources/views/emails/user-verification.blade.php`. The view will receive the
 `$user` variable which contains the user details such as the verification
-token. Here is an sample e-mail view to get you started:
+token. Here is a sample e-mail view content to get you started with:
 
 ```
 Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
@@ -146,7 +146,7 @@ No user found for the given e-mail adresse.
 ### Error View
 
 Create a view for the default verification error route at
-resources/views/errors/user-verification.blade.php. Customize this view to your
+`resources/views/errors/user-verification.blade.php`. Customize this view to your
 needs.
 
 ## Usage
@@ -197,7 +197,7 @@ Do something if the verification fails.
 #### Custom attributes/properties
 
 To customize the package behaviour and the redirects you can implement and
-customize five (6) attributes/properties:
+customize six (6) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
@@ -223,16 +223,16 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
-## Example
+## Guidelines
 
 This package whishes to let you be creative while offering you a predefined
-path. The following sample assume you have configured Laravel for the
+path. The following guidelines assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
 documentation.
 This package doesn't require the user to be authenticated to perform the
 verification. You are free to implement any flow you may want to achieve.
 Note that by default the behaviour of Laravel is to return an authenticated
-user straight after the registration.
+user straight after the registration step.
 
 ### Example
 
@@ -243,11 +243,11 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 - Import the `VerifiesUsers` trait (mandatory)
 - Overwrite and customize the redirect path attributes/properties (not
     mandatory)
-- Overwrite and customize the view name for the getVerificationError method
+- Overwrite and customize the view name for the `getVerificationError` method
     (not mandatory)
 - Create the verification error view according to the defined path (mandatory)
 - Overwrite the contructor (not mandatory)
-- Overwrite the postRegister/register method (mandatory)
+- Overwrite the `postRegister()`/`register()` method (mandatory)
 
 ```
     ...
@@ -268,7 +268,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
      */
     public function __construct()
     {
-        // Based on the workflow you want you may update the following lines.
+        // Based on the workflow you want you may update and customize the following lines.
 
         // Laravel 5.0.*|5.1.*
         $this->middleware('guest', ['except' => ['getLogout']]);
@@ -310,8 +310,9 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
 Edit the `app\Http\routes.php` file.
 
-- Define two new routes. Routes are customizable.
-Don't forget to update the previous listed redirect attributes.
+- Define two (2) new routes. Routes are customizable.
+Don't forget to update the previous listed redirect attributes/properties if you want to
+change the pre-defined routes.
 
 ```
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
