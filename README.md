@@ -16,15 +16,12 @@ This project can be installed via [Composer](http://getcomposer.org).
 To get the latest version of Laravel User Verification, simply add the following line to
 the require block of your composer.json file:
 
-    "jrean/laravel-user-verification": "dev-master"
+    {
+        "require": {
+                "jrean/laravel-user-verification": "^2.0"
+        }
 
-    or
-
-    "jrean/laravel-user-verification": "2.2.*"
-
-    or
-
-    "jrean/laravel-user-verification": "2.*"
+    }
 
 You'll then need to run `composer install` or `composer update` to download the
 package and have the autoloader updated.
@@ -32,6 +29,7 @@ package and have the autoloader updated.
 Or run the following command:
 
     "composer require jrean/laravel-user-verification"
+
 
 ### Add the Service Provider
 
