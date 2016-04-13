@@ -176,8 +176,9 @@ Process the token verification for the given e-mail and token.
 
 ### Facade
 
-The package offers a facade callable with `UserVerification::`. You can use it
-over the three (3) previous listed public methods.
+The package offers a facade callable with `UserVerification::`.
+
+You can use it over the three (3) previous listed public methods.
 
 ### Trait
 
