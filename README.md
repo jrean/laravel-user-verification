@@ -218,7 +218,7 @@ Where to redirect after a successful verification token generation.
 
 Where to redirect after a successful verification token verification.
 
-* `$redirectIfVerificationFails = '/auth/verification/error';`
+* `$redirectIfVerificationFails = '/verification/error';`
 
 Where to redirect after a failling token verification.
 
