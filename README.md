@@ -233,7 +233,7 @@ Name of the default table used for managing users.
 
 * `$verificationFrom` = null;
 
-From address of the verification e-mail eg: ['address' => 'sender@example.com', 'name' => 'Verification Sender'].
+From address of the verification e-mail eg: ['sender@example.com' => 'Verification Sender'].
 
 ## Guidelines
 
@@ -314,7 +314,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom E-mail Subject', ['address' => 'sender@example.com', 'name' => 'Verification Sender']);
+        UserVerification::send($user, 'My Custom E-mail Subject', ['sender@example.com' => 'Verification Sender']);
 
         return redirect($this->redirectPath());
     }
