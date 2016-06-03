@@ -231,13 +231,9 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
-* `$verificationFromAddress` = null;
+* `$verificationFrom` = null;
 
-From address of the verification e-mail sender.
-
-* `$verificationFromName` = null;
-
-From address name of the verification e-mail sender.
+From address of the verification e-mail eg: ['address' => 'sender@example.com', 'name' => 'Verification Sender'].
 
 ## Guidelines
 
@@ -318,7 +314,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom E-mail Subject', compact('sender@example.com', 'Verification Sender'));
+        UserVerification::send($user, 'My Custom E-mail Subject', ['address' => 'sender@example.com', 'name' => 'Verification Sender']);
 
         return redirect($this->redirectPath());
     }

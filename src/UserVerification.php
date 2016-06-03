@@ -42,10 +42,6 @@ class UserVerification
     public function __construct(MailerContract $mailer, Builder $schema)
     {
         $this->mailer = $mailer;
-        if (property_exists($this, 'verificationFromAddress')) {
-            $m->alwaysFrom($this->verificationFromAddress,
-                property_exists($this, 'verificationFromName') ? $this->verificationFromAddress : null);
-        }
         $this->schema = $schema;
     }
 
@@ -107,7 +103,7 @@ class UserVerification
             throw new ModelNotCompliantException();
         }
 
-        return (boolean) $this->emailVerificationLink($user, $subject);
+        return (boolean) $this->emailVerificationLink($user, $subject, $from);
     }
 
     /**
@@ -228,6 +224,8 @@ class UserVerification
             $m->to($user->email);
             if (!is_null($from)) {
                 $m->from($from);
+            } elseif (property_exists($this, 'verificationFrom')) {
+                $m->from($this->verificationFromAddress);
             }
 
             $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
