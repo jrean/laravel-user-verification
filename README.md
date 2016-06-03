@@ -166,7 +166,7 @@ The package public API offers three (3) methods.
 
 Generate and save a verification token for the given user.
 
-* `send(AuthenticatableContract $user, $subject = null)`
+* `send(AuthenticatableContract $user, $subject = null, $from = null)`
 
 Send by e-mail a link containing the verification token.
 
@@ -231,6 +231,14 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
+* `$verificationFromAddress` = null;
+
+From address of the verification e-mail sender.
+
+* `$verificationFromName` = null;
+
+From address name of the verification e-mail sender.
+
 ## Guidelines
 
 This package whishes to let you be creative while offering you a predefined
@@ -293,7 +301,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function postRegister(Request $request)
+    public function register(Request $request)
     {
         $validator = $this->validator($request->all());
 
@@ -306,11 +314,11 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
         $user = $this->create($request->all());
 
         // Authenticating the user is not mandatory at all.
-        //Auth::login($user);
+        // Auth::guard($this->getGuard())->login($user);
 
         UserVerification::generate($user);
 
-        UserVerification::send($user, 'My Custom E-mail Subject');
+        UserVerification::send($user, 'My Custom E-mail Subject', compact('sender@example.com', 'Verification Sender'));
 
         return redirect($this->redirectPath());
     }

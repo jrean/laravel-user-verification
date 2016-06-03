@@ -42,6 +42,10 @@ class UserVerification
     public function __construct(MailerContract $mailer, Builder $schema)
     {
         $this->mailer = $mailer;
+        if (property_exists($this, 'verificationFromAddress')) {
+            $m->alwaysFrom($this->verificationFromAddress,
+                property_exists($this, 'verificationFromName') ? $this->verificationFromAddress : null);
+        }
         $this->schema = $schema;
     }
 
@@ -97,7 +101,7 @@ class UserVerification
      *
      * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
-    public function send(AuthenticatableContract $user, $subject = null)
+    public function send(AuthenticatableContract $user, $subject = null, $from = null)
     {
         if (! $this->isCompliant($user)) {
             throw new ModelNotCompliantException();
@@ -218,10 +222,13 @@ class UserVerification
      * @param  string  $subject
      * @return mixed
      */
-    protected function emailVerificationLink(AuthenticatableContract $user, $subject)
+    protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from)
     {
-        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject) {
+        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject, $from) {
             $m->to($user->email);
+            if (!is_null($from)) {
+                $m->from($from);
+            }
 
             $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
         });
