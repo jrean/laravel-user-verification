@@ -1,4 +1,4 @@
-**jrean/laravel-user-verification** is a PHP package built for Laravel 5 to
+**jrean/laravel-user-verification** is a PHP package built for Laravel 5.* to
 easily handle a user verification flow and validate its e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
