@@ -223,7 +223,7 @@ Where to redirect after a successful verification token verification.
 
 Where to redirect after a failling token verification.
 
-* `$verifiationErrorView = 'errors.user-verification';`
+* `$verificationErrorView = 'errors.user-verification';`
 
 Name of the view returned by the getVerificationError method.
 
