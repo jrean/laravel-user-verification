@@ -93,17 +93,19 @@ class UserVerification
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
      * @return bool
      *
      * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
-    public function send(AuthenticatableContract $user, $subject = null)
+    public function send(AuthenticatableContract $user, $subject = null, $from = null, $name = null)
     {
         if (! $this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
-        return (boolean) $this->emailVerificationLink($user, $subject);
+        return (boolean) $this->emailVerificationLink($user, $subject, $from, $name);
     }
 
     /**
@@ -216,11 +218,17 @@ class UserVerification
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
      * @return mixed
      */
-    protected function emailVerificationLink(AuthenticatableContract $user, $subject)
+    protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
-        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject) {
+        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject, $from, $name) {
+            if (! empty($from)) {
+                $m->from($from, $name);
+            }
+
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
