@@ -1,14 +1,14 @@
 **jrean/laravel-user-verification** is a PHP package built for Laravel 5.* to
-easily handle a user verification flow and validate its e-mail.
+easily handle a user verification and validate the e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
 ## About
 
-- Generate and store a verification token for a registered user.
-- Send an e-mail with the verification token link.
-- Handle the verification of the token.
-- Set the user as verified.
+- [x] Generate and store a verification token for a registered user
+- [x] Send an e-mail with the verification token link
+- [x] Handle the verification of the token
+- [x] Set the user as verified
 
 ## Installation
 
@@ -47,14 +47,15 @@ Open up `config/app.php` and add the following to the `aliases` key:
 
 ## Configuration
 
-Prior to use this package the table representing the user must be updated with
-two new columns, "verified" and "verification_token". It is mandatory to add
-the two columns on the same table and where the user's e-mail is
-stored.
+Prior to use this package the table representing the `User` must be updated with
+two new columns, `verified` and `verification_token`.
 
-Last but not least, the model must implement the authenticatable
+**It is mandatory to add the two columns on the same table and where the user's
+e-mail is stored.**
+
+The model representing the `User` must implement the authenticatable
 interface `Illuminate\Contracts\Auth\Authenticatable` which is the default with
-the Eloquent User model.
+the Eloquent `User` model.
 
 ### Migration
 
@@ -64,7 +65,7 @@ Generate the migration file with the following artisan command:
 php artisan make:migration add_verification_to_:table_table --table=":table"
 ```
 
-Where `:table` is replaced by the table of your choice.
+Where `:table` is replaced by the table name of your choice.
 
 For instance if you want to keep the default Eloquent User table:
 
@@ -72,7 +73,7 @@ For instance if you want to keep the default Eloquent User table:
 php artisan make:migration add_verification_to_users_table --table="users"
 ```
 
-Once the migration is generated, edit the file in `database/migration` with the following:
+Once the migration is generated, edit the generated migration file in `database/migration` with the following:
 
 ```
     /**
@@ -113,19 +114,22 @@ php artisan migrate
 
 ### Exception
 
-If the table representing the user is not updated and then a user instance is
-given to the package a `ModelNotCompliantException` will be thrown.
+If the table representing the user is not updated and a user instance is given
+to the package without implement the authenticatable interface
+`Illuminate\Contracts\Auth\Authenticatable` a `ModelNotCompliantException` will
+be thrown.
+
 
 ## E-mail
 
 This package offers to send an e-mail with a link containing the verification token.
 
-Please refer to the Laravel documentation for the proper e-mail component configuration.
+Please refer to the Laravel [documentation](https://laravel.com/docs/) for the proper e-mail component configuration.
 
 ### E-mail View
 
-The user will receive an e-mail with a link leading to the 'getVerificationi()'
-method (endpoint). You will need to create a view for this e-mail at
+The user will receive an e-mail with a link leading to the `getVerification()`
+method (endpoint). Create a view for this e-mail at
 `resources/views/emails/user-verification.blade.php`. The view will receive the
 `$user` variable which contains the user details such as the verification
 token. Here is a sample e-mail view content to get you started with:
@@ -136,25 +140,33 @@ Click here to verify your account: <a href="{{ $link = url('verification', $user
 
 ## Errors
 
-This package throws several exceptions.
+This package throws several exceptions. You are free to use `try/catch`
+statements or to rely on Laravel built-in exceptions handling.
 
 * `ModelNotCompliantException`
-The model instance provided is not compliant with this package.
+
+The model instance provided is not compliant with this package. It must
+implement the authenticatable interface
+`Illuminate\Contracts\Auth\Authenticatable`
 
 * `TokenMismatchException`
+
 Wrong verification token.
 
 * `UserIsVerifiedException`
-This user is already verified.
+
+The given user is already verified.
 
 * `UserNotFoundException`
+
 No user found for the given e-mail adresse.
 
 ### Error View
 
-Create a view for the default verification error route at
-`resources/views/errors/user-verification.blade.php`. Customize this view to your
-needs.
+Create a view for the default verification error route `/verification/error` at
+`resources/views/errors/user-verification.blade.php`. If an error occurs, the
+user will be redirected to this route and this view will be rendered. Customize
+this view to your needs.
 
 ## Usage
 
@@ -185,6 +197,8 @@ You can use it over the three (3) previous listed public methods.
 The package also offers two (2) traits for a quick implementation.
 
 `Jrean\UserVerification\Traits\VerifiesUsers`
+
+which includes:
 
 `Jrean\UserVerification\Traits\RedirectsUsers`
 
@@ -231,12 +245,18 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
+#### Custom methods
+
+You can easily customize the package behaviour by overriding/overwriting the
+public methods. Dig into the source.
+
 ## Guidelines
 
 This package whishes to let you be creative while offering you a predefined
 path. The following guidelines assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
 documentation.
+
 This package doesn't require the user to be authenticated to perform the
 verification. You are free to implement any flow you may want to achieve.
 Note that by default the behaviour of Laravel is to return an authenticated
@@ -246,16 +266,19 @@ user straight after the registration step.
 
 The following code sample aims to showcase a quick and basic implementation.
 
-Edit the `app\Http\Controller\Auth\AuthController.php` file.
+Edit the `app\Http\Controller\Auth\AuthController.php` file. It is highly
+recommended to read the content of the authentication properpties /
+methods provided by Laravel before implementing the package.
 
-- Import the `VerifiesUsers` trait (mandatory)
-- Overwrite and customize the redirect path attributes/properties (not
+- [x] Import the `VerifiesUsers` trait (mandatory)
+- [] Overwrite and customize the redirect path attributes/properties (not
     mandatory)
-- Overwrite and customize the view name for the `getVerificationError` method
+- [] Overwrite and customize the view name for the `getVerificationError()` method
     (not mandatory)
-- Create the verification error view according to the defined path (mandatory)
-- Overwrite the contructor (not mandatory)
-- Overwrite the `postRegister()`/`register()` method (mandatory)
+- [x] Create the verification error view according to the defined path (mandatory)
+- [] Overwrite the contructor (not mandatory)
+- [x] Overwrite the `postRegister()`/`register()` method depending on the
+    Laravel version you use (mandatory)
 
 ```
     ...
@@ -287,6 +310,8 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
     ...
 
+    // Laravel 5.0.*|5.1.*
+
     /**
      * Handle a registration request for the application.
      *
@@ -314,6 +339,40 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         return redirect($this->redirectPath());
     }
+
+    // Laravel 5.2.*
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $user = $this->create($request->all());
+
+        // Authenticating the user is not mandatory at all.
+
+        // Laravel <= 5.2.7
+        // Auth::login($user);
+
+        // Laravel > 5.2.7
+        Auth::guard($this->getGuard())->login($user);
+
+        UserVerification::generate($user);
+
+        UserVerification::send($user, 'My Custom E-mail Subject');
+
+        return redirect($this->redirectPath());
+    }
 ```
 
 Edit the `app\Http\routes.php` file.
@@ -329,9 +388,7 @@ change the pre-defined routes.
 
 ## Contribute
 
-This package is (yet) under development and refactoring but is ready for
-production. Please, feel free to comment, contribute and help. I will be happy
-to get some help to deliver tests.
+Feel free to comment, contribute and help. 1 PR = 1 feature.
 
 ## License
 
