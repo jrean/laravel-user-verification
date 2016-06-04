@@ -122,7 +122,18 @@ be thrown.
 
 ## E-mail
 
-This package offers to send an e-mail with a link containing the verification token.
+This package provides a method to send an e-mail with a link containing the verification token.
+
+- `send(AuthenticatableContract $user, $subject = null, $from = null, $name =
+    null)`
+
+By default the package will use the `from` and `name` values defined into the
+`config/mail.php` file:
+
+    'from' => ['address' => '', 'name' => ''],
+
+If you want to override the values, simply set the `$from` and (optional)
+`$name` parameters.
 
 Please refer to the Laravel [documentation](https://laravel.com/docs/) for the proper e-mail component configuration.
 
@@ -178,7 +189,8 @@ The package public API offers three (3) methods.
 
 Generate and save a verification token for the given user.
 
-* `send(AuthenticatableContract $user, $subject = null)`
+* `send(AuthenticatableContract $user, $subject = null, $from = null, $name =
+* null)`
 
 Send by e-mail a link containing the verification token.
 
