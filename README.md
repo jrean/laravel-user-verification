@@ -283,12 +283,12 @@ recommended to read the content of the authentication properpties /
 methods provided by Laravel before implementing the package.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
-- [  ] Overwrite and customize the redirect path attributes/properties (not
+- [ ] Overwrite and customize the redirect path attributes/properties (not
     mandatory)
-- [  ] Overwrite and customize the view name for the `getVerificationError()` method
+- [ ] Overwrite and customize the view name for the `getVerificationError()` method
     (not mandatory)
 - [x] Create the verification error view according to the defined path (mandatory)
-- [  ] Overwrite the contructor (not mandatory)
+- [ ] Overwrite the contructor (not mandatory)
 - [x] Overwrite the `postRegister()`/`register()` method depending on the
     Laravel version you use (mandatory)
 
