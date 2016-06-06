@@ -9,6 +9,7 @@ easily handle a user verification and validate the e-mail.
 - [x] Send an e-mail with the verification token link
 - [x] Handle the verification of the token
 - [x] Set the user as verified
+- [x] Relaunch the process anytime
 
 ## Installation
 
@@ -181,6 +182,41 @@ this view to your needs.
 
 ## Usage
 
+### Routes
+
+Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
+customizable. If you do so, you must overwrite the corresponding available
+redirect attributes/properties listed later.
+
+```
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
+```
+
+### Trait
+
+The package offers two (2) traits for a quick implementation.
+Only `VerifiesUsers` must be included.
+
+`Jrean\UserVerification\Traits\VerifiesUsers`
+
+which includes:
+
+`Jrean\UserVerification\Traits\RedirectsUsers`
+
+### Endpoints
+
+The two (2) following methods are included into the `VerifiesUsers` trait and
+called by the default package routes.
+
+* `getVerification(Request $request, $token)`
+
+Handle the user verification.
+
+* `getVerificationError()`
+
+Do something if the verification fails.
+
 ### API
 
 The package public API offers three (3) methods.
@@ -189,8 +225,7 @@ The package public API offers three (3) methods.
 
 Generate and save a verification token for the given user.
 
-* `send(AuthenticatableContract $user, $subject = null, $from = null, $name =
-* null)`
+* `send(AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
 
 Send by e-mail a link containing the verification token.
 
@@ -200,35 +235,9 @@ Process the token verification for the given e-mail and token.
 
 ### Facade
 
-The package offers a facade callable with `UserVerification::`.
+The package offers a facade `UserVerification::`.
 
-You can use it over the three (3) previous listed public methods.
-
-### Trait
-
-The package also offers two (2) traits for a quick implementation.
-
-`Jrean\UserVerification\Traits\VerifiesUsers`
-
-which includes:
-
-`Jrean\UserVerification\Traits\RedirectsUsers`
-
-#### Endpoints
-
-The two following methods are endpoints you can join by defining the proper
-route(s) of your choice.
-
-* `getVerification(Request $request, $token)`
-
-Handle the user verification. It requires a string parameter representing the
-verification token to verify.
-
-* `getVerificationError()`
-
-Do something if the verification fails.
-
-#### Custom attributes/properties
+### Custom attributes/properties
 
 To customize the package behaviour and the redirects you can implement and
 customize six (6) attributes/properties:
@@ -257,10 +266,10 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
-#### Custom methods
+### Custom methods/attributes/properties
 
 You can easily customize the package behaviour by overriding/overwriting the
-public methods. Dig into the source.
+public methods and the attributes/properties. Dig into the source.
 
 ## Guidelines
 
@@ -389,9 +398,7 @@ methods provided by Laravel before implementing the package.
 
 Edit the `app\Http\routes.php` file.
 
-- Define two (2) new routes. Routes are customizable.
-Don't forget to update the previous listed redirect attributes/properties if you want to
-change the pre-defined routes.
+- Define two (2) new routes.
 
 ```
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
