@@ -315,6 +315,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     Laravel version you use (mandatory)
 
 ```
+    // app\Http\Controller\Auth\AuthController.php
     ...
 
     use Jrean\UserVerification\Traits\VerifiesUsers;
