@@ -185,12 +185,11 @@ this view to your needs.
 ### Routes
 
 Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
-customizable. If you do so, you must overwrite the corresponding available
-redirect attributes/properties listed later.
+customizable.
 
 ```
-    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
     Route::get('verification/{token}', 'Auth\AuthController@getVerification');
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
 ```
 
 ### Trait
@@ -277,27 +276,40 @@ public methods and the attributes/properties. Dig into the source.
 verification. You are free to implement any flow you may want to achieve.**
 
 This package whishes to let you be creative while offering you a predefined
-path. The following guidelines assume you have configured Laravel for the
+path. **The following guidelines assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
-documentation.
+documentation and the previous documented steps.**
 
 Note that by default the behaviour of Laravel is to return an authenticated
 user straight after the registration step.
 
 ### Example
 
-The following code sample aims to showcase a quick and basic implementation.
+The following code sample aims to showcase a quick and basic implementation
+following Laravel logic. You are free to implement the way you want.
+It is highly recommended to read and understand the way Laravel implements
+registration / authentication before implementing the package.
 
-Edit the `app\Http\Controller\Auth\AuthController.php` file. It is highly
-recommended to read the content of the authentication properpties /
-methods provided by Laravel before implementing the package.
+Edit the `app\Http\routes.php` file.
+
+- Define two (2) new routes.
+
+```
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+```
+
+- Define the e-mail view.
+
+Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
-- [ ] Overwrite and customize the redirect path attributes/properties (not
-    mandatory)
-- [ ] Overwrite and customize the view name for the `getVerificationError()` method
+- [ ] Overwrite and customize the redirect attributes/properties paths
+    available within the `RedirectsUsers` trait included by the
+    `VerifiesUsers` trait. (not mandatory)
+- [ ] Overwrite the error view name used by the `getVerificationError()` method
     (not mandatory)
-- [x] Create the verification error view according to the defined path (mandatory)
+- [x] Create the verification error view (mandatory)
 - [ ] Overwrite the contructor (not mandatory)
 - [x] Overwrite the `postRegister()`/`register()` method depending on the
     Laravel version you use (mandatory)
@@ -397,14 +409,12 @@ methods provided by Laravel before implementing the package.
     }
 ```
 
-Edit the `app\Http\routes.php` file.
+At this point, after registration an e-mail is sent to the user.
+Click the link within the e-mail and the user will be verified against the
+token.
 
-- Define two (2) new routes.
-
-```
-    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
-```
+**Note by default the user won't be authenticated after the verification**. You
+are free to implement it or not.
 
 ## Contribute
 
