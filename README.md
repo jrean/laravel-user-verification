@@ -337,10 +337,12 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
         // Based on the workflow you want you may update and customize the following lines.
 
         // Laravel 5.0.*|5.1.*
-        $this->middleware('guest', ['except' => ['getLogout']]);
+        $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
 
         // Laravel 5.2.*
-        $this->middleware('guest', ['except' => ['logout']]);
+        $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
+        //or
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
     }
 
     ...
@@ -410,12 +412,17 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     }
 ```
 
-At this point, after registration an e-mail is sent to the user.
+At this point, after registration, an e-mail is sent to the user.
 Click the link within the e-mail and the user will be verified against the
 token.
 
-**Note by default the user won't be authenticated after the verification**. You
-are free to implement it or not.
+If you want to perform the verification against an authenticated user you must
+update the middleware exception to allow `getVerification` and
+`getVerificationError` routes to be accessed.
+
+```
+$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+```
 
 ## Contribute
 
