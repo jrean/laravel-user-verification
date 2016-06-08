@@ -368,7 +368,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
         $user = $this->create($request->all());
 
         // Authenticating the user is not mandatory at all.
-        //Auth::login($user);
+        Auth::login($user);
 
         UserVerification::generate($user);
 
