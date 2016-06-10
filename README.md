@@ -13,9 +13,9 @@ easily handle a user verification and validate the e-mail.
 
 ## Installation
 
-This project can be installed via [Composer](http://getcomposer.org).
-To get the latest version of Laravel User Verification, simply add the following line to
-the require block of your composer.json file:
+This project can be installed via [Composer](http://getcomposer.org). To get
+the latest version of Laravel User Verification, add the following line to the
+require block of your composer.json file:
 
     {
         "require": {
@@ -48,7 +48,7 @@ Open up `config/app.php` and add the following to the `aliases` key:
 
 ## Configuration
 
-Prior to use this package the table representing the `User` must be updated with
+Prior to use this package the table representing the user must be updated with
 two new columns, `verified` and `verification_token`.
 
 **It is mandatory to add the two columns on the same table and where the user's
@@ -74,7 +74,8 @@ For instance if you want to keep the default Eloquent User table:
 php artisan make:migration add_verification_to_users_table --table="users"
 ```
 
-Once the migration is generated, edit the generated migration file in `database/migration` with the following:
+Once the migration is generated, edit the generated migration file in
+`database/migration` with the following lines:
 
 ```
     /**
@@ -115,11 +116,10 @@ php artisan migrate
 
 ### Exception
 
-If the table representing the user is not updated and a user instance is given
-to the package without implement the authenticatable interface
-`Illuminate\Contracts\Auth\Authenticatable` a `ModelNotCompliantException` will
-be thrown.
-
+If the table representing the user is not updated with the two new columns and
+the model representing the user doesn't implement the authenticatable interface
+`Illuminate\Contracts\Auth\Authenticatable`, a `ModelNotCompliantException`
+will be thrown.
 
 ## E-mail
 
@@ -136,7 +136,8 @@ By default the package will use the `from` and `name` values defined into the
 If you want to override the values, simply set the `$from` and (optional)
 `$name` parameters.
 
-Please refer to the Laravel [documentation](https://laravel.com/docs/) for the proper e-mail component configuration.
+Refer to the Laravel [documentation](https://laravel.com/docs/) for the
+proper e-mail component configuration.
 
 ### E-mail View
 
@@ -145,6 +146,8 @@ method (endpoint). Create a view for this e-mail at
 `resources/views/emails/user-verification.blade.php`. The view will receive the
 `$user` variable which contains the user details such as the verification
 token. Here is a sample e-mail view content to get you started with:
+**The link url must contain the verification token as parameter + (mandatory) a
+query string with the user's e-mail as parameter.**
 
 ```
 Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
@@ -153,7 +156,7 @@ Click here to verify your account: <a href="{{ $link = url('verification', $user
 ## Errors
 
 This package throws several exceptions. You are free to use `try/catch`
-statements or to rely on Laravel built-in exceptions handling.
+statements or to rely on the Laravel built-in exceptions handling.
 
 * `ModelNotCompliantException`
 
@@ -177,8 +180,11 @@ No user found for the given e-mail adresse.
 
 Create a view for the default verification error route `/verification/error` at
 `resources/views/errors/user-verification.blade.php`. If an error occurs, the
-user will be redirected to this route and this view will be rendered. Customize
-this view to your needs.
+user will be redirected to this route and this view will be rendered. **You
+must implement and customize this view to your needs.** For instance you may
+wish to display a short message saying that something went wrong and then ask
+for the user's e-mail again and start the process from scratch (generate, send,
+verify, ...).
 
 ## Usage
 
@@ -195,7 +201,7 @@ customizable.
 ### Trait
 
 The package offers two (2) traits for a quick implementation.
-Only `VerifiesUsers` must be included.
+**Only `VerifiesUsers` must be included.**
 
 `Jrean\UserVerification\Traits\VerifiesUsers`
 
@@ -236,7 +242,7 @@ Process the token verification for the given e-mail and token.
 
 The package offers a facade `UserVerification::`.
 
-### Custom attributes/properties
+### Attributes/Properties
 
 To customize the package behaviour and the redirects you can implement and
 customize six (6) attributes/properties:
@@ -265,9 +271,9 @@ Name of the view returned by the getVerificationError method.
 
 Name of the default table used for managing users.
 
-### Custom methods/attributes/properties
+### Customize
 
-You can easily customize the package behaviour by overriding/overwriting the
+You can customize the package behaviour by overriding/overwriting the
 public methods and the attributes/properties. Dig into the source.
 
 ## Guidelines
@@ -287,8 +293,8 @@ user straight after the registration step.
 
 The following code sample aims to showcase a quick and basic implementation
 following Laravel logic. You are free to implement the way you want.
-It is highly recommended to read and understand the way Laravel implements
-registration / authentication before implementing the package.
+It is highly recommended to read and to understand the way Laravel implements
+registration/authentication.
 
 Edit the `app\Http\routes.php` file.
 
