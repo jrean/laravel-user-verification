@@ -19,16 +19,6 @@ trait RedirectsUsers
     }
 
     /**
-     * Get the redirect path for a successful verification token generation.
-     *
-     * @return string
-     */
-    public function redirectAfterTokenGeneration()
-    {
-        return property_exists($this, 'redirectAfterTokenGeneration') ? $this->redirectAfterTokenGeneration : '/';
-    }
-
-    /**
      * Get the redirect path for a successful verification token verification.
      *
      * @return string

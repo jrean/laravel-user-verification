@@ -142,10 +142,16 @@ proper e-mail component configuration.
 ### E-mail View
 
 The user will receive an e-mail with a link leading to the `getVerification()`
-method (endpoint). Create a view for this e-mail at
-`resources/views/emails/user-verification.blade.php`. The view will receive the
-`$user` variable which contains the user details such as the verification
-token. Here is a sample e-mail view content to get you started with:
+method (endpoint). The view will receive a `$user` variable which contains the
+user details such as the verification token.
+
+By default the package sets the e-mail view as `emails.user-verification`.
+Create a view for this e-mail at `resources/views/emails/user-verification.blade.php`.
+
+If you want to customize the e-mail view location you can create the view file
+wherever you want and call `UserVerification::viewName('directory.your-view-name')`.
+
+Here is a sample e-mail view content to get you started with:
 **The link url must contain the verification token as parameter + (mandatory) a
 query string with the user's e-mail as parameter.**
 
@@ -245,15 +251,11 @@ The package offers a facade `UserVerification::`.
 ### Attributes/Properties
 
 To customize the package behaviour and the redirects you can implement and
-customize six (6) attributes/properties:
+customize six (5) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
 Where to reditect if the authenticated user is already verified.
-
-* `$redirectAfterTokenGeneration = '/';`
-
-Where to redirect after a successful verification token generation.
 
 * `$redirectAfterVerification = '/';`
 

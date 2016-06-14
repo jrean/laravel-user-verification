@@ -78,6 +78,16 @@ trait VerifiesUsers
     }
 
     /**
+     * Get the verification e-mail view name.
+     *
+     * @return string
+     */
+    protected function verificationEmailView()
+    {
+        return property_exists($this, 'verificationEmailView') ? $this->verificationEmailView : 'emails.user-verification';
+    }
+
+    /**
      * Get the user table name.
      *
      * @return string

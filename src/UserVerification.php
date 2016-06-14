@@ -33,6 +33,13 @@ class UserVerification
     protected $schema;
 
     /**
+     * E-mail view name.
+     *
+     * @var string
+     */
+    protected $emailView;
+
+    /**
      * Create a new instance.
      *
      * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
@@ -41,8 +48,9 @@ class UserVerification
      */
     public function __construct(MailerContract $mailer, Builder $schema)
     {
-        $this->mailer = $mailer;
-        $this->schema = $schema;
+        $this->mailer    = $mailer;
+        $this->schema    = $schema;
+        $this->emailView = 'emails.user-verification';
     }
 
     /**
@@ -106,6 +114,19 @@ class UserVerification
         }
 
         return (boolean) $this->emailVerificationLink($user, $subject, $from, $name);
+    }
+
+    /**
+     * Set the e-mail view name.
+     *
+     * @param  mixed  $name
+     * @return \Jrean\UserVerification
+     */
+    public function emailView($name)
+    {
+        $this->emailView = $name;
+
+        return $this;
     }
 
     /**
@@ -224,7 +245,7 @@ class UserVerification
      */
     protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
-        return $this->mailer->send('emails.user-verification', compact('user'), function ($m) use ($user, $subject, $from, $name) {
+        return $this->mailer->send($this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
             if (! empty($from)) {
                 $m->from($from, $name);
             }
