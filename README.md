@@ -350,7 +350,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
         // Laravel 5.2.*
         $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
         //or
-        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
     }
 
     ...
@@ -429,7 +429,7 @@ update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
 ```
-$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
 ```
 
 ## Contribute
