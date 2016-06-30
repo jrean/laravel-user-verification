@@ -309,7 +309,7 @@ Edit the `app\Http\routes.php` file.
 
 - Define the e-mail view.
 
-Edit the `app\Http\Controller\Auth\AuthController.php` file.
+Edit the `app\Http\Controllers\Auth\AuthController.php` file.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
 - [ ] Overwrite and customize the redirect attributes/properties paths
@@ -323,7 +323,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     Laravel version you use (mandatory)
 
 ```
-    // app\Http\Controller\Auth\AuthController.php
+    // app\Http\Controllers\Auth\AuthController.php
     ...
 
     use Jrean\UserVerification\Traits\VerifiesUsers;
