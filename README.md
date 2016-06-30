@@ -200,8 +200,8 @@ Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
 customizable.
 
 ```
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 ### Trait
