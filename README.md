@@ -303,8 +303,8 @@ Edit the `app\Http\routes.php` file.
 - Define two (2) new routes.
 
 ```
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 - Define the e-mail view.
