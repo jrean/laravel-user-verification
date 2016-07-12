@@ -200,8 +200,8 @@ Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
 customizable.
 
 ```
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 ### Trait
@@ -303,13 +303,13 @@ Edit the `app\Http\routes.php` file.
 - Define two (2) new routes.
 
 ```
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 - Define the e-mail view.
 
-Edit the `app\Http\Controller\Auth\AuthController.php` file.
+Edit the `app\Http\Controllers\Auth\AuthController.php` file.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
 - [ ] Overwrite and customize the redirect attributes/properties paths
@@ -323,6 +323,11 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     Laravel version you use (mandatory)
 
 ```
+<<<<<<< HEAD
+=======
+    // app\Http\Controllers\Auth\AuthController.php
+    ...
+>>>>>>> 05993cbfd9f638a00d57b615741dae38459ba35e
 
     namespace App\Http\Controllers\Auth;
 
@@ -373,6 +378,7 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
 
         // Laravel 5.0.*|5.1.*
 
+<<<<<<< HEAD
         /**
         * Handle a registration request for the application.
         *
@@ -382,6 +388,13 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
         public function postRegister(Request $request)
         {
             $validator = $this->validator($request->all());
+=======
+        // Laravel 5.2.*
+        $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError']]);
+        //or
+        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
+    }
+>>>>>>> 05993cbfd9f638a00d57b615741dae38459ba35e
 
             if ($validator->fails()) {
                 $this->throwValidationException(
@@ -447,7 +460,7 @@ update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
 ```
-$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
 ```
 
 ## Contribute
