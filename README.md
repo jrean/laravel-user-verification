@@ -323,101 +323,119 @@ Edit the `app\Http\Controller\Auth\AuthController.php` file.
     Laravel version you use (mandatory)
 
 ```
-    // app\Http\Controller\Auth\AuthController.php
-    ...
 
+    namespace App\Http\Controllers\Auth;
+
+    use App\User;
+    use Validator;
+    use App\Http\Controllers\Controller;
+    use Illuminate\Foundation\Auth\ThrottlesLogins;
+    use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
     use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Auth;
 
-    ...
-
-    use VerifiesUsers;
-
-    ...
-
-    /**
-     * Create a new authentication controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    class AuthController extends Controller
     {
-        // Based on the workflow you want you may update and customize the following lines.
+        /*
+        |--------------------------------------------------------------------------
+        | Registration & Login Controller
+        |--------------------------------------------------------------------------
+        |
+        | This controller handles the registration of new users, as well as the
+        | authentication of existing users. By default, this controller uses
+        | a simple trait to add these behaviors. Why don't you explore it?
+        |
+        */
+
+        use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+
+        use VerifiesUsers;
+
+        /**
+        * Create a new authentication controller instance.
+        *
+        * @return void
+        */
+        public function __construct()
+        {
+            // Based on the workflow you want you may update and customize the following lines.
+
+            // Laravel 5.0.*|5.1.*
+            $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
+
+            // Laravel 5.2.*
+            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
+            //or
+            $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+        }
 
         // Laravel 5.0.*|5.1.*
-        $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
+
+        /**
+        * Handle a registration request for the application.
+        *
+        * @param  \Illuminate\Http\Request  $request
+        * @return \Illuminate\Http\Response
+        */
+        public function postRegister(Request $request)
+        {
+            $validator = $this->validator($request->all());
+
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
+
+            $user = $this->create($request->all());
+
+            // Authenticating the user is not mandatory at all.
+            Auth::login($user);
+
+            UserVerification::generate($user);
+
+            UserVerification::send($user, 'My Custom E-mail Subject');
+
+            return redirect($this->redirectPath());
+        }
 
         // Laravel 5.2.*
-        $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
-        //or
-        $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
-    }
+        /**
+        * Handle a registration request for the application.
+        *
+        * @param  \Illuminate\Http\Request  $request
+        * @return \Illuminate\Http\Response
+        */
+        public function register(Request $request)
+        {
+            $validator = $this->validator($request->all());
 
-    ...
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
 
-    // Laravel 5.0.*|5.1.*
+            $user = $this->create($request->all());
 
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function postRegister(Request $request)
-    {
-        $validator = $this->validator($request->all());
+            // Authenticating the user is not mandatory at all.
 
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
+            // Laravel <= 5.2.7
+            // Auth::login($user);
+
+            // Laravel > 5.2.7
+            Auth::guard($this->getGuard())->login($user);
+
+            UserVerification::generate($user);
+
+            UserVerification::send($user, 'My Custom E-mail Subject');
+
+            return redirect($this->redirectPath());
         }
-
-        $user = $this->create($request->all());
-
-        // Authenticating the user is not mandatory at all.
-        Auth::login($user);
-
-        UserVerification::generate($user);
-
-        UserVerification::send($user, 'My Custom E-mail Subject');
-
-        return redirect($this->redirectPath());
     }
 
-    // Laravel 5.2.*
-    /**
-     * Handle a registration request for the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function register(Request $request)
-    {
-        $validator = $this->validator($request->all());
-
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-
-        $user = $this->create($request->all());
-
-        // Authenticating the user is not mandatory at all.
-
-        // Laravel <= 5.2.7
-        // Auth::login($user);
-
-        // Laravel > 5.2.7
-        Auth::guard($this->getGuard())->login($user);
-
-        UserVerification::generate($user);
-
-        UserVerification::send($user, 'My Custom E-mail Subject');
-
-        return redirect($this->redirectPath());
-    }
 ```
 
 At this point, after registration, an e-mail is sent to the user.
