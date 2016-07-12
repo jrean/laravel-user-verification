@@ -372,7 +372,6 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
         }
 
         // Laravel 5.0.*|5.1.*
-
         /**
         * Handle a registration request for the application.
         *
