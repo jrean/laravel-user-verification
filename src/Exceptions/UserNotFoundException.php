@@ -15,5 +15,5 @@ class UserNotFoundException extends Exception
      *
      * @var string
      */
-    protected $message = 'No user found for the given email adresse.';
+    protected $message = 'No user found for the given email address.';
 }
