@@ -16,8 +16,8 @@ For Laravel 5.0.* | 5.1.* | 5.2.*, use branch
 ## About
 
 - [x] Generate and store a verification token for a registered user
-- [x] Send an e-mail with the verification token link
-- [x] Handle the verification of the token
+- [x] Send or queue an e-mail with the verification token link
+- [x] Handle the token verification
 - [x] Set the user as verified
 - [x] Relaunch the process anytime
 
@@ -29,7 +29,7 @@ require block of your composer.json file:
 
     {
         "require": {
-                "jrean/laravel-user-verification": "^2.0"
+                "jrean/laravel-user-verification": "^3.0"
         }
 
     }
@@ -58,7 +58,7 @@ Open up `config/app.php` and add the following to the `aliases` key:
 
 ## Configuration
 
-Prior to use this package the table representing the user must be updated with
+Prior to use this package, the table representing the user must be updated with
 two new columns, `verified` and `verification_token`.
 
 **It is mandatory to add the two columns on the same table and where the user's
@@ -78,7 +78,7 @@ php artisan make:migration add_verification_to_:table_table --table=":table"
 
 Where `:table` is replaced by the table name of your choice.
 
-For instance if you want to keep the default Eloquent User table:
+For instance, if you want to keep the default Eloquent `User` table:
 
 ```
 php artisan make:migration add_verification_to_users_table --table="users"
@@ -124,13 +124,6 @@ Migrate the migration with the following command:
 php artisan migrate
 ```
 
-### Exception
-
-If the table representing the user is not updated with the two new columns and
-the model representing the user doesn't implement the authenticatable interface
-`Illuminate\Contracts\Auth\Authenticatable`, a `ModelNotCompliantException`
-will be thrown.
-
 ## E-mail
 
 This package provides a method to send an e-mail with a link containing the verification token.
@@ -172,7 +165,7 @@ Click here to verify your account: <a href="{{ $link = url('verification', $user
 ## Errors
 
 This package throws several exceptions. You are free to use `try/catch`
-statements or to rely on the Laravel built-in exceptions handling.
+statements or to rely on the Laravel built-in exceptions handler.
 
 * `ModelNotCompliantException`
 
@@ -206,12 +199,12 @@ verify, ...).
 
 ### Routes
 
-Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
+Add the two (2) default routes to the `routes/web.php` file. Routes are
 customizable.
 
 ```
-    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
+    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
 ```
 
 ### Trait
@@ -240,7 +233,7 @@ Do something if the verification fails.
 
 ### API
 
-The package public API offers three (3) methods.
+The package public API offers height (8) methods.
 
 * `generate(AuthenticatableContract $user)`
 
@@ -250,9 +243,33 @@ Generate and save a verification token for the given user.
 
 Send by e-mail a link containing the verification token.
 
+* `sendQueue(AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Queue and send by e-mail a link containing the verification token.
+
+* `sendQueueOn($queue, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Queue on the given queue and send by e-mail a link containing the verification token.
+
+* `sendLater($seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Send later by e-mail a link containing the verification token.
+
+* `sendLaterOn($queue, $seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Send later on the given queue by e-mail a link containing the verification token.
+
 * `process($email, $token, $userTable)`
 
 Process the token verification for the given e-mail and token.
+
+* `emailView($name)`
+
+Set the e-mail view name.
+
+For the `sendQueue`, `sendQueueOn`, `sendLater` and
+`sendLaterOn` methods, you must [configure your queues](https://laravel.com/docs/)
+before using this feature.
 
 ### Facade
 
@@ -261,7 +278,7 @@ The package offers a facade `UserVerification::`.
 ### Attributes/Properties
 
 To customize the package behaviour and the redirects you can implement and
-customize six (5) attributes/properties:
+customize six (6) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
@@ -278,6 +295,10 @@ Where to redirect after a failling token verification.
 * `$verificationErrorView = 'errors.user-verification';`
 
 Name of the view returned by the getVerificationError method.
+
+* `$verificationEmailView = 'emails.user-verification';`
+
+Name of the default e-mail view.
 
 * `$userTable = 'users';`
 
@@ -299,7 +320,7 @@ package as well as created and migrated the migration according to this
 documentation and the previous documented steps.**
 
 Note that by default the behaviour of Laravel is to return an authenticated
-user straight after the registration step.
+user after the registration step.
 
 ### Example
 
@@ -308,29 +329,29 @@ following Laravel logic. You are free to implement the way you want.
 It is highly recommended to read and to understand the way Laravel implements
 registration/authentication.
 
-Edit the `app\Http\routes.php` file.
+Edit the `routes/web.php` file.
 
 - Define two (2) new routes.
 
 ```
-    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
+    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
 ```
 
 - Define the e-mail view.
 
-Edit the `app\Http\Controllers\Auth\AuthController.php` file.
+Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
 - [ ] Overwrite and customize the redirect attributes/properties paths
     available within the `RedirectsUsers` trait included by the
     `VerifiesUsers` trait. (not mandatory)
-- [ ] Overwrite the error view name used by the `getVerificationError()` method
+- [ ] Overwrite the default error view name used by the `getVerificationError()` method
     (not mandatory)
-- [x] Create the verification error view (mandatory)
+- [x] Create the verification error view at
+    `resources/views/errors/user-verification.blade.php` (mandatory)
 - [ ] Overwrite the contructor (not mandatory)
-- [x] Overwrite the `postRegister()`/`register()` method depending on the
-    Laravel version you use (mandatory)
+- [x] Overwrite the `register()` method (mandatory)
 
 ```
 
@@ -339,78 +360,72 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
     use App\User;
     use Validator;
     use App\Http\Controllers\Controller;
-    use Illuminate\Foundation\Auth\ThrottlesLogins;
-    use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+    use Illuminate\Foundation\Auth\RegistersUsers;
+    use Illuminate\Http\Request;
+
     use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
-    use Illuminate\Http\Request;
-    use Illuminate\Support\Facades\Auth;
 
-    class AuthController extends Controller
+
+    class RegisterController extends Controller
     {
         /*
         |--------------------------------------------------------------------------
-        | Registration & Login Controller
+        | Register Controller
         |--------------------------------------------------------------------------
         |
-        | This controller handles the registration of new users, as well as the
-        | authentication of existing users. By default, this controller uses
-        | a simple trait to add these behaviors. Why don't you explore it?
+        | This controller handles the registration of new users as well as their
+        | validation and creation. By default this controller uses a trait to
+        | provide this functionality without requiring any additional code.
         |
         */
 
-        use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+        use RegistersUsers;
 
         use VerifiesUsers;
 
-        /**
-        * Create a new authentication controller instance.
+       /**
+        * Create a new controller instance.
         *
         * @return void
         */
         public function __construct()
         {
-            // Based on the workflow you want you may update and customize the following lines.
+            // Based on the workflow you need, you may update and customize the following lines.
 
-            // Laravel 5.0.*|5.1.*
-            $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
-
-            // Laravel 5.2.*
-            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
-            //or
-            $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+            $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
         }
 
-        // Laravel 5.0.*|5.1.*
         /**
-        * Handle a registration request for the application.
+        * Get a validator for an incoming registration request.
         *
-        * @param  \Illuminate\Http\Request  $request
-        * @return \Illuminate\Http\Response
+        * @param  array  $data
+        * @return \Illuminate\Contracts\Validation\Validator
         */
-        public function postRegister(Request $request)
+        protected function validator(array $data)
         {
-            $validator = $this->validator($request->all());
-
-            if ($validator->fails()) {
-                $this->throwValidationException(
-                    $request, $validator
-                );
-            }
-
-            $user = $this->create($request->all());
-
-            // Authenticating the user is not mandatory at all.
-            Auth::login($user);
-
-            UserVerification::generate($user);
-
-            UserVerification::send($user, 'My Custom E-mail Subject');
-
-            return redirect($this->redirectPath());
+            return Validator::make($data, [
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:255|unique:users',
+                'password' => 'required|min:6|confirmed',
+            ]);
         }
 
-        // Laravel 5.2.*
+        /**
+        * Create a new user instance after a valid registration.
+        *
+        * @param  array  $data
+        * @return User
+        */
+        protected function create(array $data)
+        {
+            return User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+            ]);
+        }
+
         /**
         * Handle a registration request for the application.
         *
@@ -419,26 +434,12 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
         */
         public function register(Request $request)
         {
-            $validator = $this->validator($request->all());
-
-            if ($validator->fails()) {
-                $this->throwValidationException(
-                    $request, $validator
-                );
-            }
+            $this->validator($request->all())->validate();
 
             $user = $this->create($request->all());
-
-            // Authenticating the user is not mandatory at all.
-
-            // Laravel <= 5.2.7
-            // Auth::login($user);
-
-            // Laravel > 5.2.7
-            Auth::guard($this->getGuard())->login($user);
+            $this->guard()->login($user);
 
             UserVerification::generate($user);
-
             UserVerification::send($user, 'My Custom E-mail Subject');
 
             return redirect($this->redirectPath());
@@ -456,7 +457,7 @@ update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
 ```
-$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
+$this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
 ```
 
 ## Contribute
