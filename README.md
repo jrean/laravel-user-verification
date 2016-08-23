@@ -290,7 +290,7 @@ Where to redirect after a successful verification token verification.
 
 * `$redirectIfVerificationFails = '/verification/error';`
 
-Where to redirect after a failling token verification.
+Where to redirect after a failing token verification.
 
 * `$verificationErrorView = 'errors.user-verification';`
 
@@ -367,10 +367,8 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
     use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
 
-
     class AuthController extends Controller
     {
-
         /*
         |--------------------------------------------------------------------------
         | Registration & Login Controller
@@ -399,9 +397,9 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
             $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
 
             // Laravel 5.2.*
-            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
+            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError']]);
             //or
-            $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
+            $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
         }
 
         // Laravel 5.0.*|5.1.*
