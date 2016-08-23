@@ -16,7 +16,7 @@ For Laravel 5.0.* | 5.1.* | 5.2.*, use branch
 ## About
 
 - [x] Generate and store a verification token for a registered user
-- [x] Send an e-mail with the verification token link
+- [x] Send or queue an e-mail with the verification token link
 - [x] Handle the token verification
 - [x] Set the user as verified
 - [x] Relaunch the process anytime
@@ -233,7 +233,7 @@ Do something if the verification fails.
 
 ### API
 
-The package public API offers three (3) methods.
+The package public API offers height (8) methods.
 
 * `generate(AuthenticatableContract $user)`
 
@@ -243,9 +243,33 @@ Generate and save a verification token for the given user.
 
 Send by e-mail a link containing the verification token.
 
+* `sendQueue(AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Queue and send by e-mail a link containing the verification token.
+
+* `sendQueueOn($queue, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Queue on the given queue and send by e-mail a link containing the verification token.
+
+* `sendLater($seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Send later by e-mail a link containing the verification token.
+
+* `sendLaterOn($queue, $seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
+
+Send later on the given queue by e-mail a link containing the verification token.
+
 * `process($email, $token, $userTable)`
 
 Process the token verification for the given e-mail and token.
+
+* `emailView($name)`
+
+Set the e-mail view name.
+
+For the `sendQueue`, `sendQueueOn`, `sendLater` and
+`sendLaterOn` methods, you must [configure your queues](https://laravel.com/docs/)
+before using this feature.
 
 ### Facade
 
@@ -254,7 +278,7 @@ The package offers a facade `UserVerification::`.
 ### Attributes/Properties
 
 To customize the package behaviour and the redirects you can implement and
-customize six (5) attributes/properties:
+customize six (6) attributes/properties:
 
 * `$redirectIfVerified = '/';`
 
@@ -271,6 +295,10 @@ Where to redirect after a failling token verification.
 * `$verificationErrorView = 'errors.user-verification';`
 
 Name of the view returned by the getVerificationError method.
+
+* `$verificationEmailView = 'emails.user-verification';`
+
+Name of the default e-mail view.
 
 * `$userTable = 'users';`
 

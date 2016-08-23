@@ -117,9 +117,93 @@ class UserVerification
     }
 
     /**
+     * Queue and send by e-mail a link containing the verification token.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
+     */
+    public function sendQueue(AuthenticatableContract $user, $subject = null, $from = null, $name = null)
+    {
+        if (! $this->isCompliant($user)) {
+            throw new ModelNotCompliantException();
+        }
+
+        return (boolean) $this->emailQueueVerificationLink($user, $subject, $from, $name);
+    }
+
+    /**
+     * Queue on the given queue and send by e-mail a link containing the verification token.
+     *
+     * @param  string  $queue
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
+     */
+    public function sendQueueOn($queue, AuthenticatableContract $user, $subject = null, $from = null, $name = null)
+    {
+        if (! $this->isCompliant($user)) {
+            throw new ModelNotCompliantException();
+        }
+
+        return (boolean) $this->emailQueueOnVerificationLink($queue, $user, $subject, $from, $name);
+    }
+
+    /**
+     * Send later by e-mail a link containing the verification token.
+     *
+     * @param  int  $seconds
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
+     */
+    public function sendLater($seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)
+    {
+        if (! $this->isCompliant($user)) {
+            throw new ModelNotCompliantException();
+        }
+
+        return (boolean) $this->emailLaterVerificationLink($seconds, $user, $subject, $from, $name);
+    }
+
+    /**
+     * Send later on the given queue by e-mail a link containing the verification token.
+     *
+     * @param  string  $queue
+     * @param  int  $seconds
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
+     */
+    public function sendLaterOn($queue, $seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)
+    {
+        if (! $this->isCompliant($user)) {
+            throw new ModelNotCompliantException();
+        }
+
+        return (boolean) $this->emailLaterOnVerificationLink($queue, $seconds, $user, $subject, $from, $name);
+    }
+
+    /**
      * Set the e-mail view name.
      *
-     * @param  mixed  $name
+     * @param  string  $name
      * @return \Jrean\UserVerification
      */
     public function emailView($name)
@@ -246,6 +330,97 @@ class UserVerification
     protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->send($this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
+            if (! empty($from)) {
+                $m->from($from, $name);
+            }
+
+            $m->to($user->email);
+
+            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+        });
+    }
+
+    /**
+     * Prepare and push a job onto the queue to send the e-mail with the verification token link.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailQueueVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
+    {
+        return $this->mailer->queue($this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
+            if (! empty($from)) {
+                $m->from($from, $name);
+            }
+
+            $m->to($user->email);
+
+            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+        });
+    }
+
+    /**
+     * Prepare and push a job onto the given queue to send the e-mail with the verification token link.
+     *
+     * @param  string  $queue
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailQueueOnVerificationLink($queue, AuthenticatableContract $user, $subject, $from = null, $name = null)
+    {
+        return $this->mailer->queueOn($queue, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
+            if (! empty($from)) {
+                $m->from($from, $name);
+            }
+
+            $m->to($user->email);
+
+            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+        });
+    }
+
+    /**
+     * Prepare and send later the e-mail with the verification token link.
+     *
+     * @param  int  $seconds
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailLaterVerificationLink($seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
+    {
+        return $this->mailer->later($seconds, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
+            if (! empty($from)) {
+                $m->from($from, $name);
+            }
+
+            $m->to($user->email);
+
+            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+        });
+    }
+
+    /**
+     * Prepare and send later on the given queue the e-mail with the verification token link.
+     *
+     * @param  int  $seconds
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailLaterOnVerificationLink($queue, $seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
+    {
+        return $this->mailer->laterOn($queue, $seconds, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
             if (! empty($from)) {
                 $m->from($from, $name);
             }
