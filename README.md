@@ -149,7 +149,7 @@ By default the package sets the e-mail view as `emails.user-verification`.
 Create a view for this e-mail at `resources/views/emails/user-verification.blade.php`.
 
 If you want to customize the e-mail view location you can create the view file
-wherever you want and call `UserVerification::viewName('directory.your-view-name')`.
+wherever you want and call `UserVerification::emailView('directory.your-view-name')`.
 
 Here is a sample e-mail view content to get you started with:
 **The link url must contain the verification token as parameter + (mandatory) a
