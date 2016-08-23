@@ -367,10 +367,8 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
     use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
 
-
     class AuthController extends Controller
     {
-
         /*
         |--------------------------------------------------------------------------
         | Registration & Login Controller
