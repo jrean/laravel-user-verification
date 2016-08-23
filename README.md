@@ -3,6 +3,16 @@ easily handle a user verification and validate the e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
+## Versions
+**This package is Laravel 5.3 compliant.**
+
+For Laravel 5.3.*, use branch
+[3.0](https://github.com/jrean/laravel-user-verification/tree/3.0)
+and/or [master](https://github.com/jrean/laravel-user-verification/tree/master)
+
+For Laravel 5.0.* | 5.1.* | 5.2.*, use branch
+[2.2](https://github.com/jrean/laravel-user-verification/tree/2.2)
+
 ## About
 
 - [x] Generate and store a verification token for a registered user
