@@ -29,7 +29,7 @@ require block of your composer.json file:
 
     {
         "require": {
-                "jrean/laravel-user-verification": "^3.0"
+                "jrean/laravel-user-verification": "^2.0"
         }
 
     }
@@ -199,12 +199,12 @@ verify, ...).
 
 ### Routes
 
-Add the two (2) default routes to the `routes/web.php` file. Routes are
+Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
 customizable.
 
 ```
-    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 ### Trait
@@ -329,18 +329,18 @@ following Laravel logic. You are free to implement the way you want.
 It is highly recommended to read and to understand the way Laravel implements
 registration/authentication.
 
-Edit the `routes/web.php` file.
+Edit the `app\Http\routes.php` file.
 
 - Define two (2) new routes.
 
 ```
-    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
+    Route::get('verification/error', 'Auth\AuthController@getVerificationError');
+    Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
 
 - Define the e-mail view.
 
-Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
+Edit the `app\Http\Controllers\Auth\AuthController.php` file.
 
 - [x] Import the `VerifiesUsers` trait (mandatory)
 - [ ] Overwrite and customize the redirect attributes/properties paths
@@ -351,7 +351,8 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 - [x] Create the verification error view at
     `resources/views/errors/user-verification.blade.php` (mandatory)
 - [ ] Overwrite the contructor (not mandatory)
-- [x] Overwrite the `register()` method (mandatory)
+- [x] Overwrite the `postRegister()`/`register()` method depending on the
+    Laravel version you use (mandatory)
 
 ```
 
@@ -367,65 +368,72 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
     use Jrean\UserVerification\Facades\UserVerification;
 
 
-    class RegisterController extends Controller
+    class AuthController extends Controller
     {
+
         /*
         |--------------------------------------------------------------------------
-        | Register Controller
+        | Registration & Login Controller
         |--------------------------------------------------------------------------
         |
-        | This controller handles the registration of new users as well as their
-        | validation and creation. By default this controller uses a trait to
-        | provide this functionality without requiring any additional code.
+        | This controller handles the registration of new users, as well as the
+        | authentication of existing users. By default, this controller uses
+        | a simple trait to add these behaviors. Why don't you explore it?
         |
         */
 
-        use RegistersUsers;
+        use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
         use VerifiesUsers;
 
-       /**
-        * Create a new controller instance.
+        /**
+        * Create a new authentication controller instance.
         *
         * @return void
         */
         public function __construct()
         {
-            // Based on the workflow you need, you may update and customize the following lines.
+            // Based on the workflow you want you may update and customize the following lines.
 
-            $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
+            // Laravel 5.0.*|5.1.*
+            $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
+
+            // Laravel 5.2.*
+            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError]]);
+            //or
+            $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError]]);
         }
 
+        // Laravel 5.0.*|5.1.*
         /**
-        * Get a validator for an incoming registration request.
+        * Handle a registration request for the application.
         *
-        * @param  array  $data
-        * @return \Illuminate\Contracts\Validation\Validator
+        * @param  \Illuminate\Http\Request  $request
+        * @return \Illuminate\Http\Response
         */
-        protected function validator(array $data)
+        public function postRegister(Request $request)
         {
-            return Validator::make($data, [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
-                'password' => 'required|min:6|confirmed',
-            ]);
+            $validator = $this->validator($request->all());
+
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
+
+            $user = $this->create($request->all());
+
+            // Authenticating the user is not mandatory at all.
+            Auth::login($user);
+
+            UserVerification::generate($user);
+
+            UserVerification::send($user, 'My Custom E-mail Subject');
+
+            return redirect($this->redirectPath());
         }
 
-        /**
-        * Create a new user instance after a valid registration.
-        *
-        * @param  array  $data
-        * @return User
-        */
-        protected function create(array $data)
-        {
-            return User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-            ]);
-        }
-
+        // Laravel 5.2.*
         /**
         * Handle a registration request for the application.
         *
@@ -434,12 +442,26 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
         */
         public function register(Request $request)
         {
-            $this->validator($request->all())->validate();
+            $validator = $this->validator($request->all());
+
+            if ($validator->fails()) {
+                $this->throwValidationException(
+                    $request, $validator
+                );
+            }
 
             $user = $this->create($request->all());
-            $this->guard()->login($user);
+
+            // Authenticating the user is not mandatory at all.
+
+            // Laravel <= 5.2.7
+            // Auth::login($user);
+
+            // Laravel > 5.2.7
+            Auth::guard($this->getGuard())->login($user);
 
             UserVerification::generate($user);
+
             UserVerification::send($user, 'My Custom E-mail Subject');
 
             return redirect($this->redirectPath());
@@ -457,7 +479,7 @@ update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
 ```
-$this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
+$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
 ```
 
 ## Contribute
