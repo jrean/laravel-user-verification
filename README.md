@@ -50,12 +50,6 @@ Open up `config/app.php` and add the following to the `providers` key:
 
 * `Jrean\UserVerification\UserVerificationServiceProvider::class`
 
-### Add the Facade/Alias
-
-Open up `config/app.php` and add the following to the `aliases` key:
-
-* `'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class`
-
 ## Configuration
 
 Prior to use this package, the table representing the user must be updated with
