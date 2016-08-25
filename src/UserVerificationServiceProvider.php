@@ -19,6 +19,7 @@ class UserVerificationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerUserVerification($this->app);
+        $this->registerFacade();
     }
 
     /**
@@ -37,6 +38,19 @@ class UserVerificationServiceProvider extends ServiceProvider
         });
 
         $app->alias('user.verification', UserVerification::class);
+    }
+
+    /**
+     * Register the facade without the user having to add it to the app.php file.
+     *
+     * @return void
+     */
+    protected function registerFacade() {
+        $this->app->booting(function()
+        {
+            $loader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $loader->alias('UserVerification', 'Jrean\UserVerification\Facades\UserVerification');
+        });
     }
 
     /**
