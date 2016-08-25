@@ -187,13 +187,15 @@ No user found for the given e-mail adresse.
 
 ### Error View
 
-Create a view for the default verification error route `/verification/error` at
-`resources/views/errors/user-verification.blade.php`. If an error occurs, the
-user will be redirected to this route and this view will be rendered. **You
-must implement and customize this view to your needs.** For instance you may
-wish to display a short message saying that something went wrong and then ask
-for the user's e-mail again and start the process from scratch (generate, send,
-verify, ...).
+By default the `user-verification.blade.php` view will be used for the verification error route `/verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
+
+**You may customize this view to your needs.** To do so first publish the view to your resources folder:
+
+```
+    php artisan vendor:publish --tag=laravel-user-verification-views
+```
+
+Now the view will be available in your `resources/views/vendor/laravel-user-verification/` directory and can be customized.
 
 ## Usage
 
