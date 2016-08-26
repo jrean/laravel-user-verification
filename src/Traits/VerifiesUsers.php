@@ -53,7 +53,7 @@ trait VerifiesUsers
         ]);
 
         if ($validator->fails()) {
-            return redirect($this->redirectIfVerificationFails());
+            throw new UserNotFoundException();
         }
     }
 
