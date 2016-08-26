@@ -294,11 +294,11 @@ Where to redirect after a successful verification token verification.
 
 Where to redirect after a failling token verification.
 
-* `$verificationErrorView = 'errors.user-verification';`
+* `$verificationErrorView = 'laravel-user-verification::user-verification';`
 
 Name of the view returned by the getVerificationError method.
 
-* `$verificationErrorView = 'errors.user-verification';`
+* `$verificationEmailView = 'emails.user-verification'`
 
 Name of the default e-mail view.
 
