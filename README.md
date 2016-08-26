@@ -187,7 +187,7 @@ No user found for the given e-mail adresse.
 
 ### Error View
 
-By default the `user-verification.blade.php` view will be used for the verification error route `/verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
+By default the `user-verification.blade.php` view will be loaded for the verification error route `/verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
 
 **You may customize this view to your needs.** To do so first publish the view to your resources folder:
 
@@ -195,7 +195,7 @@ By default the `user-verification.blade.php` view will be used for the verificat
     php artisan vendor:publish --tag=laravel-user-verification-views
 ```
 
-Now the view will be available in your `resources/views/vendor/laravel-user-verification/` directory and can be customized.
+The view will be available in the `resources/views/vendor/laravel-user-verification/` directory and can be customized.
 
 ## Usage
 
@@ -296,10 +296,6 @@ Where to redirect after a failling token verification.
 
 * `$verificationErrorView = 'errors.user-verification';`
 
-Name of the view returned by the getVerificationError method.
-
-* `$verificationEmailView = 'emails.user-verification';`
-
 Name of the default e-mail view.
 
 * `$userTable = 'users';`
@@ -348,8 +344,6 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 - [ ] Overwrite and customize the redirect attributes/properties paths
     available within the `RedirectsUsers` trait included by the
     `VerifiesUsers` trait. (not mandatory)
-- [ ] Overwrite the default error view name used by the `getVerificationError()` method
-    (not mandatory)
 - [x] Create the verification error view at
     `resources/views/errors/user-verification.blade.php` (mandatory)
 - [ ] Overwrite the contructor (not mandatory)
