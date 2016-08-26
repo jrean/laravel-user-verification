@@ -235,7 +235,7 @@ Do something if the verification fails.
 
 ### API
 
-The package public API offers height (8) methods.
+The package public API offers eight (8) methods.
 
 * `generate(AuthenticatableContract $user)`
 
