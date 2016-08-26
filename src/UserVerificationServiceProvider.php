@@ -12,6 +12,19 @@ use Illuminate\Support\ServiceProvider;
 class UserVerificationServiceProvider extends ServiceProvider
 {
     /**
+     * Perform post-registration booting of services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->loadViewsFrom(__DIR__.'/resources/views', 'laravel-user-verification');
+
+        $this->publishes([
+                __DIR__.'/resources/views' => resource_path('views/vendor/laravel-user-verification'),
+            ], 'laravel-user-verification-views');
+    }
+    /**
      * Register the service provider.
      *
      * @return void
