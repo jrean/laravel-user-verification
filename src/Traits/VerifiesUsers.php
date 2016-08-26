@@ -26,17 +26,7 @@ trait VerifiesUsers
     public function getVerification(Request $request, $token)
     {
         $this->validateRequest($request);
-
-        try {
-            UserVerification::process($request->input('email'), $token, $this->userTable());
-        } catch (UserNotFoundException $e) {
-            return redirect($this->redirectIfVerificationFails());
-        } catch (UserIsVerifiedException $e) {
-            return redirect($this->redirectIfVerified());
-        } catch (TokenMismatchException $e) {
-            return redirect($this->redirectIfVerificationFails());
-        }
-
+        UserVerification::process($request->input('email'), $token, $this->userTable());
         return redirect($this->redirectAfterVerification());
     }
 
