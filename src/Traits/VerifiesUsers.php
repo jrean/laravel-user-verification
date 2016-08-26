@@ -74,7 +74,7 @@ trait VerifiesUsers
      */
     protected function verificationErrorView()
     {
-        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'errors.user-verification';
+        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'laravel-user-verification::user-verification';
     }
 
     /**
