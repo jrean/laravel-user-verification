@@ -39,7 +39,7 @@ package and have the autoloader updated.
 
 Or run the following command:
 
-    "composer require jrean/laravel-user-verification"
+    composer require jrean/laravel-user-verification
 
 
 ### Add the Service Provider
@@ -48,13 +48,13 @@ Once Larvel User Verification is installed, you need to register the service pro
 
 Open up `config/app.php` and add the following to the `providers` key:
 
-* `Jrean\UserVerification\UserVerificationServiceProvider::class`
+    Jrean\UserVerification\UserVerificationServiceProvider::class,
 
 ### Add the Facade/Alias
 
 Open up `config/app.php` and add the following to the `aliases` key:
 
-* `'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class`
+    'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
 
 ## Configuration
 
