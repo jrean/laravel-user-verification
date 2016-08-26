@@ -47,7 +47,7 @@ trait VerifiesUsers
      */
     public function getVerificationError()
     {
-        return view('laravel-user-verification::user-verification');
+        return view($this->verificationErrorView());
     }
 
     /**
@@ -65,6 +65,16 @@ trait VerifiesUsers
         if ($validator->fails()) {
             return redirect($this->redirectIfVerificationFails());
         }
+    }
+
+    /**
+     * Get the verification error view name.
+     *
+     * @return string
+     */
+    protected function verificationErrorView()
+    {
+        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'laravel-user-verification::user-verification';
     }
 
     /**
