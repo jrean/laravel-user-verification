@@ -296,6 +296,10 @@ Where to redirect after a failling token verification.
 
 * `$verificationErrorView = 'errors.user-verification';`
 
+Name of the view returned by the getVerificationError method.
+
+* `$verificationErrorView = 'errors.user-verification';`
+
 Name of the default e-mail view.
 
 * `$userTable = 'users';`
