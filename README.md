@@ -348,8 +348,6 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 - [ ] Overwrite and customize the redirect attributes/properties paths
     available within the `RedirectsUsers` trait included by the
     `VerifiesUsers` trait. (not mandatory)
-- [x] Create the verification error view at
-    `resources/views/errors/user-verification.blade.php` (mandatory)
 - [ ] Overwrite the contructor (not mandatory)
 - [x] Overwrite the `register()` method (mandatory)
 
