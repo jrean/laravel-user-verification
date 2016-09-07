@@ -245,7 +245,7 @@ class UserVerification
     {
         $user = DB::table($table)
             ->where('email', $email)
-            ->first(['id', 'email', 'verified', 'verification_token']);
+            ->first();
 
         if ($user === null) {
             throw new UserNotFoundException();
