@@ -142,6 +142,16 @@ If you want to override the values, simply set the `$from` and (optional)
 Refer to the Laravel [documentation](https://laravel.com/docs/) for the
 proper e-mail component configuration.
 
+### Resending the verification token
+If you want to resend the verification token, you can do this with the following two lines:
+
+```php
+UserVerification::generate($user);
+UserVerification::send($user, 'My Custom E-mail Subject');
+```
+
+The first line will generate a new token and change the users `verified` status to 0. The `send` method is than used to send a new email to the user.
+
 ### E-mail View
 
 The user will receive an e-mail with a link leading to the `getVerification()`
