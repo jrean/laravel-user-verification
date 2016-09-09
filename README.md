@@ -42,19 +42,19 @@ Or run the following command:
     composer require jrean/laravel-user-verification
 
 
-### Add the Service Provider
+### Add the Service Provider & Facade/Alias
 
-Once Larvel User Verification is installed, you need to register the service provider.
+Once Larvel User Verification is installed, you need to register the service provider in `config/app.php`. Make sure to add the following line **above** the `RouteServiceProvider`.
 
-Open up `config/app.php` and add the following to the `providers` key:
-
+```php
     Jrean\UserVerification\UserVerificationServiceProvider::class,
+```
 
-### Add the Facade/Alias
+You may add the following `aliases` to your `config/app.php`:
 
-Open up `config/app.php` and add the following to the `aliases` key:
-
+```php
     'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
+```
 
 ## Configuration
 
@@ -87,7 +87,7 @@ php artisan make:migration add_verification_to_users_table --table="users"
 Once the migration is generated, edit the generated migration file in
 `database/migration` with the following lines:
 
-```
+```php
     /**
      * Run the migrations.
      *
@@ -159,7 +159,7 @@ Here is a sample e-mail view content to get you started with:
 query string with the user's e-mail as parameter.**
 
 ```
-Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
+Click here to verify your account: <a href="{{ $link = route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
 ## Errors
@@ -187,7 +187,7 @@ No user found for the given e-mail adresse.
 
 ### Error View
 
-By default the `user-verification.blade.php` view will be loaded for the verification error route `/verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
+By default the `user-verification.blade.php` view will be loaded for the verification error route `/email-verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
 
 **You may customize this view to your needs.** To do so first publish the view to your resources folder:
 
@@ -201,12 +201,11 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 
 ### Routes
 
-Add the two (2) default routes to the `routes/web.php` file. Routes are
-customizable.
+By default this packages ships with two routes, if you want to change them, you can simply define your own routes. Make sure you added the packages service provider **before** Laravels `RouteServiceProvider`, otherwise you can not overwrite the routes.
 
 ```
-    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
+    Route::get('email-verification/error', 'App\Http\Controllers\Auth\RegisterController@getVerificationError')->name('email-verification.error');
+    Route::get('email-verification/check/{token}', 'App\Http\Controllers\Auth\RegisterController@getVerification')->name('email-verification.check');
 ```
 
 ### Trait
@@ -290,7 +289,7 @@ Where to reditect if the authenticated user is already verified.
 
 Where to redirect after a successful verification token verification.
 
-* `$redirectIfVerificationFails = '/verification/error';`
+* `$redirectIfVerificationFails = '/email-verification/error';`
 
 Where to redirect after a failling token verification.
 
@@ -330,15 +329,6 @@ The following code sample aims to showcase a quick and basic implementation
 following Laravel logic. You are free to implement the way you want.
 It is highly recommended to read and to understand the way Laravel implements
 registration/authentication.
-
-Edit the `routes/web.php` file.
-
-- Define two (2) new routes.
-
-```
-    Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
-    Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
-```
 
 - Define the e-mail view.
 

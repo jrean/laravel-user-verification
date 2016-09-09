@@ -23,6 +23,11 @@ class UserVerificationServiceProvider extends ServiceProvider
         $this->publishes([
                 __DIR__.'/resources/views' => resource_path('views/vendor/laravel-user-verification'),
             ], 'laravel-user-verification-views');
+
+        // load route file for package
+        if (! $this->app->routesAreCached()) {
+            require __DIR__.'/routes.php';
+        }
     }
     /**
      * Register the service provider.
