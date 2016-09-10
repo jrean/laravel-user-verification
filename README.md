@@ -41,7 +41,6 @@ Or run the following command:
 
     "composer require jrean/laravel-user-verification"
 
-
 ### Add the Service Provider
 
 Once Larvel User Verification is installed, you need to register the service provider.
@@ -73,7 +72,7 @@ the Eloquent `User` model.
 Generate the migration file with the following artisan command:
 
 ```
-php artisan make:migration add_verification_to_:table_table --table=":table"
+    php artisan make:migration add_verification_to_:table_table --table=":table"
 ```
 
 Where `:table` is replaced by the table name of your choice.
@@ -81,13 +80,13 @@ Where `:table` is replaced by the table name of your choice.
 For instance, if you want to keep the default Eloquent `User` table:
 
 ```
-php artisan make:migration add_verification_to_users_table --table="users"
+    php artisan make:migration add_verification_to_users_table --table="users"
 ```
 
 Once the migration is generated, edit the generated migration file in
 `database/migration` with the following lines:
 
-```
+```PHP
     /**
      * Run the migrations.
      *
@@ -121,7 +120,7 @@ Where `:table` is replaced by the table name of your choice.
 Migrate the migration with the following command:
 
 ```
-php artisan migrate
+    php artisan migrate
 ```
 
 ## E-mail
@@ -134,7 +133,9 @@ This package provides a method to send an e-mail with a link containing the veri
 By default the package will use the `from` and `name` values defined into the
 `config/mail.php` file:
 
+```PHP
     'from' => ['address' => '', 'name' => ''],
+```
 
 If you want to override the values, simply set the `$from` and (optional)
 `$name` parameters.
@@ -159,7 +160,7 @@ Here is a sample e-mail view content to get you started with:
 query string with the user's e-mail as parameter.**
 
 ```
-Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
+    Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
 ## Errors
@@ -204,7 +205,7 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 Add the two (2) default routes to the `app\Http\routes.php` file. Routes are
 customizable.
 
-```
+```PHP
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
     Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
@@ -335,7 +336,7 @@ Edit the `app\Http\routes.php` file.
 
 - Define two (2) new routes.
 
-```
+```PHP
     Route::get('verification/error', 'Auth\AuthController@getVerificationError');
     Route::get('verification/{token}', 'Auth\AuthController@getVerification');
 ```
@@ -354,7 +355,7 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
 - [x] Overwrite the `postRegister()`/`register()` method depending on the
     Laravel version you use (mandatory)
 
-```
+```PHP
 
     namespace App\Http\Controllers\Auth;
 
@@ -476,9 +477,20 @@ If you want to perform the verification against an authenticated user you must
 update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
+```PHP
+    $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
 ```
-$this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
+
+## Relaunch the process anytime
+
+If you want to regenerate and resend the verification token, you can do this with the following two lines:
+
+```PHP
+    UserVerification::generate($user);
+    UserVerification::send($user, 'My Custom E-mail Subject');
 ```
+
+The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new e-mail to the user.
 
 ## Contribute
 
