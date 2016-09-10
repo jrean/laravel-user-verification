@@ -398,7 +398,7 @@ Edit the `app\Http\Controllers\Auth\AuthController.php` file.
             $this->middleware('guest', ['except' => ['getLogout', 'getVerification', 'getVerificationError']]);
 
             // Laravel 5.2.*
-            $this->middleware('guest', ['except' => ['logout', 'getVerification, 'getVerificationError']]);
+            $this->middleware('guest', ['except' => ['logout', 'getVerification', 'getVerificationError']]);
             //or
             $this->middleware($this->guestMiddleware(), ['except' => ['logout', 'getVerification', 'getVerificationError']]);
         }
