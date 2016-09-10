@@ -87,7 +87,7 @@ php artisan make:migration add_verification_to_users_table --table="users"
 Once the migration is generated, edit the generated migration file in
 `database/migration` with the following lines:
 
-```
+```PHP
     /**
      * Run the migrations.
      *
@@ -141,6 +141,7 @@ If you want to override the values, simply set the `$from` and (optional)
 
 Refer to the Laravel [documentation](https://laravel.com/docs/) for the
 proper e-mail component configuration.
+
 
 ### E-mail View
 
@@ -204,7 +205,7 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 Add the two (2) default routes to the `routes/web.php` file. Routes are
 customizable.
 
-```
+```PHP
     Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
     Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
 ```
@@ -335,7 +336,7 @@ Edit the `routes/web.php` file.
 
 - Define two (2) new routes.
 
-```
+```PHP
     Route::get('verification/error', 'Auth\RegisterController@getVerificationError');
     Route::get('verification/{token}', 'Auth\RegisterController@getVerification');
 ```
@@ -351,8 +352,7 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 - [ ] Overwrite the contructor (not mandatory)
 - [x] Overwrite the `register()` method (mandatory)
 
-```
-
+```PHP
     namespace App\Http\Controllers\Auth;
 
     use App\User;
@@ -443,7 +443,6 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
             return redirect($this->redirectPath());
         }
     }
-
 ```
 
 At this point, after registration, an e-mail is sent to the user.
@@ -454,9 +453,20 @@ If you want to perform the verification against an authenticated user you must
 update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
-```
+```PHP
 $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
 ```
+
+## Relaunch the process anytime
+
+If you want to regenerate and resend the verification token, you can do this with the following two lines:
+
+```php
+UserVerification::generate($user);
+UserVerification::send($user, 'My Custom E-mail Subject');
+```
+
+The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new email to the user.
 
 ## Contribute
 
