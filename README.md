@@ -47,14 +47,14 @@ Or run the following command:
 
 Once Larvel User Verification is installed, you need to register the service provider in `config/app.php`. Make sure to add the following line **above** the `RouteServiceProvider`.
 
-```php
-    Jrean\UserVerification\UserVerificationServiceProvider::class,
+```PHP
+Jrean\UserVerification\UserVerificationServiceProvider::class,
 ```
 
 You may add the following `aliases` to your `config/app.php`:
 
-```php
-    'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
+```PHP
+'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
 ```
 
 ## CONFIGURATION
@@ -114,7 +114,6 @@ Once the migration is generated, edit the generated migration file in
             $table->dropColumn('verification_token');
         });
     }
-
 ```
 
 Where `:table` is replaced by the table name of your choice.
@@ -194,7 +193,7 @@ By default the `user-verification.blade.php` view will be loaded for the verific
 **You may customize this view to your needs.** To do so first publish the view to your resources folder:
 
 ```
-    php artisan vendor:publish --tag=laravel-user-verification-views
+php artisan vendor:publish --tag=laravel-user-verification-views
 ```
 
 The view will be available in the `resources/views/vendor/laravel-user-verification/` directory and can be customized.
@@ -206,11 +205,11 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 By default this packages ships with two routes. If you want to change them, you can simply define your own routes.
 
 ```PHP
-    Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
-    Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
+Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
+Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
 ```
 
-### Trait
+### Traits
 
 The package offers two (2) traits for a quick implementation.
 **Only `VerifiesUsers` must be included.**
@@ -306,6 +305,16 @@ Name of the default e-mail view.
 * `$userTable = 'users';`
 
 Name of the default table used for managing users.
+
+### Translations
+
+To customize the translations you may publish the files to your `resources/lang/vendor` folder using the following command:
+
+```
+php artisan vendor:publish --tag=laravel-user-verification-translations
+```
+
+This will add `laravel-user-verification/en/user-verification.php` to your vendor folder. By creating new language folders, like `de` or `fr` and placing a `user-verification.php` with the translations inside, you can add translations for other languages. You can find out more about localization in the [Laravel documentation](https://laravel.com/docs/5.3/localization).
 
 ### Customize
 
@@ -445,7 +454,7 @@ update the middleware exception to allow `getVerification` and
 `getVerificationError` routes to be accessed.
 
 ```PHP
-    $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
+$this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
 ```
 
 ## RELAUNCH THE PROCESS ANYTIME
@@ -453,8 +462,8 @@ update the middleware exception to allow `getVerification` and
 If you want to regenerate and resend the verification token, you can do this with the following two lines:
 
 ```PHP
-    UserVerification::generate($user);
-    UserVerification::send($user, 'My Custom E-mail Subject');
+UserVerification::generate($user);
+UserVerification::send($user, 'My Custom E-mail Subject');
 ```
 
 The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new e-mail to the user.
