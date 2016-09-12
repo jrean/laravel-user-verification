@@ -336,7 +336,7 @@ class UserVerification
 
             $m->to($user->email);
 
-            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+            $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
         });
     }
 
@@ -358,7 +358,7 @@ class UserVerification
 
             $m->to($user->email);
 
-            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+            $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
         });
     }
 
@@ -381,7 +381,7 @@ class UserVerification
 
             $m->to($user->email);
 
-            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+            $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
         });
     }
 
@@ -404,7 +404,7 @@ class UserVerification
 
             $m->to($user->email);
 
-            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+            $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
         });
     }
 
@@ -427,7 +427,7 @@ class UserVerification
 
             $m->to($user->email);
 
-            $m->subject(is_null($subject) ? 'Your Account Verification Link' : $subject);
+            $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
         });
     }
 
