@@ -312,7 +312,7 @@ Name of the default table used for managing users.
 You can customize the package behaviour by overriding/overwriting the
 public methods and the attributes/properties. Dig into the source.
 
-## Guidelines
+## GUIDELINES
 
 **This package doesn't require the user to be authenticated to perform the
 verification. You are free to implement any flow you may want to achieve.**
@@ -448,7 +448,7 @@ update the middleware exception to allow `getVerification` and
     $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
 ```
 
-## Relaunch the process anytime
+## RELAUNCH THE PROCESS ANYTIME
 
 If you want to regenerate and resend the verification token, you can do this with the following two lines:
 
@@ -459,10 +459,10 @@ If you want to regenerate and resend the verification token, you can do this wit
 
 The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new e-mail to the user.
 
-## Contribute
+## CONTRIBUTE
 
 Feel free to comment, contribute and help. 1 PR = 1 feature.
 
-## License
+## LICENSE
 
 Laravel User Verification is licensed under [The MIT License (MIT)](LICENSE).
