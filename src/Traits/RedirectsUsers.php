@@ -29,12 +29,12 @@ trait RedirectsUsers
     }
 
     /**
-     * Get the redirect path for a failing verification token verification.
+     * Get the redirect path for a failing token verification.
      *
      * @return string
      */
     public function redirectIfVerificationFails()
     {
-        return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : '/verification/error';
+        return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : route('email-verification.error');
     }
 }
