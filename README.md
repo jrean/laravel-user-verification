@@ -203,7 +203,7 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 
 ### Routes
 
-By default this packages ships with two routes, if you want to change them, you can simply define your own routes. Make sure you added the packages service provider **before** Laravels `RouteServiceProvider`, otherwise you can not overwrite the routes.
+By default this packages ships with two routes. If you want to change them, you can simply define your own routes.
 
 ```PHP
     Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
