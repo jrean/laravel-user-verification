@@ -18,15 +18,24 @@ class UserVerificationServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // routes
         if (! $this->app->routesAreCached()) {
             require __DIR__ . '/routes.php';
         }
 
+        // views
         $this->loadViewsFrom(__DIR__ . '/resources/views', 'laravel-user-verification');
 
         $this->publishes([
                 __DIR__ . '/resources/views' => resource_path('views/vendor/laravel-user-verification'),
             ], 'laravel-user-verification-views');
+
+        // translations
+        $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'laravel-user-verification');
+
+        $this->publishes([
+            __DIR__ . '/resources/lang' => resource_path('lang/vendor/laravel-user-verification'),
+        ], 'laravel-user-verification-translations');
     }
 
     /**
