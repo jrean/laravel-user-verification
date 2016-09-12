@@ -3,17 +3,18 @@ easily handle a user verification and validate the e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
-## Versions
+## VERSIONS
+
 **This package is Laravel 5.3 compliant.**
 
-For Laravel 5.3.*, use branch
-[3.0](https://github.com/jrean/laravel-user-verification/tree/3.0)
-and/or [master](https://github.com/jrean/laravel-user-verification/tree/master)
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
+|---------|-----|-----|--------|
+| 5.0.*   |  x  |     |        |
+| 5.1.*   |  x  |     |        |
+| 5.2.*   |  x  |     |        |
+| 5.3.*   |     |  x  |    x   |
 
-For Laravel 5.0.* | 5.1.* | 5.2.*, use branch
-[2.2](https://github.com/jrean/laravel-user-verification/tree/2.2)
-
-## About
+## ABOUT
 
 - [x] Generate and store a verification token for a registered user
 - [x] Send or queue an e-mail with the verification token link
@@ -21,7 +22,7 @@ For Laravel 5.0.* | 5.1.* | 5.2.*, use branch
 - [x] Set the user as verified
 - [x] Relaunch the process anytime
 
-## Installation
+## INSTALLATION
 
 This project can be installed via [Composer](http://getcomposer.org). To get
 the latest version of Laravel User Verification, add the following line to the
@@ -56,7 +57,7 @@ Open up `config/app.php` and add the following to the `aliases` key:
 
     'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
 
-## Configuration
+## CONFIGURATION
 
 Prior to use this package, the table representing the user must be updated with
 two new columns, `verified` and `verification_token`.
@@ -124,7 +125,7 @@ Migrate the migration with the following command:
 php artisan migrate
 ```
 
-## E-mail
+## E-MAIL
 
 This package provides a method to send an e-mail with a link containing the verification token.
 
@@ -163,7 +164,7 @@ query string with the user's e-mail as parameter.**
 Click here to verify your account: <a href="{{ $link = url('verification', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
 ```
 
-## Errors
+## ERRORS
 
 This package throws several exceptions. You are free to use `try/catch`
 statements or to rely on the Laravel built-in exceptions handler.
@@ -198,7 +199,7 @@ By default the `user-verification.blade.php` view will be loaded for the verific
 
 The view will be available in the `resources/views/vendor/laravel-user-verification/` directory and can be customized.
 
-## Usage
+## USAGE
 
 ### Routes
 
@@ -466,7 +467,7 @@ UserVerification::generate($user);
 UserVerification::send($user, 'My Custom E-mail Subject');
 ```
 
-The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new email to the user.
+The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new e-mail to the user.
 
 ## Contribute
 
