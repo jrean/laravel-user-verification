@@ -28,14 +28,14 @@ class UserVerificationServiceProvider extends ServiceProvider
 
         $this->publishes([
                 __DIR__ . '/resources/views' => resource_path('views/vendor/laravel-user-verification'),
-            ], 'laravel-user-verification-views');
+            ], 'views');
 
         // translations
         $this->loadTranslationsFrom(__DIR__ . '/resources/lang', 'laravel-user-verification');
 
         $this->publishes([
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/laravel-user-verification'),
-        ], 'laravel-user-verification-translations');
+        ], 'translations');
     }
 
     /**
