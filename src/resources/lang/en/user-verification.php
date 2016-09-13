@@ -8,7 +8,11 @@ return [
     |--------------------------------------------------------------------------
     */
 
+    // email
     'verification_email_subject' => 'Your Account Verification Link',
+
+    // general errors
+    'verification_resend_error' => 'Re-sending the verification failed.',
 
     // error view
     'verification_error_header'      => 'Verification failed',
