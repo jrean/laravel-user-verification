@@ -193,7 +193,7 @@ By default the `user-verification.blade.php` view will be loaded for the verific
 **You may customize this view to your needs.** To do so first publish the view to your resources folder:
 
 ```
-php artisan vendor:publish --tag=laravel-user-verification-views
+php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
 ```
 
 The view will be available in the `resources/views/vendor/laravel-user-verification/` directory and can be customized.
@@ -311,7 +311,7 @@ Name of the default table used for managing users.
 To customize the translations you may publish the files to your `resources/lang/vendor` folder using the following command:
 
 ```
-php artisan vendor:publish --tag=laravel-user-verification-translations
+php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="translations"
 ```
 
 This will add `laravel-user-verification/en/user-verification.php` to your vendor folder. By creating new language folders, like `de` or `fr` and placing a `user-verification.php` with the translations inside, you can add translations for other languages. You can find out more about localization in the [Laravel documentation](https://laravel.com/docs/5.3/localization).
