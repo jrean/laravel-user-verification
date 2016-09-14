@@ -11,6 +11,7 @@ use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Jrean\UserVerification\Events\VerificationEmailSent;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
@@ -337,6 +338,8 @@ class UserVerification
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
+
+            event(new VerificationEmailSent($user));
         });
     }
 
@@ -359,6 +362,8 @@ class UserVerification
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
+
+            event(new VerificationEmailSent($user));
         });
     }
 
@@ -382,6 +387,8 @@ class UserVerification
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
+
+            event(new VerificationEmailSent($user));
         });
     }
 
@@ -405,6 +412,8 @@ class UserVerification
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
+
+            event(new VerificationEmailSent($user));
         });
     }
 
@@ -428,6 +437,8 @@ class UserVerification
             $m->to($user->email);
 
             $m->subject(is_null($subject) ? trans('laravel-user-verification::user-verification.verification_email_subject') : $subject);
+
+            event(new VerificationEmailSent($user));
         });
     }
 
