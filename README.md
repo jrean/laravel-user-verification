@@ -134,6 +134,8 @@ it and edit it to your needs:
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
 ```
 
+The view will be available in the `resources/views/vendor/laravel-user-verification/` directory.
+
 If you want to customize the e-mail view location and name you can create the view file
 wherever you want and call `UserVerification::emailView('directory.your-view-name')`.
 
