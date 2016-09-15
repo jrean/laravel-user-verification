@@ -70,58 +70,23 @@ interface `Illuminate\Contracts\Auth\Authenticatable` which is the default with
 the Eloquent `User` model.
 
 ### Migration
-
-Generate the migration file with the following artisan command:
-
-```
-php artisan make:migration add_verification_to_:table_table --table=":table"
-```
-
-Where `:table` is replaced by the table name of your choice.
-
-For instance, if you want to keep the default Eloquent `User` table:
+This package ships with a migration file to alter the user table. If you want to add this to an existing database, you can run only the migration file of this package:
 
 ```
-php artisan make:migration add_verification_to_users_table --table="users"
+php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
 ```
 
-Once the migration is generated, edit the generated migration file in
-`database/migration` with the following lines:
-
-```PHP
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table(':table', function (Blueprint $table) {
-            $table->boolean('verified')->default(false);
-            $table->string('verification_token')->nullable();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table(':table', function (Blueprint $table) {
-            $table->dropColumn('verified');
-            $table->dropColumn('verification_token');
-        });
-    }
-```
-
-Where `:table` is replaced by the table name of your choice.
-
-Migrate the migration with the following command:
+Normally you can achieve the same using the default migrating command, which will only migrate whatever is not in your database at the moment.
 
 ```
 php artisan migrate
+```
+
+#### Configuring the users table for the migration
+This package tries to guess your user table by checking what is set in the auth providers users model table settings. Should this key not exist, the default `App\User` will be used to get the table name. To customize the migrations even further, you can publish them with the following command:
+
+```
+php artisan vendor:publish -tags="migrations"
 ```
 
 ## E-MAIL
