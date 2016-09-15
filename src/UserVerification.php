@@ -51,7 +51,7 @@ class UserVerification
     {
         $this->mailer    = $mailer;
         $this->schema    = $schema;
-        $this->emailView = 'emails.user-verification';
+        $this->emailView = 'laravel-user-verification::email';
     }
 
     /**
