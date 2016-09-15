@@ -36,6 +36,13 @@ class UserVerificationServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/resources/lang' => resource_path('lang/vendor/laravel-user-verification'),
         ], 'translations');
+
+        // migrations
+        $this->loadMigrationsFrom(__DIR__ . '/resources/migrations');
+
+        $this->publishes([
+            __DIR__ . '/resources/migrations/' => database_path('migrations')
+        ], 'migrations');
     }
 
     /**
