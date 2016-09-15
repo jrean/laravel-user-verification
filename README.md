@@ -209,6 +209,24 @@ Route::get('email-verification/error', 'Auth\RegisterController@getVerificationE
 Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
 ```
 
+### Convenience functions
+This package offers a `UserVerification` trait, which adds the two methods `isVerified` and `verificationPending` to the `User` model.
+
+- `isVerified` returns a `boolean` indicating if the user has already verified his email address or not
+- `verificationPending` returns a `boolean` indicating if the user/system has already initiated a verification request (this is done by checking if a `verification_token` exists in the database)
+
+Add the use statement to your `User` model and use the `UserVerification` within the class:
+
+```php
+// ...
+use Jrean\UserVerification\Traits\UserVerification;
+
+class User extends Authenticatable
+{
+    use UserVerification;
+    // ...
+```
+
 ### Traits
 
 The package offers two (2) traits for a quick implementation.
