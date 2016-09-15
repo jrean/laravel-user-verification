@@ -71,57 +71,19 @@ the Eloquent `User` model.
 
 ### Migration
 
-Generate the migration file with the following artisan command:
+This package ships with a migration file. To migrate the migration run, the
+following command:
 
 ```
-php artisan make:migration add_verification_to_:table_table --table=":table"
+php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
 ```
 
-Where `:table` is replaced by the table name of your choice.
+The package tries to guess your `user` table by checking what is set in the auth providers users settings. If this key is not found, the default `App\User` will be used to get the table name.
 
-For instance, if you want to keep the default Eloquent `User` table:
-
-```
-php artisan make:migration add_verification_to_users_table --table="users"
-```
-
-Once the migration is generated, edit the generated migration file in
-`database/migration` with the following lines:
-
-```PHP
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table(':table', function (Blueprint $table) {
-            $table->boolean('verified')->default(false);
-            $table->string('verification_token')->nullable();
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table(':table', function (Blueprint $table) {
-            $table->dropColumn('verified');
-            $table->dropColumn('verification_token');
-        });
-    }
-```
-
-Where `:table` is replaced by the table name of your choice.
-
-Migrate the migration with the following command:
+To customize the migration to your needs, publish it with the following command:
 
 ```
-php artisan migrate
+php artisan vendor:publish --tag="migrations"
 ```
 
 ## E-MAIL
@@ -190,7 +152,7 @@ No user found for the given e-mail adresse.
 
 By default the `user-verification.blade.php` view will be loaded for the verification error route `/email-verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
 
-**You may customize this view to your needs.** To do so first publish the view to your resources folder:
+To customize the view, publish it with the following command:
 
 ```
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
@@ -212,11 +174,9 @@ Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerif
 ### Traits
 
 The package offers three (3) traits for a quick implementation.
-**Only `VerifiesUsers` trait is mandatory.**
+**Only `VerifiesUsers` trait is mandatory** and includes `RedirectsUsers`.
 
 `Jrean\UserVerification\Traits\VerifiesUsers`
-
-which includes:
 
 `Jrean\UserVerification\Traits\RedirectsUsers`
 
