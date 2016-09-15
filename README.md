@@ -211,14 +211,25 @@ Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerif
 
 ### Traits
 
-The package offers two (2) traits for a quick implementation.
-**Only `VerifiesUsers` must be included.**
+The package offers three (3) traits for a quick implementation.
+**Only `VerifiesUsers` trait is mandatory.**
 
 `Jrean\UserVerification\Traits\VerifiesUsers`
 
 which includes:
 
 `Jrean\UserVerification\Traits\RedirectsUsers`
+
+and:
+
+`Jrean\UserVerification\Traits\UserVerification`
+
+This last one offers two methods that can be added to the `User` model.
+
+- `isVerified` checks if a user is marked as verified.
+- `isPendingVerification` checks if a verification process has been initiated for a user.
+
+Add the use statement to your `User` model and use the `UserVerification` within the class:
 
 ### Endpoints
 
