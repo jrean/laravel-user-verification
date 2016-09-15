@@ -38,10 +38,10 @@ class UserVerificationServiceProvider extends ServiceProvider
         ], 'translations');
 
         // migrations
-        $this->loadMigrationsFrom(__DIR__.'/resources/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/resources/migrations');
 
         $this->publishes([
-            __DIR__.'/resources/migrations/' => database_path('migrations')
+            __DIR__ . '/resources/migrations/' => database_path('migrations')
         ], 'migrations');
     }
 

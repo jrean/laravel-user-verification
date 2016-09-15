@@ -70,23 +70,20 @@ interface `Illuminate\Contracts\Auth\Authenticatable` which is the default with
 the Eloquent `User` model.
 
 ### Migration
-This package ships with a migration file to alter the user table. If you want to add this to an existing database, you can run only the migration file of this package:
+
+This package ships with a migration file. To migrate the migration run, the
+following command:
 
 ```
 php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
 ```
 
-Normally you can achieve the same using the default migrating command, which will only migrate whatever is not in your database at the moment.
+The package tries to guess your `user` table by checking what is set in the auth providers users settings. If this key is not found, the default `App\User` will be used to get the table name.
+
+To customize the migration to your needs, publish it with the following command:
 
 ```
-php artisan migrate
-```
-
-#### Configuring the users table for the migration
-This package tries to guess your user table by checking what is set in the auth providers users model table settings. Should this key not exist, the default `App\User` will be used to get the table name. To customize the migrations even further, you can publish them with the following command:
-
-```
-php artisan vendor:publish -tags="migrations"
+php artisan vendor:publish --tag="migrations"
 ```
 
 ## E-MAIL
@@ -155,7 +152,7 @@ No user found for the given e-mail adresse.
 
 By default the `user-verification.blade.php` view will be loaded for the verification error route `/email-verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
 
-**You may customize this view to your needs.** To do so first publish the view to your resources folder:
+To customize the view, publish it with the following command:
 
 ```
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
@@ -177,11 +174,9 @@ Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerif
 ### Traits
 
 The package offers three (3) traits for a quick implementation.
-**Only `VerifiesUsers` trait is mandatory.**
+**Only `VerifiesUsers` trait is mandatory** and includes `RedirectsUsers`.
 
 `Jrean\UserVerification\Traits\VerifiesUsers`
-
-which includes:
 
 `Jrean\UserVerification\Traits\RedirectsUsers`
 
