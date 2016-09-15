@@ -78,12 +78,19 @@ following command:
 php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
 ```
 
+Alternatively you may run the following command that will look for all
+available migrations including into this package:
+
+```
+php artisan migrate
+```
+
 The package tries to guess your `user` table by checking what is set in the auth providers users settings. If this key is not found, the default `App\User` will be used to get the table name.
 
 To customize the migration to your needs, publish it with the following command:
 
 ```
-php artisan vendor:publish --tag="migrations"
+php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="migrations"
 ```
 
 ## E-MAIL
@@ -111,19 +118,24 @@ The user will receive an e-mail with a link leading to the `getVerification()`
 method (endpoint). The view will receive a `$user` variable which contains the
 user details such as the verification token.
 
-By default the package sets the e-mail view as `emails.user-verification`.
-Create a view for this e-mail at `resources/views/emails/user-verification.blade.php`.
+By default the package loads a sample e-mail view to get you started with:
 
-If you want to customize the e-mail view location you can create the view file
-wherever you want and call `UserVerification::emailView('directory.your-view-name')`.
+```
+Click here to verify your account: <a href="{{ $link = route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) }}">{{ $link }}</a>
+```
 
-Here is a sample e-mail view content to get you started with:
-**The link url must contain the verification token as parameter + (mandatory) a
+**The URL must contain the verification token as parameter + (mandatory) a
 query string with the user's e-mail as parameter.**
 
+If you want to customize the e-mail view, run the following command to publish
+it and edit it to your needs:
+
 ```
-Click here to verify your account: <a href="{{ $link = route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) }}"> {{ $link }}</a>
+php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
 ```
+
+If you want to customize the e-mail view location and name you can create the view file
+wherever you want and call `UserVerification::emailView('directory.your-view-name')`.
 
 ## ERRORS
 
