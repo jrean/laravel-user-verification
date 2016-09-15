@@ -1,12 +1,15 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification\Traits;
 
 trait UserVerification
 {
     /**
-     * returns true if the user is verified and false if not
-     * @method isVerified
+     * Check if the user is verified.
      *
      * @return boolean
      */
@@ -14,13 +17,13 @@ trait UserVerification
     {
         return $this->verified === 1;
     }
+
     /**
-     * returns true if a verification is pending for the user
-     * @method verificationPending
+     * Check if the user verification is pending.
      *
      * @return boolean
      */
-    public function verificationPending()
+    public function isPendingVerification()
     {
         return $this->verified === 0 && $this->verification_token !== null;
     }
