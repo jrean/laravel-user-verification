@@ -22,5 +22,20 @@
         "preferred-install": "dist"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "require-dev": {
+        "phpunit/phpunit": "^5.5",
+        "fzaninotto/faker": "^1.6",
+        "mockery/mockery": "^0.9.5",
+        "satooshi/php-coveralls": "^1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Jrean\\UserVerification\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --colors=always;",
+        "travis": "phpunit --coverage-clover build/logs/clover.xml"
+    }
 }
