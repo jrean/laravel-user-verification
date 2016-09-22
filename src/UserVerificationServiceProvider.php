@@ -43,6 +43,12 @@ class UserVerificationServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/resources/migrations/' => database_path('migrations')
         ], 'migrations');
+
+        // configurations
+        $this->publishes([
+            __DIR__.'/config/user-verification.php' => config_path('user-verification.php')
+        ], 'config');
+
     }
 
     /**
@@ -53,6 +59,11 @@ class UserVerificationServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerUserVerification($this->app);
+
+        // configurations
+        $this->mergeConfigFrom(
+            __DIR__.'/config/user-verification.php', 'user-verification'
+        );
     }
 
     /**
