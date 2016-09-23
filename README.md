@@ -206,6 +206,15 @@ This last one offers two methods that can be added to the `User` model.
 
 Add the use statement to your `User` model and use the `UserVerification` within the class:
 
+### Configuration
+
+You can disable the verification to be send on registration by setting adding the following line to a `config/user-verification.php` file.
+```php
+    'listen' => [
+        'registration' => false,
+    ],
+```
+
 ### Endpoints
 
 The two (2) following methods are included into the `VerifiesUsers` trait and
@@ -335,8 +344,7 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 - [ ] Overwrite and customize the redirect attributes/properties paths
     available within the `RedirectsUsers` trait included by the
     `VerifiesUsers` trait. (not mandatory)
-- [ ] Overwrite the contructor (not mandatory)
-- [x] Overwrite the `register()` method (mandatory)
+- [ ] Overwrite the constructor (not mandatory)
 
 ```PHP
     namespace App\Http\Controllers\Auth;
@@ -379,56 +387,7 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
 
             $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
         }
-
-        /**
-        * Get a validator for an incoming registration request.
-        *
-        * @param  array  $data
-        * @return \Illuminate\Contracts\Validation\Validator
-        */
-        protected function validator(array $data)
-        {
-            return Validator::make($data, [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:255|unique:users',
-                'password' => 'required|min:6|confirmed',
-            ]);
-        }
-
-        /**
-        * Create a new user instance after a valid registration.
-        *
-        * @param  array  $data
-        * @return User
-        */
-        protected function create(array $data)
-        {
-            return User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt($data['password']),
-            ]);
-        }
-
-        /**
-        * Handle a registration request for the application.
-        *
-        * @param  \Illuminate\Http\Request  $request
-        * @return \Illuminate\Http\Response
-        */
-        public function register(Request $request)
-        {
-            $this->validator($request->all())->validate();
-
-            $user = $this->create($request->all());
-            $this->guard()->login($user);
-
-            UserVerification::generate($user);
-            UserVerification::send($user, 'My Custom E-mail Subject');
-
-            return redirect($this->redirectPath());
-        }
-    }
+        // ...
 ```
 
 At this point, after registration, an e-mail is sent to the user.

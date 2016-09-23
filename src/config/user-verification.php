@@ -7,5 +7,7 @@ return [
     | Laravel User Verification Defaults
     |--------------------------------------------------------------------------
     */
-
+    'listen' => [
+        'registration' => true,
+    ],
 ];

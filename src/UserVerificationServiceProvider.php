@@ -6,6 +6,7 @@
  */
 namespace Jrean\UserVerification;
 
+use Event;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
@@ -82,6 +83,10 @@ class UserVerificationServiceProvider extends ServiceProvider
         });
 
         $app->alias('user.verification', UserVerification::class);
+
+        if($app->make('config')->get('user-verification.listen.registration', true)){
+            Event::listen('Illuminate\Auth\Events\Registered', 'Jrean\UserVerification\Listeners\SendVerificationEmail');
+        }
     }
 
     /**
