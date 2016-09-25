@@ -331,9 +331,7 @@ class UserVerification
     protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->send($this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
-
             $m = $this->createVerificationEmail($m, $user, $subject, $from, $name);
-
         });
     }
 
@@ -349,9 +347,7 @@ class UserVerification
     protected function emailQueueVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->queue($this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
-
             $m = $this->createVerificationEmail($m, $user, $subject, $from, $name);
-
         });
     }
 
@@ -368,9 +364,7 @@ class UserVerification
     protected function emailQueueOnVerificationLink($queue, AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->queueOn($queue, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
-
             $m = $this->createVerificationEmail($m, $user, $subject, $from, $name);
-
         });
     }
 
@@ -387,9 +381,7 @@ class UserVerification
     protected function emailLaterVerificationLink($seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->later($seconds, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
-
             $m = $this->createVerificationEmail($m, $user, $subject, $from, $name);
-
         });
     }
 
@@ -406,21 +398,19 @@ class UserVerification
     protected function emailLaterOnVerificationLink($queue, $seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
     {
         return $this->mailer->laterOn($queue, $seconds, $this->emailView, compact('user'), function ($m) use ($user, $subject, $from, $name) {
-
             $m = $this->createVerificationEmail($m, $user, $subject, $from, $name);
-
         });
     }
 
     /**
-     * creates the email to be send out
-     * @method createVerificationEmail
-     * @param  string                  $mail
+     * Creates and format the e-mail to be sent.
+     *
+     * @param  string  $mail
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string                  $subject
-     * @param  string                  $from    [description]
-     * @param  string                  $name    [description]
-     * @return [type]                           [description]
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
      */
     protected function createVerificationEmail($mail, $user, $subject, $from, $name)
     {
