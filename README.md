@@ -58,36 +58,37 @@ You may add the following `aliases` to your `config/app.php`:
 ```
 
 ## CONFIGURATION
-
-Prior to use this package, the table representing the user must be updated with
-two new columns, `verified` and `verification_token`.
-
-**It is mandatory to add the two columns on the same table and where the user's
-e-mail is stored.**
-
 The model representing the `User` must implement the authenticatable
 interface `Illuminate\Contracts\Auth\Authenticatable` which is the default with
 the Eloquent `User` model.
 
 ### Migration
 
-This package ships with a migration file. To migrate the migration run, the
-following command:
+The table representing the user must be updated with two new columns, `verified` and `verification_token`.
+This update will be performed by the migrations included with this package.
 
-```
-php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
-```
+**It is mandatory that the two columns are on the same table where the user's e-mail is stored.**
+**Please make sure you do not already have those fields on your user table.**
 
-Alternatively you may run the following command that will look for all
-available migrations including into this package:
+Run the following command to migrate (all) the migrations, including the
+migration(s) provided by this package:
 
 ```
 php artisan migrate
 ```
 
-The package tries to guess your `user` table by checking what is set in the auth providers users settings. If this key is not found, the default `App\User` will be used to get the table name.
+If you wish to only run the migration(s) from this package, run the following command:
 
-To customize the migration to your needs, publish it with the following command:
+```
+php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
+```
+
+The package tries to guess your `user` table by checking what is set in the auth providers users settings.
+If this key is not found, the default `App\User` will be used to get the table name.
+
+The migration adds a `verification_token` and a `verified` field to the user table.
+
+To customize the migration(s) to your needs, publish them with the following command:
 
 ```
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="migrations"
