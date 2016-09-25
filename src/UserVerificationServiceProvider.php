@@ -46,7 +46,7 @@ class UserVerificationServiceProvider extends ServiceProvider
 
         // configurations
         $this->publishes([
-            __DIR__.'/config/user-verification.php' => config_path('user-verification.php')
+            __DIR__ . '/config/user-verification.php' => config_path('user-verification.php')
         ], 'config');
 
     }
@@ -62,7 +62,7 @@ class UserVerificationServiceProvider extends ServiceProvider
 
         // configurations
         $this->mergeConfigFrom(
-            __DIR__.'/config/user-verification.php', 'user-verification'
+            __DIR__ . '/config/user-verification.php', 'user-verification'
         );
     }
 
