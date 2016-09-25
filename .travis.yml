@@ -1,0 +1,27 @@
+language: php
+
+sudo: false
+
+matrix:
+  include:
+    - php: 5.5
+    - php: 5.6
+      env:
+        - EXECUTE_COVERAGE=true
+    - php: 7.0
+  fast_finish: true
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+install:
+  - travis_retry composer install --prefer-dist
+
+script:
+  - mkdir -p build/logs
+  - if [ "$EXECUTE_COVERAGE" != "true" ]; then composer test; fi
+  - if [ "$EXECUTE_COVERAGE" == "true" ]; then composer run travis; fi
+
+after_success:
+  - travis_retry php vendor/bin/coveralls
