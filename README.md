@@ -70,14 +70,7 @@ This update will be performed by the migrations included with this package.
 **It is mandatory that the two columns are on the same table where the user's e-mail is stored.**
 **Please make sure you do not already have those fields on your user table.**
 
-Run the following command to migrate (all) the migrations, including the
-migration(s) provided by this package:
-
-```
-php artisan migrate
-```
-
-If you wish to only run the migration(s) from this package, run the following command:
+To run the migrations from this package use the following command:
 
 ```
 php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources/migrations
@@ -86,7 +79,7 @@ php artisan migrate --path=/vendor/jrean/laravel-user-verification/src/resources
 The package tries to guess your `user` table by checking what is set in the auth providers users settings.
 If this key is not found, the default `App\User` will be used to get the table name.
 
-The migration adds a `verification_token` and a `verified` field to the user table.
+The migration adds a `verification_token` and a `verified` field to the user table, so you need to make sure that the user table exists before running the migration.
 
 To customize the migration(s) to your needs, publish them with the following command:
 

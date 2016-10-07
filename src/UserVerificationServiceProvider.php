@@ -38,7 +38,7 @@ class UserVerificationServiceProvider extends ServiceProvider
         ], 'translations');
 
         // migrations
-        $this->loadMigrationsFrom(__DIR__ . '/resources/migrations');
+        // $this->loadMigrationsFrom(__DIR__ . '/resources/migrations'); // disable autorun migrations for now
 
         $this->publishes([
             __DIR__ . '/resources/migrations/' => database_path('migrations')
