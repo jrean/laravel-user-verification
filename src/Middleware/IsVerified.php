@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification\Middleware;
 
 use Closure;
@@ -18,7 +22,7 @@ class IsVerified
      */
     public function handle($request, Closure $next)
     {
-        if( $request->user()->verified !== 1 ){
+        if( ! $request->user()->verified){
             throw new UserNotVerifiedException;
         }
 

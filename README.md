@@ -89,9 +89,10 @@ php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationSe
 ## Middleware
 
 ### Default middleware
-This package ships with an optional middleware which throws a `UserNotVerifiedException`. You can setup the desired behaviour, for example a redirect to a specific page, in the `app\Exceptions\Handler.php`. Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
 
-To register the default middleware add the following to the `$routeMiddleware` array within the `app/Kernal.php` file:
+This package ships with an optional middleware throwing a `UserNotVerifiedException`. You can setup the desired behaviour, for example a redirect to a specific page, in the `app\Exceptions\Handler.php`. Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
+
+To register the default middleware add the following to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
 
 ```php
 protected $routeMiddleware = [
@@ -99,7 +100,7 @@ protected $routeMiddleware = [
     'isVerified' => Jrean\UserVerification\Middleware\IsVerified::class,
 ```
 
-Now you can use the middleware on your routes:
+Apply the middleware on your routes:
 
 ```php
 Route::group(['middleware' => ['web', 'isVerified']], function () {
@@ -107,13 +108,14 @@ Route::group(['middleware' => ['web', 'isVerified']], function () {
 ```
 
 ### Custom middleware
-Instead of using the provided middleware you can create your own middleware using artisan:
+
+Create your own custom middleware using the following artisan command:
 
 ```
 php artisan make:middleware IsVerified
 ```
 
-For more information on middleware please refer to the Please refer to the [Laravel Documentation](https://laravel.com/docs/5.3/middleware) to learn more about how to work with the exception handler.
+For more details about middlewares, please refer to the [Laravel Documentation](https://laravel.com/docs/5.3/middleware).
 
 ## E-MAIL
 
@@ -182,7 +184,7 @@ The given user is already verified.
 
 * `UserNotVerifiedException`
 
-The given user is not verified yet.
+The given user is not yet verified.
 
 * `UserNotFoundException`
 
