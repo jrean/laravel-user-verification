@@ -86,6 +86,35 @@ To customize the migration, publish it with the following command:
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="migrations"
 ```
 
+## Middleware
+
+### Default middleware
+This package ships with an optional middleware which throws a `UserNotVerifiedException`. You can setup the desired behaviour, for example a redirect to a specific page, in the `app\Exceptions\Handler.php`. Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
+
+To register the default middleware add the following to the `$routeMiddleware` array within the `app/Kernal.php` file:
+
+```php
+protected $routeMiddleware = [
+    // …
+    'isVerified' => Jrean\UserVerification\Middleware\IsVerified::class,
+```
+
+Now you can use the middleware on your routes:
+
+```php
+Route::group(['middleware' => ['web', 'isVerified']], function () {
+    …
+```
+
+### Custom middleware
+Instead of using the provided middleware you can create your own middleware using artisan:
+
+```
+php artisan make:middleware IsVerified
+```
+
+For more information on middleware please refer to the Please refer to the [Laravel Documentation](https://laravel.com/docs/5.3/middleware) to learn more about how to work with the exception handler.
+
 ## E-MAIL
 
 This package provides a method to send an e-mail with a link containing the verification token.
@@ -150,6 +179,10 @@ Wrong verification token.
 * `UserIsVerifiedException`
 
 The given user is already verified.
+
+* `UserNotVerifiedException`
+
+The given user is not verified yet.
 
 * `UserNotFoundException`
 
