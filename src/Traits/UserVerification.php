@@ -27,9 +27,9 @@ trait UserVerification
     {
         return ! $this->isVerified() && $this->hasVerificationToken();
     }
-    
+
     /**
-     * Checks if the user has verification token.
+     * Checks if the user has a verification token.
      *
      * @return bool
      */
