@@ -15,7 +15,7 @@ trait UserVerification
      */
     public function isVerified()
     {
-        return $this->verified === 1;
+        return (bool) $this->verified;
     }
 
     /**
@@ -25,6 +25,16 @@ trait UserVerification
      */
     public function isPendingVerification()
     {
-        return $this->verified === 0 && $this->verification_token !== null;
+        return ! $this->isVerified() && $this->hasVerificationToken();
+    }
+
+    /**
+     * Checks if the user has a verification token.
+     *
+     * @return bool
+     */
+    public function hasVerificationToken()
+    {
+        return ! is_null($this->verification_token);
     }
 }
