@@ -8,6 +8,7 @@ namespace Jrean\UserVerification\Middleware;
 
 use Closure;
 use Jrean\UserVerification\Exceptions\UserNotVerifiedException;
+use Laravel\Spark\Spark;
 
 class IsVerified
 {
@@ -22,7 +23,11 @@ class IsVerified
      */
     public function handle($request, Closure $next)
     {
-        if( ! $request->user()->verified){
+        $user = class_exists(Spark::class)
+            ? Spark::user()
+            : $request->user();
+        
+        if( ! $user->verified){
             throw new UserNotVerifiedException;
         }
 
