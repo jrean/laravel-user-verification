@@ -8,7 +8,7 @@ namespace Jrean\UserVerification\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Jrean\UserVerification\Facades\UserVerification;
+use Jrean\UserVerification\Facades\UserVerification as UserVerificationFacade;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
 use Jrean\UserVerification\Exceptions\TokenMismatchException;
@@ -28,7 +28,7 @@ trait VerifiesUsers
         $this->validateRequest($request);
 
         try {
-            UserVerification::process($request->input('email'), $token, $this->userTable());
+            UserVerificationFacade::process($request->input('email'), $token, $this->userTable());
         } catch (UserNotFoundException $e) {
             return redirect($this->redirectIfVerificationFails());
         } catch (UserIsVerifiedException $e) {
