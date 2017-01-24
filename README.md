@@ -5,14 +5,17 @@ easily handle a user verification and validate the e-mail.
 
 ## VERSIONS
 
-**This package is Laravel 5.3 compliant.**
+**This package is Laravel 5.4 compliant.**
+A few minor changes remain to be updated for the email queue methods.
+A 2.3 ; 3.1 ; 4.1 update is coming soon with several improvements.
 
-| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
-|---------|-----|-----|--------|
-| 5.0.*   |  x  |     |        |
-| 5.1.*   |  x  |     |        |
-| 5.2.*   |  x  |     |        |
-| 5.3.*   |     |  x  |    x   |
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0)  | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
+|---------|-----|-----|-----|--------|
+| 5.0.*   |  x  |     |     |        |
+| 5.1.*   |  x  |     |     |        |
+| 5.2.*   |  x  |     |     |        |
+| 5.3.*   |     |  x  |     |    x   |
+| 5.4.*   |     |     |  x  |    x   |
 
 ## ABOUT
 
@@ -369,14 +372,14 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
     namespace App\Http\Controllers\Auth;
 
     use App\User;
-    use Validator;
     use App\Http\Controllers\Controller;
+    use Illuminate\Support\Facades\Validator;
     use Illuminate\Foundation\Auth\RegistersUsers;
-    use Illuminate\Http\Request;
 
+    use Illuminate\Http\Request;
+    use Illuminate\Auth\Events\Registered;
     use Jrean\UserVerification\Traits\VerifiesUsers;
     use Jrean\UserVerification\Facades\UserVerification;
-
 
     class RegisterController extends Controller
     {
@@ -391,9 +394,17 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
         |
         */
 
+
         use RegistersUsers;
 
         use VerifiesUsers;
+
+        /**
+        * Where to redirect users after registration.
+        *
+        * @var string
+        */
+        protected $redirectTo = '/home';
 
        /**
         * Create a new controller instance.
@@ -407,7 +418,7 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
             $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
         }
 
-        /**
+                /**
         * Get a validator for an incoming registration request.
         *
         * @param  array  $data
@@ -448,13 +459,19 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
             $this->validator($request->all())->validate();
 
             $user = $this->create($request->all());
+
+            event(new Registered($user));
+
             $this->guard()->login($user);
 
             UserVerification::generate($user);
+
             UserVerification::send($user, 'My Custom E-mail Subject');
 
-            return redirect($this->redirectPath());
+            return $this->registered($request, $user)
+                            ?: redirect($this->redirectPath());
         }
+
     }
 ```
 
