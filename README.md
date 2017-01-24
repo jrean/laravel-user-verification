@@ -14,7 +14,7 @@ A 2.3 ; 3.1 ; 4.1 update is coming soon with several improvements.
 | 5.0.*   |  x  |     |     |        |
 | 5.1.*   |  x  |     |     |        |
 | 5.2.*   |  x  |     |     |        |
-| 5.3.*   |     |  x  |     |    x   |
+| 5.3.*   |     |  x  |     |        |
 | 5.4.*   |     |     |  x  |    x   |
 
 ## ABOUT
