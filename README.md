@@ -6,7 +6,8 @@ easily handle a user verification and validate the e-mail.
 ## VERSIONS
 
 **This package is Laravel 5.4 compliant.**
-A few minor changes remain to be updated for the email queue methods.
+
+A few minor changes remain to be updated for the email markdown support + queue methods.
 A 2.3 ; 3.1 ; 4.1 update is coming soon with several improvements.
 
 | laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0)  | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
@@ -33,7 +34,7 @@ require block of your composer.json file:
 
     {
         "require": {
-                "jrean/laravel-user-verification": "^3.0"
+                "jrean/laravel-user-verification": "^4.0"
         }
 
     }
@@ -44,7 +45,6 @@ package and have the autoloader updated.
 Or run the following command:
 
     composer require jrean/laravel-user-verification
-
 
 ### Add the Service Provider & Facade/Alias
 
@@ -121,6 +121,8 @@ php artisan make:middleware IsVerified
 For more details about middlewares, please refer to the [Laravel Documentation](https://laravel.com/docs/5.3/middleware).
 
 ## E-MAIL
+
+As of this 4.0 release, the markdown support is not yet available.
 
 This package provides a method to send an e-mail with a link containing the verification token.
 
