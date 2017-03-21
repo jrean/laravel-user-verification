@@ -303,7 +303,7 @@ class UserVerification
 
         $this->updateUser($user);
 
-	    event(new UserVerified($user));
+        event(new UserVerified($user));
     }
 
     /**
