@@ -11,6 +11,7 @@ use Illuminate\Contracts\Mail\Mailer as MailerContract;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Jrean\UserVerification\Events\UserVerified;
 use Jrean\UserVerification\Events\VerificationEmailSent;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
@@ -301,6 +302,8 @@ class UserVerification
         $user->verified = true;
 
         $this->updateUser($user);
+
+        event(new UserVerified($user));
     }
 
     /**
