@@ -31,7 +31,7 @@ require block of your composer.json file:
 
     {
         "require": {
-                "jrean/laravel-user-verification": "^4.1"
+                "jrean/laravel-user-verification": "^4.2"
         }
 
     }
