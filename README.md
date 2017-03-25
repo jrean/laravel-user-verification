@@ -7,16 +7,13 @@ easily handle a user verification and validate the e-mail.
 
 **This package is Laravel 5.4 compliant.**
 
-A few minor changes remain to be updated for the email markdown support + queue methods.
-A 2.3 ; 3.1 ; 4.1 update is coming soon with several improvements.
-
-| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0)  | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
-|---------|-----|-----|-----|--------|
-| 5.0.*   |  x  |     |     |        |
-| 5.1.*   |  x  |     |     |        |
-| 5.2.*   |  x  |     |     |        |
-| 5.3.*   |     |  x  |     |        |
-| 5.4.*   |     |     |  x  |    x   |
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
+|---------|-----|-----|-----|-----|--------|
+| 5.0.*   |  x  |     |     |     |        |
+| 5.1.*   |  x  |     |     |     |        |
+| 5.2.*   |  x  |     |     |     |        |
+| 5.3.*   |     |  x  |     |     |        |
+| 5.4.*   |     |     |  x  |  x  |    x   |
 
 ## ABOUT
 
@@ -48,7 +45,8 @@ Or run the following command:
 
 ### Add the Service Provider & Facade/Alias
 
-Once Larvel User Verification is installed, you need to register the service provider in `config/app.php`. Make sure to add the following line **above** the `RouteServiceProvider`.
+Once Larvel User Verification is installed, you need to register the service provider in `config/app.php`.
+Make sure to add the following line **above** the `RouteServiceProvider`.
 
 ```PHP
 Jrean\UserVerification\UserVerificationServiceProvider::class,
@@ -58,6 +56,12 @@ You may add the following `aliases` to your `config/app.php`:
 
 ```PHP
 'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
+```
+
+Publish the package config file by running the following command:
+
+```
+php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="config"
 ```
 
 ## CONFIGURATION
@@ -93,9 +97,10 @@ php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationSe
 
 ### Default middleware
 
-This package ships with an optional middleware throwing a `UserNotVerifiedException`. You can setup the desired behaviour, for example a redirect to a specific page, in the `app\Exceptions\Handler.php`. Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
+This package provides an optional middleware throwing a `UserNotVerifiedException`.
+Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
 
-To register the default middleware add the following to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
+To register the default middleware add the following lines to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
 
 ```php
 protected $routeMiddleware = [
@@ -107,7 +112,7 @@ Apply the middleware on your routes:
 
 ```php
 Route::group(['middleware' => ['web', 'isVerified']], function () {
-    …
+    // …
 ```
 
 ### Custom middleware
@@ -122,11 +127,9 @@ For more details about middlewares, please refer to the [Laravel Documentation](
 
 ## E-MAIL
 
-As of this 4.0 release, the markdown support is not yet available.
-
 This package provides a method to send an e-mail with a link containing the verification token.
 
-- `send(AuthenticatableContract $user, $subject = null, $from = null, $name =
+- `send(AuthenticatableContract $user, $subject, $from = null, $name =
     null)`
 
 By default the package will use the `from` and `name` values defined into the
@@ -147,26 +150,42 @@ The user will receive an e-mail with a link leading to the `getVerification()`
 method (endpoint). The view will receive a `$user` variable which contains the
 user details such as the verification token.
 
-By default the package loads a sample e-mail view to get you started with:
+The package allow you to use both traditional blade view files and markdown.
+
+By default a sample e-mail view is loaded to get you started with:
 
 ```
 Click here to verify your account: <a href="{{ $link = route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) }}">{{ $link }}</a>
 ```
 
+If you prefer to use Markdown instead, update the package config file
+`user-verification.php` in the `config` directory and replace the following:
+
+```PHP
+'email' => [
+    'type' => 'default',
+],
+```
+
+by:
+
+```PHP
+'email' => [
+    'type' => 'markdown',
+],
+```
+
+If you want to customize the e-mail views, run the following command to publish
+them and edit them to your needs:
+
 **The URL must contain the verification token as parameter + (mandatory) a
 query string with the user's e-mail as parameter.**
-
-If you want to customize the e-mail view, run the following command to publish
-it and edit it to your needs:
 
 ```
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="views"
 ```
 
 The view will be available in the `resources/views/vendor/laravel-user-verification/` directory.
-
-If you want to customize the e-mail view location and name you can create the view file
-wherever you want and call `UserVerification::emailView('directory.your-view-name')`.
 
 ## ERRORS
 
@@ -267,27 +286,15 @@ Send by e-mail a link containing the verification token.
 
 Queue and send by e-mail a link containing the verification token.
 
-* `sendQueueOn($queue, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
-
-Queue on the given queue and send by e-mail a link containing the verification token.
-
 * `sendLater($seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
 
 Send later by e-mail a link containing the verification token.
-
-* `sendLaterOn($queue, $seconds, AuthenticatableContract $user, $subject = null, $from = null, $name = null)`
-
-Send later on the given queue by e-mail a link containing the verification token.
 
 * `process($email, $token, $userTable)`
 
 Process the token verification for the given e-mail and token.
 
-* `emailView($name)`
-
-Set the e-mail view name.
-
-For the `sendQueue`, `sendQueueOn`, `sendLater` and
+For the `sendQueue`, `sendLater` and
 `sendLaterOn` methods, you must [configure your queues](https://laravel.com/docs/)
 before using this feature.
 
