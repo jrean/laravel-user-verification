@@ -36,8 +36,5 @@
         }
     },
     "scripts": {
-        "test": "phpunit --colors=always; ./vendor/bin/php-cs-fixer fix src --dry-run --diff --ansi",
-        "travis": "phpunit --coverage-clover build/logs/clover.xml",
-        "fix": "./vendor/bin/php-cs-fixer fix src --diff --ansi"
     }
 }
