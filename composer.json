@@ -33,7 +33,6 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Jrean\\UserVerification\\Tests\\": "tests"
         }
     },
     "scripts": {
