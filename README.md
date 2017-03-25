@@ -7,12 +7,13 @@ easily handle a user verification and validate the e-mail.
 
 **This package is Laravel 5.3 compliant.**
 
-| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
-|---------|-----|-----|--------|
-| 5.0.*   |  x  |     |        |
-| 5.1.*   |  x  |     |        |
-| 5.2.*   |  x  |     |        |
-| 5.3.*   |     |  x  |    x   |
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
+|---------|-----|-----|-----|-----|--------|
+| 5.0.*   |  x  |     |     |     |        |
+| 5.1.*   |  x  |     |     |     |        |
+| 5.2.*   |  x  |     |     |     |        |
+| 5.3.*   |     |  x  |     |     |        |
+| 5.4.*   |     |     |  x  |  x  |    x   |
 
 ## ABOUT
 
