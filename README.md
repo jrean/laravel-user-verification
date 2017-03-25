@@ -42,7 +42,7 @@ package and have the autoloader updated.
 
 Or run the following command:
 
-    composer require jrean/laravel-user-verification
+    composer require jrean/laravel-user-verification:^4.0
 
 ### Add the Service Provider & Facade/Alias
 
