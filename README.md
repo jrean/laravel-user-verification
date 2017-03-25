@@ -105,7 +105,7 @@ To register the default middleware add the following lines to the `$routeMiddlew
 ```php
 protected $routeMiddleware = [
     // …
-    'isVerified' => Jrean\UserVerification\Middleware\IsVerified::class,
+    'isVerified' => \Jrean\UserVerification\Middleware\IsVerified::class,
 ```
 
 Apply the middleware on your routes:
