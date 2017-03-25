@@ -5,14 +5,13 @@ easily handle a user verification and validate the e-mail.
 
 ## VERSIONS
 
-**This package is Laravel 5.3 compliant.**
-
-| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
-|---------|-----|-----|--------|
-| 5.0.*   |  x  |     |        |
-| 5.1.*   |  x  |     |        |
-| 5.2.*   |  x  |     |        |
-| 5.3.*   |     |  x  |    x   |
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.0](https://github.com/jrean/laravel-user-verification/tree/4.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
+|---------|-----|-----|-----|-----|--------|
+| 5.0.*   |  x  |     |     |     |        |
+| 5.1.*   |  x  |     |     |     |        |
+| 5.2.*   |  x  |     |     |     |        |
+| 5.3.*   |     |  x  |     |     |        |
+| 5.4.*   |     |     |  x  |  x  |    x   |
 
 ## ABOUT
 
@@ -30,7 +29,7 @@ require block of your composer.json file:
 
     {
         "require": {
-                "jrean/laravel-user-verification": "^2.0"
+                "jrean/laravel-user-verification": "^2.2"
         }
 
     }
@@ -40,7 +39,7 @@ package and have the autoloader updated.
 
 Or run the following command:
 
-    "composer require jrean/laravel-user-verification"
+    "composer require jrean/laravel-user-verification:^2.2"
 
 ### Add the Service Provider
 
