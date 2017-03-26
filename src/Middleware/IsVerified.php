@@ -22,7 +22,7 @@ class IsVerified
      */
     public function handle($request, Closure $next)
     {
-        if( !is_null($request->user()) && !$request->user()->verified){
+        if(! is_null($request->user()) && ! $request->user()->verified) {
             throw new UserNotVerifiedException;
         }
 
