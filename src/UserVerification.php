@@ -7,7 +7,8 @@
 namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Mail\Mailer as MailerContract;
+/* use Illuminate\Contracts\Mail\Mailer as MailerContract; */
+use Illuminate\Mail\Mailer;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class UserVerification
     /**
      * Mailer instance.
      *
-     * @var \Illuminate\Contracts\Mail\Mailer
+     * @var \Illuminate\Mail\Mailer
      */
     protected $mailer;
 
@@ -38,11 +39,11 @@ class UserVerification
     /**
      * Create a new instance.
      *
-     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
+     * @param  \Illuminate\Mail\Mailer  $mailer
      * @param  \Illuminate\Database\Schema\Builder  $schema
      * @return void
      */
-    public function __construct(MailerContract $mailer, Builder $schema)
+    public function __construct(Mailer $mailer, Builder $schema)
     {
         $this->mailer = $mailer;
         $this->schema = $schema;
@@ -98,21 +99,24 @@ class UserVerification
      * @param  string  $subject
      * @param  string  $from
      * @param  string  $name
-     * @return bool
+     * @return void
      *
      * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
-    public function send(AuthenticatableContract $user, $subject, $from = null, $name = null)
+    public function send(
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
     {
         if (! $this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
-        $status = (boolean) $this->emailVerificationLink($user, $subject, $from, $name);
+        $this->emailVerificationLink($user, $subject, $from, $name);
 
-        if ($status) event(new VerificationEmailSent($user));
-
-        return $status;
+        event(new VerificationEmailSent($user));
     }
 
     /**
@@ -122,46 +126,118 @@ class UserVerification
      * @param  string  $subject
      * @param  string  $from
      * @param  string  $name
-     * @return bool
+     * @return void
      *
      * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
-    public function sendQueue(AuthenticatableContract $user, $subject, $from = null, $name = null)
+    public function sendQueue(
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
     {
         if (! $this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
-        $status = (boolean) $this->emailQueueVerificationLink($user, $subject, $from, $name);
+        $this->emailQueueVerificationLink($user, $subject, $from, $name);
 
-        if ($status) event(new VerificationEmailSent($user));
-
-        return $status;
+        event(new VerificationEmailSent($user));
     }
 
     /**
      * Send later by e-mail a link containing the verification token.
      *
-     * @param  int  $seconds
+     * @param  \DateTime  $delay
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @param  string  $subject
      * @param  string  $from
      * @param  string  $name
-     * @return bool
+     * @return void
      *
      * @throws \Jrean\UserVerification\Exceptions\ModelNotCompliantException
      */
-    public function sendLater($seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
+    public function sendLater(
+        $delay,
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
     {
         if (! $this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
-        $status = (boolean) $this->emailLaterVerificationLink($seconds, $user, $subject, $from, $name);
+        $this->emailLaterVerificationLink($delay, $user, $subject, $from, $name);
 
-        if ($status) event(new VerificationEmailSent($user));
+        event(new VerificationEmailSent($user));
+    }
 
-        return $status;
+    /**
+     * Prepare and send the e-mail with the verification token link.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailVerificationLink(
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
+    {
+        return $this->mailer
+            ->to($user->email)
+            ->send(new VerificationTokenGenerated($user, $subject, $from, $name));
+    }
+
+    /**
+     * Prepare and push a job onto the queue to send the e-mail with the verification token link.
+     *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailQueueVerificationLink(
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
+    {
+        return $this->mailer
+            ->to($user->email)
+            ->queue(new VerificationTokenGenerated($user, $subject, $from, $name));
+    }
+
+    /**
+     * Prepare and delay the sending of the e-mail with the verification token link.
+     *
+     * @param  \DateTime  $delay
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string  $subject
+     * @param  string  $from
+     * @param  string  $name
+     * @return mixed
+     */
+    protected function emailLaterVerificationLink(
+        $delay,
+        AuthenticatableContract $user,
+        $subject = null,
+        $from = null,
+        $name = null
+    )
+    {
+        return $this->mailer
+            ->to($user->email)
+            ->later($delay, new VerificationTokenGenerated($user, $subject, $from, $name));
     }
 
     /**
@@ -176,6 +252,8 @@ class UserVerification
     {
         $user = $this->getUserByEmail($email, $userTable);
 
+        // Check if the given user is already verified.
+        // If he is, we stop here.
         $this->isVerified($user);
 
         $this->verifyToken($user->verification_token, $token);
@@ -269,55 +347,6 @@ class UserVerification
                 'verification_token' => $user->verification_token,
                 'verified' => $user->verified
             ]);
-    }
-
-    /**
-     * Prepare and send the e-mail with the verification token link.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $subject
-     * @param  string  $from
-     * @param  string  $name
-     * @return mixed
-     */
-    protected function emailVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
-    {
-        return $this->mailer
-            ->to($user->email)
-            ->send(new VerificationTokenGenerated($user, $subject, $from, $name));
-    }
-
-    /**
-     * Prepare and push a job onto the queue to send the e-mail with the verification token link.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $subject
-     * @param  string  $from
-     * @param  string  $name
-     * @return mixed
-     */
-    protected function emailQueueVerificationLink(AuthenticatableContract $user, $subject, $from = null, $name = null)
-    {
-        return $this->mailer
-            ->to($user->email)
-            ->queue(new VerificationTokenGenerated($user, $subject, $from, $name));
-    }
-
-    /**
-     * Prepare and delay the sending of the e-mail with the verification token link.
-     *
-     * @param  int  $seconds
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $subject
-     * @param  string  $from
-     * @param  string  $name
-     * @return mixed
-     */
-    protected function emailLaterVerificationLink($seconds, AuthenticatableContract $user, $subject, $from = null, $name = null)
-    {
-        return $this->mailer
-            ->to($user->email)
-            ->later($seconds, new VerificationTokenGenerated($user, $subject, $from, $name));
     }
 
     /**

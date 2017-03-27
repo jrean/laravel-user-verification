@@ -47,7 +47,7 @@ class VerificationTokenGenerated extends Mailable
      */
     public function __construct(
         AuthenticatableContract $user,
-        $subject,
+        $subject = null,
         $from = null,
         $name = null
     )
@@ -69,7 +69,9 @@ class VerificationTokenGenerated extends Mailable
             $this->from($this->from, $this->name);
         }
 
-        $this->subject($this->subject);
+        $this->subject(is_null($this->subject)
+            ? trans('laravel-user-verification::user-verification.verification_email_subject')
+            : $this->subject);
 
         if (config('user-verification.email.type') == 'markdown') {
             $this->markdown('laravel-user-verification::email-markdown');
