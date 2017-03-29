@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Jrean\UserVerification\Events\VerificationEmailSent;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
-use Jrean\UserVerification\Exceptions\UserNotFoundException;
-use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
 use Jrean\UserVerification\Exceptions\TokenMismatchException;
+use Jrean\UserVerification\Exceptions\UserHasNoEmailException;
+use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
+use Jrean\UserVerification\Exceptions\UserNotFoundException;
 
 class UserVerification
 {
@@ -62,6 +63,9 @@ class UserVerification
      */
     public function generate(AuthenticatableContract $user)
     {
+        if (is_null($user->email) || empty($user->email)) {
+            throw new UserHasNoEmailException();
+        }
         return $this->saveToken($user, $this->generateToken());
     }
 
