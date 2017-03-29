@@ -186,6 +186,10 @@ The given user is already verified.
 
 No user found for the given e-mail adresse.
 
+* `UserHasNoEmailException`
+
+The given user has its email property null or empty.
+
 ### Error View
 
 By default the `user-verification.blade.php` view will be loaded for the verification error route `/verification/error`. If an error occurs, the user will be redirected to this route and this view will be rendered.
