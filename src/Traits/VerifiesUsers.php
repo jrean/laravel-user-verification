@@ -25,7 +25,9 @@ trait VerifiesUsers
      */
     public function getVerification(Request $request, $token)
     {
-        $this->validateRequest($request);
+        if (! $this->validateRequest($request)) {
+            return redirect($this->redirectIfVerificationFails());
+        }
 
         try {
             UserVerification::process($request->input('email'), $token, $this->userTable());
@@ -54,7 +56,7 @@ trait VerifiesUsers
      * Validate the verification link.
      *
      * @param  string  $token
-     * @return Response
+     * @return boolean
      */
     protected function validateRequest(Request $request)
     {
@@ -63,7 +65,7 @@ trait VerifiesUsers
         ]);
 
         if ($validator->fails()) {
-            return redirect($this->redirectIfVerificationFails());
+            return false;
         }
     }
 
@@ -74,7 +76,9 @@ trait VerifiesUsers
      */
     protected function verificationErrorView()
     {
-        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'laravel-user-verification::user-verification';
+        return property_exists($this, 'verificationErrorView')
+            ? $this->verificationErrorView
+            : 'laravel-user-verification::user-verification';
     }
 
     /**
@@ -84,7 +88,9 @@ trait VerifiesUsers
      */
     protected function verificationEmailView()
     {
-        return property_exists($this, 'verificationEmailView') ? $this->verificationEmailView : 'emails.user-verification';
+        return property_exists($this, 'verificationEmailView')
+            ? $this->verificationEmailView
+            : 'emails.user-verification';
     }
 
     /**

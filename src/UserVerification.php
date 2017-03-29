@@ -58,9 +58,15 @@ class UserVerification
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
+     *
+     * @throws \Jrean\UserVerification\Exceptions\UserHasNoEmailException
      */
     public function generate(AuthenticatableContract $user)
     {
+        if (is_null($user->email) || empty($user->email)) {
+            throw new UserHasNoEmailException();
+        }
+
         return $this->saveToken($user, $this->generateToken());
     }
 
