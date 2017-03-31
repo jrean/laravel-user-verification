@@ -56,7 +56,7 @@ trait VerifiesUsers
      * Validate the verification link.
      *
      * @param  string  $token
-     * @return boolean
+     * @return bool
      */
     protected function validateRequest(Request $request)
     {
