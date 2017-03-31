@@ -64,9 +64,7 @@ trait VerifiesUsers
             'email' => 'required|email'
         ]);
 
-        if ($validator->fails()) {
-            return false;
-        }
+        return $validator->passes();
     }
 
     /**
