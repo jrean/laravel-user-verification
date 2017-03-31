@@ -55,7 +55,7 @@ Jrean\UserVerification\UserVerificationServiceProvider::class,
 You may add the following `aliases` to your `config/app.php`:
 
 ```PHP
-'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class
+'UserVerification' => Jrean\UserVerification\Facades\UserVerification::class,
 ```
 
 Publish the package config file by running the following command:
