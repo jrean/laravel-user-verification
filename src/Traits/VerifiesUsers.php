@@ -64,9 +64,7 @@ trait VerifiesUsers
             'email' => 'required|email'
         ]);
 
-        if ($validator->fails()) {
-            return false;
-        }
+        return $validator->passes();
     }
 
     /**
@@ -76,7 +74,9 @@ trait VerifiesUsers
      */
     protected function verificationErrorView()
     {
-        return property_exists($this, 'verificationErrorView') ? $this->verificationErrorView : 'laravel-user-verification::user-verification';
+        return property_exists($this, 'verificationErrorView')
+            ? $this->verificationErrorView
+            : 'laravel-user-verification::user-verification';
     }
 
     /**
@@ -86,7 +86,9 @@ trait VerifiesUsers
      */
     protected function verificationEmailView()
     {
-        return property_exists($this, 'verificationEmailView') ? $this->verificationEmailView : 'emails.user-verification';
+        return property_exists($this, 'verificationEmailView')
+            ? $this->verificationEmailView
+            : 'emails.user-verification';
     }
 
     /**
