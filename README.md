@@ -104,7 +104,7 @@ protected $routeMiddleware = [
 Apply the middleware on your routes:
 
 ```php
-Route::group(['middleware' => ['web', 'isVerified']], function () {
+Route::group(['middleware' => 'isVerified'], function () {
     …
 ```
 
