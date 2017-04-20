@@ -250,11 +250,13 @@ class UserVerification
      * @param  string  $email
      * @param  string  $token
      * @param  string  $userTable
-     * @return void
+     * @return stdClass
      */
     public function process($email, $token, $userTable)
     {
         $user = $this->getUserByEmail($email, $userTable);
+
+        unset($user->{"password"});
 
         // Check if the given user is already verified.
         // If he is, we stop here.
@@ -263,6 +265,8 @@ class UserVerification
         $this->verifyToken($user->verification_token, $token);
 
         $this->wasVerified($user);
+
+        return $user;
     }
 
     /**

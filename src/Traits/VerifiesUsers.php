@@ -30,13 +30,17 @@ trait VerifiesUsers
         }
 
         try {
-            UserVerificationFacade::process($request->input('email'), $token, $this->userTable());
+            $user = UserVerificationFacade::process($request->input('email'), $token, $this->userTable());
         } catch (UserNotFoundException $e) {
             return redirect($this->redirectIfVerificationFails());
         } catch (UserIsVerifiedException $e) {
             return redirect($this->redirectIfVerified());
         } catch (TokenMismatchException $e) {
             return redirect($this->redirectIfVerificationFails());
+        }
+
+        if (config('user-verification.auto-login') === true) {
+            auth()->loginUsingId($user->id);
         }
 
         return redirect($this->redirectAfterVerification());
