@@ -345,6 +345,20 @@ php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationSe
 
 This will add `laravel-user-verification/en/user-verification.php` to your vendor folder. By creating new language folders, like `de` or `fr` and placing a `user-verification.php` with the translations inside, you can add translations for other languages. You can find out more about localization in the [Laravel documentation](https://laravel.com/docs/5.3/localization).
 
+### Auto-login
+
+If you wish to automaticaly log in the user after the verification process, update the package config file `user-verification.php` in the config directory and replace the following:
+
+```PHP
+'auto-login' => false,
+```
+
+by:
+
+```PHP
+'auto-login' => true,
+```
+
 ### Customize
 
 You can customize the package behaviour by overriding/overwriting the
