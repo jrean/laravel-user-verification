@@ -8,7 +8,7 @@ namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Schema\Builder;
-use Illuminate\Mail\Mailer;
+use Illuminate\Contracts\Mail\Mailer;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Jrean\UserVerification\Events\UserVerified;
@@ -25,7 +25,7 @@ class UserVerification
     /**
      * Mailer instance.
      *
-     * @var \Illuminate\Mail\Mailer
+     * @var \Illuminate\Contracts\Mail\Mailer
      */
     protected $mailer;
 
@@ -39,7 +39,7 @@ class UserVerification
     /**
      * Create a new instance.
      *
-     * @param  \Illuminate\Mail\Mailer  $mailer
+     * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
      * @param  \Illuminate\Database\Schema\Builder  $schema
      * @return void
      */
