@@ -196,7 +196,7 @@ class UserVerification
     )
     {
         return $this->mailer
-            ->to($user->email)
+            ->to($user)
             ->send(new VerificationTokenGenerated($user, $subject, $from, $name));
     }
 
@@ -217,7 +217,7 @@ class UserVerification
     )
     {
         return $this->mailer
-            ->to($user->email)
+            ->to($user)
             ->queue(new VerificationTokenGenerated($user, $subject, $from, $name));
     }
 
@@ -240,7 +240,7 @@ class UserVerification
     )
     {
         return $this->mailer
-            ->to($user->email)
+            ->to($user)
             ->later($delay, new VerificationTokenGenerated($user, $subject, $from, $name));
     }
 
