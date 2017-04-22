@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -22,40 +26,44 @@ class VerificationTokenGenerated extends Mailable
     /**
      * The subject of the message.
      *
-     * @var string
+     * @var string|null
      */
     public $subject;
 
     /**
-     * The person the message is from.
+     * The person/company/project e-mail the message is from.
      *
-     * @var mixed
+     * @var string|null
      */
-    public $from;
+    public $from_address;
 
     /**
-     * The person name the message is from.
+     * The person/company/project name the message is from.
      *
-     * @var mixed
+     * @var string|null
      */
-    public $name;
+    public $from_name;
 
     /**
      * Create a new message instance.
      *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string|null  $subject
+     * @param  string|null  $from_address
+     * @param  string|null  $from_name
      * @return void
      */
     public function __construct(
         AuthenticatableContract $user,
         $subject = null,
-        $from = null,
-        $name = null
+        $from_address = null,
+        $from_name = null
     )
     {
         $this->user = $user;
         $this->subject = $subject;
-        $this->from = $from;
-        $this->name = $name;
+        $this->from_address = $from_address;
+        $this->from_name = $from_name;
     }
 
     /**
@@ -65,8 +73,8 @@ class VerificationTokenGenerated extends Mailable
      */
     public function build()
     {
-        if (! empty($this->from)) {
-            $this->from($this->from, $this->name);
+        if (! empty($this->from_address)) {
+            $this->from($this->from_address, $this->from_name);
         }
 
         $this->subject(is_null($this->subject)
@@ -74,9 +82,13 @@ class VerificationTokenGenerated extends Mailable
             : $this->subject);
 
         if (config('user-verification.email.type') == 'markdown') {
-            $this->markdown('laravel-user-verification::email-markdown');
+            is_null($view = config('user-verification.email.view'))
+                ? $this->markdown('laravel-user-verification::email-markdown')
+                : $this->markdown($view);
         } else {
-            $this->view('laravel-user-verification::email');
+            is_null($view = config('user-verification.email.view'))
+                ? $this->view('laravel-user-verification::email')
+                : $this->view($view);
         }
 
         return $this;
