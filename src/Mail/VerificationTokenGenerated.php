@@ -74,9 +74,13 @@ class VerificationTokenGenerated extends Mailable
             : $this->subject);
 
         if (config('user-verification.email.type') == 'markdown') {
-            $this->markdown('laravel-user-verification::email-markdown');
+            is_null($view = config('user-verification.email.view'))
+                ? $this->markdown('laravel-user-verification::email-markdown')
+                : $this->markdown($view);
         } else {
-            $this->view('laravel-user-verification::email');
+            is_null($view = config('user-verification.email.view'))
+                ? $this->view('laravel-user-verification::email')
+                : $this->view($view);
         }
 
         return $this;
