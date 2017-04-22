@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is part of Jrean\UserVerification package.
+ *
+ * (c) Jean Ragouin <go@askjong.com> <www.askjong.com>
+ */
 namespace Jrean\UserVerification\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -22,27 +26,31 @@ class VerificationTokenGenerated extends Mailable
     /**
      * The subject of the message.
      *
-     * @var string
+     * @var string|null
      */
     public $subject;
 
     /**
-     * The person the message is from.
+     * The person/company/project e-mail the message is from.
      *
-     * @var mixed
+     * @var string|null
      */
     public $from_address;
 
     /**
-     * The person name the message is from.
+     * The person/company/project name the message is from.
      *
-     * @var mixed
+     * @var string|null
      */
     public $from_name;
 
     /**
      * Create a new message instance.
      *
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string|null  $subject
+     * @param  string|null  $from_address
+     * @param  string|null  $from_name
      * @return void
      */
     public function __construct(
