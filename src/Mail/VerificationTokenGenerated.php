@@ -31,14 +31,14 @@ class VerificationTokenGenerated extends Mailable
      *
      * @var mixed
      */
-    public $from;
+    public $from_address;
 
     /**
      * The person name the message is from.
      *
      * @var mixed
      */
-    public $name;
+    public $from_name;
 
     /**
      * Create a new message instance.
@@ -48,14 +48,14 @@ class VerificationTokenGenerated extends Mailable
     public function __construct(
         AuthenticatableContract $user,
         $subject = null,
-        $from = null,
-        $name = null
+        $from_address = null,
+        $from_name = null
     )
     {
         $this->user = $user;
         $this->subject = $subject;
-        $this->from = $from;
-        $this->name = $name;
+        $this->from_address = $from_address;
+        $this->from_name = $from_name;
     }
 
     /**
@@ -65,8 +65,8 @@ class VerificationTokenGenerated extends Mailable
      */
     public function build()
     {
-        if (! empty($this->from)) {
-            $this->from($this->from, $this->name);
+        if (! empty($this->from_address)) {
+            $this->from($this->from_address, $this->from_name);
         }
 
         $this->subject(is_null($this->subject)
