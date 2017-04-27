@@ -21,7 +21,7 @@ trait VerifiesUsers
      * Handle the user verification.
      *
      * @param  string  $token
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function getVerification(Request $request, $token)
     {
@@ -49,7 +49,7 @@ trait VerifiesUsers
     /**
      * Show the verification error view.
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function getVerificationError()
     {
