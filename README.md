@@ -369,7 +369,7 @@ public methods and the attributes/properties. Dig into the source.
 **This package doesn't require the user to be authenticated to perform the
 verification. You are free to implement any flow you may want to achieve.**
 
-This package whishes to let you be creative while offering you a predefined
+This package wishes to let you be creative while offering you a predefined
 path. **The following guidelines assume you have configured Laravel for the
 package as well as created and migrated the migration according to this
 documentation and the previous documented steps.**
