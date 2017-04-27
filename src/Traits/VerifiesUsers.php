@@ -6,6 +6,7 @@
  */
 namespace Jrean\UserVerification\Traits;
 
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Jrean\UserVerification\Facades\UserVerification as UserVerificationFacade;
