@@ -135,7 +135,9 @@ This package provides a method to send an e-mail with a link containing the veri
 By default the package will use the `from` and `name` values defined into the
 `config/mail.php` file:
 
+```php
     'from' => ['address' => '', 'name' => ''],
+```
 
 If you want to override the values, simply set the `$from` and (optional)
 `$name` parameters.
@@ -440,23 +442,22 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
         |
         */
 
-
         use RegistersUsers;
 
         use VerifiesUsers;
 
         /**
-        * Where to redirect users after registration.
-        *
-        * @var string
-        */
+         * Where to redirect users after registration.
+         *
+         * @var string
+         */
         protected $redirectTo = '/home';
 
-       /**
-        * Create a new controller instance.
-        *
-        * @return void
-        */
+        /**
+         * Create a new controller instance.
+         *
+         * @return void
+         */
         public function __construct()
         {
             // Based on the workflow you need, you may update and customize the following lines.
@@ -464,12 +465,12 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
             $this->middleware('guest', ['except' => ['getVerification', 'getVerificationError']]);
         }
 
-                /**
-        * Get a validator for an incoming registration request.
-        *
-        * @param  array  $data
-        * @return \Illuminate\Contracts\Validation\Validator
-        */
+        /**
+         * Get a validator for an incoming registration request.
+         *
+         * @param  array  $data
+         * @return \Illuminate\Contracts\Validation\Validator
+         */
         protected function validator(array $data)
         {
             return Validator::make($data, [
@@ -480,11 +481,11 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
         }
 
         /**
-        * Create a new user instance after a valid registration.
-        *
-        * @param  array  $data
-        * @return User
-        */
+         * Create a new user instance after a valid registration.
+         *
+         * @param  array  $data
+         * @return User
+         */
         protected function create(array $data)
         {
             return User::create([
@@ -495,11 +496,11 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
         }
 
         /**
-        * Handle a registration request for the application.
-        *
-        * @param  \Illuminate\Http\Request  $request
-        * @return \Illuminate\Http\Response
-        */
+         * Handle a registration request for the application.
+         *
+         * @param  \Illuminate\Http\Request  $request
+         * @return \Illuminate\Http\Response
+         */
         public function register(Request $request)
         {
             $this->validator($request->all())->validate();
@@ -517,7 +518,6 @@ Edit the `app\Http\Controllers\Auth\RegisterController.php` file.
             return $this->registered($request, $user)
                             ?: redirect($this->redirectPath());
         }
-
     }
 ```
 
