@@ -36,5 +36,15 @@
         }
     },
     "scripts": {
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Jrean\\UserVerification\\UserVerificationServiceProvider"
+            ],
+            "aliases": {
+                "UserVerification": "Jrean\\UserVerification\\Facades\\UserVerification"
+            }
+        }
     }
 }
