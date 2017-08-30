@@ -547,6 +547,10 @@ UserVerification::send($user, 'My Custom E-mail Subject');
 
 The `generate` method will generate a new token for the given user and change the `verified` column to 0. The `send` method will send a new e-mail to the user.
 
+## LARAVEL SPARK
+
+For Laravel Spark integration, follow this [article from Ian Fagg](https://medium.com/@idff/laravel-spark-user-verification-75441cff5e44)
+
 ## CONTRIBUTE
 
 Feel free to comment, contribute and help. 1 PR = 1 feature.
