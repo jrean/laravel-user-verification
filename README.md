@@ -32,7 +32,7 @@ require block of your composer.json file:
 
     {
         "require": {
-            "jrean/laravel-user-verification": "dev-master"
+            "jrean/laravel-user-verification": "^5.0"
         }
 
     }
@@ -42,7 +42,7 @@ package and have the autoloader updated.
 
 Or run the following command:
 
-    composer require jrean/laravel-user-verification:dev-master
+    composer require jrean/laravel-user-verification:^5.0
 
 ### Add the Service Provider & Facade/Alias
 
