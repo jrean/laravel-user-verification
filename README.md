@@ -26,21 +26,7 @@ easily handle a user verification and validate the e-mail.
 
 ## INSTALLATION
 
-This project can be installed via [Composer](http://getcomposer.org). To get
-the latest version of Laravel User Verification, add the following line to the
-require block of your composer.json file:
-
-    {
-        "require": {
-            "jrean/laravel-user-verification": "dev-master"
-        }
-
-    }
-
-You'll then need to run `composer install` or `composer update` to download the
-package and have the autoloader updated.
-
-Or run the following command:
+This project can be installed via [Composer](http://getcomposer.org). Run the following command:
 
     composer require jrean/laravel-user-verification:dev-master
 
