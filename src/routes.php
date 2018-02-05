@@ -14,9 +14,9 @@
 Route::group([
     'middleware' => 'web'
 ], function () {
-    Route::get('email-verification/error', 'App\Http\Controllers\Auth\RegisterController@getVerificationError')
+    Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')
         ->name('email-verification.error');
 
-    Route::get('email-verification/check/{token}', 'App\Http\Controllers\Auth\RegisterController@getVerification')
+    Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')
         ->name('email-verification.check');
 });
