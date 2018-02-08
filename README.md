@@ -14,7 +14,8 @@ easily handle a user verification and validate the e-mail.
 | 5.2.*   |  x  |     |     |     |        |
 | 5.3.*   |     |  x  |     |     |        |
 | 5.4.*   |     |     |  x  |     |        |
-| 5.5.*   |     |     |     |  x  |    x   |
+| 5.5.*   |     |     |     |  x  |        |
+| 5.6.*   |     |     |     |     |    x   |
 
 ## ABOUT
 
