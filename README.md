@@ -241,8 +241,24 @@ The view will be available in the `resources/views/vendor/laravel-user-verificat
 By default this packages ships with two routes.
 
 ```PHP
-Route::get('email-verification/error', 'Auth\RegisterController@getVerificationError')->name('email-verification.error');
-Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerification')->name('email-verification.check');
+Route::group([
+    'middleware' => 'web',
+    'prefix' => 'email-verification',
+], function () {
+
+    Route::get('error', 'App\Http\Controllers\Auth\RegisterController@getVerificationError')
+        ->name('email-verification.error');
+
+    Route::get('check/{token}', 'App\Http\Controllers\Auth\RegisterController@getVerification')
+        ->name('email-verification.check');
+
+    Route::get('is-verified', 'App\Http\Controllers\Auth\RegisterController@getIsVerifiedView')
+        ->name('email-verification.is-verified');
+
+    Route::get('after-verification', 'App\Http\Controllers\Auth\RegisterController@getAfterVerificationView')
+        ->name('email-verification.after-verification');
+
+});
 ```
 
 #### Overriding package routes
@@ -357,6 +373,10 @@ Name of the default e-mail view.
 * `$userTable = 'users';`
 
 Name of the default table used for managing users.
+
+* `$userName = 'name';`
+
+Name of the default username field.
 
 ### Translations
 
