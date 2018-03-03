@@ -378,6 +378,10 @@ Name of the default table used for managing users.
 
 Name of the default username field.
 
+* `$mustUpdate = ['key' => 'value'];`
+
+Name of the default username field.
+
 ### Translations
 
 To customize the translations you may publish the files to your `resources/lang/vendor` folder using the following command:
