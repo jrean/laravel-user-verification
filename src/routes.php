@@ -9,14 +9,23 @@
 |--------------------------------------------------------------------------
 | Laravel user verification routes
 |--------------------------------------------------------------------------
-*/
+ */
 
 Route::group([
-    'middleware' => 'web'
+    'middleware' => 'web',
+    'prefix' => 'email-verification',
 ], function () {
-    Route::get('email-verification/error', 'App\Http\Controllers\Auth\RegisterController@getVerificationError')
+
+    Route::get('error', 'App\Http\Controllers\Auth\RegisterController@getVerificationError')
         ->name('email-verification.error');
 
-    Route::get('email-verification/check/{token}', 'App\Http\Controllers\Auth\RegisterController@getVerification')
+    Route::get('check/{token}', 'App\Http\Controllers\Auth\RegisterController@getVerification')
         ->name('email-verification.check');
+
+    Route::get('is-verified', 'App\Http\Controllers\Auth\RegisterController@getIsVerifiedView')
+        ->name('email-verification.is-verified');
+
+    Route::get('after-verification', 'App\Http\Controllers\Auth\RegisterController@getAfterVerificationView')
+        ->name('email-verification.after-verification');
+
 });

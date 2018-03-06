@@ -15,7 +15,8 @@ trait RedirectsUsers
      */
     public function redirectIfVerified()
     {
-        return property_exists($this, 'redirectIfVerified') ? $this->redirectIfVerified : '/';
+        return property_exists($this, 'redirectIfVerified') ?
+        $this->redirectIfVerified : route('email-verification.is-verified');
     }
 
     /**
@@ -25,7 +26,8 @@ trait RedirectsUsers
      */
     public function redirectAfterVerification()
     {
-        return property_exists($this, 'redirectAfterVerification') ? $this->redirectAfterVerification : '/';
+        return property_exists($this, 'redirectAfterVerification') ?
+        $this->redirectAfterVerification : route('email-verification.after-verification');
     }
 
     /**

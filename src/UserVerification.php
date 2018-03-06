@@ -7,8 +7,8 @@
 namespace Jrean\UserVerification;
 
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Database\Schema\Builder;
 use Illuminate\Contracts\Mail\Mailer;
+use Illuminate\Database\Schema\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Jrean\UserVerification\Events\UserVerified;
@@ -85,7 +85,7 @@ class UserVerification
      */
     protected function saveToken(AuthenticatableContract $user, $token)
     {
-        if (! $this->isCompliant($user)) {
+        if (!$this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
@@ -112,9 +112,8 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
-        if (! $this->isCompliant($user)) {
+    ) {
+        if (!$this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
@@ -139,9 +138,8 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
-        if (! $this->isCompliant($user)) {
+    ) {
+        if (!$this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
@@ -168,9 +166,8 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
-        if (! $this->isCompliant($user)) {
+    ) {
+        if (!$this->isCompliant($user)) {
             throw new ModelNotCompliantException();
         }
 
@@ -193,8 +190,7 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
+    ) {
         return $this->mailer
             ->to($user)
             ->send(new VerificationTokenGenerated($user, $subject, $from, $name));
@@ -214,8 +210,7 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
+    ) {
         return $this->mailer
             ->to($user)
             ->queue(new VerificationTokenGenerated($user, $subject, $from, $name));
@@ -237,8 +232,7 @@ class UserVerification
         $subject = null,
         $from = null,
         $name = null
-    )
-    {
+    ) {
         return $this->mailer
             ->to($user)
             ->later($delay, new VerificationTokenGenerated($user, $subject, $from, $name));
@@ -252,7 +246,7 @@ class UserVerification
      * @param  string  $userTable
      * @return stdClass
      */
-    public function process($email, $token, $userTable)
+    public function process($email, $token, $userTable, $mustUpdate = [])
     {
         $user = $this->getUserByEmail($email, $userTable);
 
@@ -264,7 +258,7 @@ class UserVerification
 
         $this->verifyToken($user->verification_token, $token);
 
-        $this->wasVerified($user);
+        $this->wasVerified($user, $mustUpdate);
 
         return $user;
     }
@@ -278,7 +272,7 @@ class UserVerification
      *
      * @throws \Jrean\UserVerification\Exceptions\UserNotFoundException
      */
-    protected function getUserByEmail($email, $table)
+    public function getUserByEmail($email, $table)
     {
         $user = DB::table($table)
             ->where('email', $email)
@@ -330,13 +324,13 @@ class UserVerification
      * @param  stdClass  $user
      * @return void
      */
-    protected function wasVerified($user)
+    protected function wasVerified($user, $mustUpdate = [])
     {
         $user->verification_token = null;
 
         $user->verified = true;
 
-        $this->updateUser($user);
+        $this->updateUser($user, $mustUpdate);
 
         event(new UserVerified($user));
     }
@@ -347,14 +341,20 @@ class UserVerification
      * @param  stdClass  $user
      * @return void
      */
-    protected function updateUser($user)
+    protected function updateUser($user, $mustUpdate = [])
     {
+        $mustUpdate = is_array($mustUpdate) ? $mustUpdate : [];
         DB::table($user->table)
             ->where('email', $user->email)
-            ->update([
-                'verification_token' => $user->verification_token,
-                'verified' => $user->verified
-            ]);
+            ->update(
+                array_merge(
+                    [
+                        'verification_token' => $user->verification_token,
+                        'verified' => $user->verified,
+                    ],
+                    $mustUpdate
+                )
+            );
     }
 
     /**
@@ -367,9 +367,9 @@ class UserVerification
     protected function isCompliant(AuthenticatableContract $user)
     {
         return $this->hasColumn($user, 'verified')
-            && $this->hasColumn($user, 'verification_token')
-            ? true
-            : false;
+        && $this->hasColumn($user, 'verification_token')
+        ? true
+        : false;
     }
 
     /**
