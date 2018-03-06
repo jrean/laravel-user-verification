@@ -247,7 +247,7 @@ Route::get('email-verification/check/{token}', 'Auth\RegisterController@getVerif
 
 #### Overriding package routes
 
-To define your own custom routes, put the package service provider call before the `RouteServiceProvider` call in the `app/config.php` file.
+To define your own custom routes, put the package service provider call before the `RouteServiceProvider` call in the `config/app.php` file.
 
 ```PHP
    /*
