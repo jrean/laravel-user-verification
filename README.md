@@ -216,7 +216,7 @@ The given user is not yet verified.
 
 * `UserNotFoundException`
 
-No user found for the given e-mail adresse.
+No user found for the given e-mail address.
 
 * `UserHasNoEmailException`
 
