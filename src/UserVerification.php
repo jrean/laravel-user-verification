@@ -91,6 +91,8 @@ class UserVerification
 
         $user->verified = false;
 
+        $user->verified_at = null;
+
         $user->verification_token = $token;
 
         return $user->save();
@@ -303,7 +305,7 @@ class UserVerification
      */
     protected function isVerified($user)
     {
-        if ($user->verified == true) {
+        if ($user->verified == true && !is_null($user->verified_at)) {
             throw new UserIsVerifiedException();
         }
     }
@@ -336,6 +338,7 @@ class UserVerification
 
         $user->verified = true;
 
+        $user->verified_at = Carbon::now();
         $this->updateUser($user);
 
         event(new UserVerified($user));
@@ -353,7 +356,8 @@ class UserVerification
             ->where('email', $user->email)
             ->update([
                 'verification_token' => $user->verification_token,
-                'verified' => $user->verified
+                'verified' => $user->verified,
+                'verified_at' => $user->verified_at,
             ]);
     }
 
