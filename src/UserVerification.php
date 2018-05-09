@@ -340,6 +340,7 @@ class UserVerification
         $user->verified = true;
 
         $user->verified_at = Carbon::now();
+
         $this->updateUser($user);
 
         event(new UserVerified($user));
@@ -372,6 +373,7 @@ class UserVerification
     protected function isCompliant(AuthenticatableContract $user)
     {
         return $this->hasColumn($user, 'verified')
+            && $this->hasColumn($user, 'verified_at')
             && $this->hasColumn($user, 'verification_token')
             ? true
             : false;
