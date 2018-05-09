@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Jrean\UserVerification\Facades\UserVerification as UserVerificationFacade;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
+use Jrean\UserVerification\ConfirmationToken;
 use Jrean\UserVerification\Exceptions\TokenMismatchException;
 
 trait VerifiesUsers
@@ -20,10 +21,10 @@ trait VerifiesUsers
     /**
      * Handle the user verification.
      *
-     * @param  string  $token
+     * @param  ConfirmationToken $token
      * @return \Illuminate\Http\Response
      */
-    public function getVerification(Request $request, $token)
+    public function getVerification(Request $request, ConfirmationToken $token)
     {
         if (! $this->validateRequest($request)) {
             return redirect($this->redirectIfVerificationFails());

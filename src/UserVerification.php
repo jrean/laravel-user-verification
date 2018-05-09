@@ -54,6 +54,8 @@ class UserVerification
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return bool
+     * @throws ModelNotCompliantException
+     * @throws UserHasNoEmailException
      */
     public function generate(AuthenticatableContract $user)
     {
@@ -92,6 +94,11 @@ class UserVerification
         $user->verified = false;
 
         $user->verification_token = $token;
+
+        $user->confirmationToken()->create([
+            'token' => $token,
+            'expires_at' => $user->getConfirmationTokenExpiry()
+        ]);
 
         return $user->save();
     }
@@ -248,11 +255,15 @@ class UserVerification
      * Process the user verification for the given e-mail and token.
      *
      * @param  string  $email
-     * @param  string  $token
      * @param  string  $userTable
+     * @param  ConfirmationToken $requestToken
      * @return stdClass
+     * @throws UserNotFoundException
+     * @throws UserIsVerifiedException
+     * @throws TokenMismatchException
+     * @throws \Exception
      */
-    public function process($email, $token, $userTable)
+    public function process($email, ConfirmationToken $requestToken, $userTable)
     {
         $user = $this->getUserByEmail($email, $userTable);
 
@@ -262,9 +273,9 @@ class UserVerification
         // If he is, we stop here.
         $this->isVerified($user);
 
-        $this->verifyToken($user->verification_token, $token);
+        $this->verifyToken($user->token, $requestToken->token);
 
-        $this->wasVerified($user);
+        $this->wasVerified($user, $requestToken);
 
         return $user;
     }
@@ -282,6 +293,7 @@ class UserVerification
     {
         $user = DB::table($table)
             ->where('email', $email)
+            ->join('confirmation_tokens', $table . '.id', '=', 'confirmation_tokens.user_id')
             ->first();
 
         if ($user === null) {
@@ -328,15 +340,17 @@ class UserVerification
      * Update and save the given user as verified.
      *
      * @param  stdClass  $user
+     * @param ConfirmationToken $token
      * @return void
+     * @throws \Exception
      */
-    protected function wasVerified($user)
+    protected function wasVerified($user, ConfirmationToken $token)
     {
-        $user->verification_token = null;
-
         $user->verified = true;
 
         $this->updateUser($user);
+
+        $token->delete();
 
         event(new UserVerified($user));
     }
