@@ -6,6 +6,7 @@
  */
 namespace Jrean\UserVerification;
 
+use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Contracts\Mail\Mailer;
