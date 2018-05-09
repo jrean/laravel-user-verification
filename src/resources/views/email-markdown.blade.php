@@ -2,7 +2,7 @@
 
 One last step!
 
-@component('mail::button', ['url' => route('email-verification.check', $user->verification_token) . '?email=' . urlencode($user->email) ])
+@component('mail::button', ['url' => route('email-verification.check', $user->confirmationToken->token) . '?email=' . urlencode($user->email) ])
 Click here to verify your account
 @endcomponent
 

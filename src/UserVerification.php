@@ -93,8 +93,6 @@ class UserVerification
 
         $user->verified = false;
 
-        $user->verification_token = $token;
-
         $user->confirmationToken()->create([
             'token' => $token,
             'expires_at' => $user->getConfirmationTokenExpiry()
@@ -366,13 +364,12 @@ class UserVerification
         DB::table($user->table)
             ->where('email', $user->email)
             ->update([
-                'verification_token' => $user->verification_token,
                 'verified' => $user->verified
             ]);
     }
 
     /**
-     * Determine if the given model table has the verified and verification_token
+     * Determine if the given model table has the verified
      * columns.
      *
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
@@ -381,7 +378,6 @@ class UserVerification
     protected function isCompliant(AuthenticatableContract $user)
     {
         return $this->hasColumn($user, 'verified')
-            && $this->hasColumn($user, 'verification_token')
             ? true
             : false;
     }

@@ -38,7 +38,7 @@ trait UserVerification
      */
     public function hasVerificationToken()
     {
-        return ! is_null($this->verification_token);
+        return ! is_null($this->confirmationToken->token);
     }
 
     /**
