@@ -58,6 +58,6 @@ trait UserVerification
      */
     public function getConfirmationTokenExpiry()
     {
-        return $this->freshTimestamp()->addDays(10);
+        return $this->freshTimestamp()->addDays(config('user-verification.expiration'));
     }
 }

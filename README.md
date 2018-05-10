@@ -73,11 +73,11 @@ the Eloquent `User` model.
 
 ### Migration
 
-The table representing the user must be updated with two new columns, `verified` and `verification_token`.
+The table representing the user must be updated with one new column`verified`. Additional a new table `confirmation_tokens` must be added, which stores the confirmation tokens and an expiration date.
 This update will be performed by the migrations included with this package.
 
-**It is mandatory that the two columns are on the same table where the user's
-e-mail is stored. Please make sure you do not already have those fields on
+**It is mandatory that the one column is on the same table where the user's
+e-mail is stored. Please make sure you do not already have this field on
 your user table.**
 
 To run the migrations from this package use the following command:
@@ -95,14 +95,17 @@ To customize the migration, publish it with the following command:
 php artisan vendor:publish --provider="Jrean\UserVerification\UserVerificationServiceProvider" --tag="migrations"
 ```
 
-## Middleware
+## Middlewares
 
 ### Default middleware
 
-This package provides an optional middleware throwing a `UserNotVerifiedException`.
-Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
+This package provides two optional middlewares. Please refer to the [Laravel Documentation](https://laravel.com/docs/master/errors#the-exception-handler) to learn more about how to work with the exception handler.
 
-To register the default middleware add the following lines to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
+#### isVerified
+
+This middleware throwing a `UserNotVerifiedException`.
+
+To register the middleware add the following lines to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
 
 ```php
 protected $routeMiddleware = [
@@ -114,6 +117,23 @@ Apply the middleware on your routes:
 
 ```php
 Route::group(['middleware' => ['isVerified']], function () {
+    // …
+```
+
+#### ChecksExpiredVerificationTokens
+
+This middleware throwing a `TokenExpiredException`. To register the middleware add the following lines to the `$routeMiddleware` array within the `app/Http/Kernel.php` file:
+
+```php
+protected $routeMiddleware = [
+    // …
+    'isTokenExpired' => \Jrean\UserVerification\Middleware\ChecksExpiredVerificationTokens::class,
+```
+
+Apply the middleware on your routes:
+
+```php
+Route::group(['middleware' => ['isTokenExpired']], function () {
     // …
 ```
 
@@ -221,6 +241,10 @@ No user found for the given e-mail address.
 * `UserHasNoEmailException`
 
 User email property is null or empty.
+
+* `TokenExpiredException`
+
+The provided confirmation token has expired.
 
 ### Error View
 
@@ -370,7 +394,7 @@ This will add `laravel-user-verification/en/user-verification.php` to your vendo
 
 ### Auto-login
 
-If you wish to automaticaly log in the user after the verification process, update the package config file `user-verification.php` in the config directory and replace the following:
+If you wish to automatically log in the user after the verification process, update the package config file `user-verification.php` in the config directory and replace the following:
 
 ```PHP
 'auto-login' => false,
@@ -381,6 +405,21 @@ by:
 ```PHP
 'auto-login' => true,
 ```
+
+### Expiration date
+
+By default a token expires after 10 days. You can change that value in the config file `user-verification.php`:
+
+```PHP
+'expiration' => 10,
+```
+
+by:
+
+```PHP
+'expiration' => 1,
+```
+
 
 ### Customize
 

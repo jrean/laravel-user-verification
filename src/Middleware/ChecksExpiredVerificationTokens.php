@@ -7,20 +7,23 @@
 namespace Jrean\UserVerification\Middleware;
 
 use Closure;
+use Jrean\UserVerification\Exceptions\TokenExpiredException;
 
 class ChecksExpiredVerificationTokens
 {
+
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
      * @return mixed
+     * @throws TokenExpiredException
      */
     public function handle($request, Closure $next, $redirect)
     {
         if ($request->confirmation_token->hasExpired()) {
-            return redirect($redirect)->withError('Token expired.');
+            throw new TokenExpiredException;
         }
 
         return $next($request);

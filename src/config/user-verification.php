@@ -46,4 +46,15 @@ return [
     */
     'auto-login' => false,
 
+    /*
+    |---------------------------------------------------------------------------
+    | Token expiration
+    |---------------------------------------------------------------------------
+    |
+    | This option defines how long a token is valid in days.
+    |
+    | Supported: (integer)
+    */
+    'expiration' => 10,
+
 ];
