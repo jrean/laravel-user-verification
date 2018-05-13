@@ -19,4 +19,10 @@ Route::group([
 
     Route::get('email-verification/check/{token}', app()->getNamespace().'Http\Controllers\Auth\RegisterController@getVerification')
         ->name('email-verification.check');
+
+    Route::get('email-verification/token-expired/{token}', app()->getNamespace().'Http\Controllers\Auth\RegisterController@getTokenExpiredError')
+        ->name('email-verification.token-expired');
+
+    Route::post('email-verification/resend', app()->getNamespace().'Http\Controllers\Auth\RegisterController@resendConfirmationMail')
+        ->name('email-verification.resend-token');
 });

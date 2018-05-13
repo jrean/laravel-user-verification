@@ -8,6 +8,7 @@ namespace Jrean\UserVerification\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Jrean\UserVerification\Exceptions\TokenExpiredException;
 use Jrean\UserVerification\Facades\UserVerification as UserVerificationFacade;
 use Jrean\UserVerification\Exceptions\UserNotFoundException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
@@ -38,6 +39,8 @@ trait VerifiesUsers
             return redirect($this->redirectIfVerified());
         } catch (TokenMismatchException $e) {
             return redirect($this->redirectIfVerificationFails());
+        } catch (TokenExpiredException $e) {
+            return redirect($this->redirectIfTokenExpired($e));
         }
 
         if (config('user-verification.auto-login') === true) {
@@ -48,6 +51,21 @@ trait VerifiesUsers
     }
 
     /**
+     * @param $user
+     */
+    public function resendConfirmationMail(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required|email|exists:users,email',
+            'token' => 'required|string|exists:confirmation_tokens,token',
+        ]);
+
+        UserVerificationFacade::resendToken($request->input('email'), $request->input('token'), $this->userTable());
+
+        return redirect()->route('login')->withSuccess('Bitte prüfen Sie Ihren E-Mail Posteingang.');
+    }
+
+    /**
      * Show the verification error view.
      *
      * @return \Illuminate\Http\Response
@@ -55,6 +73,20 @@ trait VerifiesUsers
     public function getVerificationError()
     {
         return view($this->verificationErrorView());
+    }
+
+    /**
+     * Show the verification error view.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getTokenExpiredError(Request $request, $token)
+    {
+        if (! $this->validateRequest($request)) {
+            return redirect($this->redirectIfVerificationFails());
+        }
+
+        return view($this->tokenExpiredErrorView(), ['token' => $token, 'email' => $request->input('email')]);
     }
 
     /**
@@ -82,6 +114,18 @@ trait VerifiesUsers
         return property_exists($this, 'verificationErrorView')
             ? $this->verificationErrorView
             : 'laravel-user-verification::user-verification';
+    }
+
+    /**
+     * Get the token expired error view name.
+     *
+     * @return string
+     */
+    protected function tokenExpiredErrorView()
+    {
+        return property_exists($this, 'tokenExpiredErrorView')
+            ? $this->tokenExpiredErrorView
+            : 'laravel-user-verification::user-verification-token-expired';
     }
 
     /**

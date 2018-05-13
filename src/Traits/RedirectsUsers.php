@@ -6,6 +6,8 @@
  */
 namespace Jrean\UserVerification\Traits;
 
+use Jrean\UserVerification\Exceptions\TokenExpiredException;
+
 trait RedirectsUsers
 {
     /**
@@ -36,5 +38,15 @@ trait RedirectsUsers
     public function redirectIfVerificationFails()
     {
         return property_exists($this, 'redirectIfVerificationFails') ? $this->redirectIfVerificationFails : route('email-verification.error');
+    }
+
+    /**
+     * Get the redirect path when the token has been expired.
+     *
+     * @return string
+     */
+    public function redirectIfTokenExpired(TokenExpiredException $e)
+    {
+        return property_exists($this, 'redirectIfTokenExpired') ? $this->redirectIfTokenExpired : route('email-verification.token-expired', [$e->getToken()->token]) . '?email=' . urlencode($e->getUser()->email);
     }
 }

@@ -14,5 +14,8 @@ return [
     'verification_error_header' => 'Verification failed',
     'verification_error_message' => 'Your account could not be verified.',
     'verification_error_back_button' => 'Back',
+    'token_expired_error_header' => 'Confirmation token expired',
+    'token_expired_generate_new_token' => 'Request a new confirmation token',
+    'token_expired_generate_new_token_action_text' => 'Request a new confirmation token',
 
 ];

@@ -14,6 +14,7 @@ use Illuminate\Support\Str;
 use Jrean\UserVerification\Events\UserVerified;
 use Jrean\UserVerification\Events\VerificationEmailSent;
 use Jrean\UserVerification\Exceptions\ModelNotCompliantException;
+use Jrean\UserVerification\Exceptions\TokenExpiredException;
 use Jrean\UserVerification\Exceptions\TokenMismatchException;
 use Jrean\UserVerification\Exceptions\UserHasNoEmailException;
 use Jrean\UserVerification\Exceptions\UserIsVerifiedException;
@@ -273,9 +274,31 @@ class UserVerification
 
         $this->verifyToken($user->token, $requestToken->token);
 
+        if (config('user-verification.expiration') !== false) {
+            $this->isExpired($user, $requestToken);
+        }
+
         $this->wasVerified($user, $requestToken);
 
         return $user;
+    }
+
+    public function resendToken($email, $requestToken, $userTable)
+    {
+        $userModel = config('auth.providers.users.model', Auth\User::class);
+
+        $user = $userModel::whereEmail($email)->first();
+
+        unset($user->{"password"});
+
+        $requestToken = ConfirmationToken::whereToken($requestToken)->first();
+
+        $this->verifyToken($user->confirmationToken->token, $requestToken->token);
+
+        $user->confirmationToken()->delete();
+
+        UserVerification::generate($user->refresh());
+        UserVerification::send($user->refresh());
     }
 
     /**
@@ -331,6 +354,19 @@ class UserVerification
     {
         if ($storedToken != $requestToken) {
             throw new TokenMismatchException();
+        }
+    }
+
+    /**
+     * Checks if a token has expired
+     *
+     * @param ConfirmationToken $token
+     * @throws TokenExpiredException
+     */
+    protected function isExpired($user, ConfirmationToken $token)
+    {
+        if ($token->hasExpired()) {
+            throw new TokenExpiredException($user, $token);
         }
     }
 
