@@ -33,7 +33,7 @@ require block of your composer.json file:
 
     {
         "require": {
-            "jrean/laravel-user-verification": "~6.*"
+            "jrean/laravel-user-verification": "6.*"
         }
 
     }
