@@ -25,13 +25,14 @@ trait VerifiesUsers
      * @param  ConfirmationToken $token
      * @return \Illuminate\Http\Response
      */
-    public function getVerification(Request $request, ConfirmationToken $token)
+    public function getVerification(Request $request, $token)
     {
         if (! $this->validateRequest($request)) {
             return redirect($this->redirectIfVerificationFails());
         }
 
         try {
+            $token = ConfirmationToken::whereToken($token)->first() ?? new ConfirmationToken();
             $user = UserVerificationFacade::process($request->input('email'), $token, $this->userTable());
         } catch (UserNotFoundException $e) {
             return redirect($this->redirectIfVerificationFails());

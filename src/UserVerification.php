@@ -272,6 +272,10 @@ class UserVerification
         // If he is, we stop here.
         $this->isVerified($user);
 
+        // After we are sure that the user is not already verified,
+        // we fetch the user with the token.
+        $user = $this->getUserByEmail($email, $userTable, true);
+
         $this->verifyToken($user->token, $requestToken->token);
 
         if (config('user-verification.expiration') !== false) {
@@ -306,16 +310,20 @@ class UserVerification
      *
      * @param  string  $email
      * @param  string  $table
+     * @param  bool    $withToken
      * @return stdClass
      *
      * @throws \Jrean\UserVerification\Exceptions\UserNotFoundException
      */
-    protected function getUserByEmail($email, $table)
+    protected function getUserByEmail($email, $table, $withToken = false)
     {
-        $user = DB::table($table)
-            ->where('email', $email)
-            ->join('confirmation_tokens', $table . '.id', '=', 'confirmation_tokens.user_id')
-            ->first();
+        $query = DB::table($table)->where('email', $email);
+
+        if ($withToken) {
+            $query = $query->join('confirmation_tokens', $table . '.id', '=', 'confirmation_tokens.user_id');
+        }
+
+        $user = $query->first();
 
         if ($user === null) {
             throw new UserNotFoundException();
