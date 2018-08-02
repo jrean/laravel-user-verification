@@ -62,7 +62,7 @@ trait VerifiesUsers
 
         UserVerificationFacade::resendToken($request->input('email'), $request->input('token'), $this->userTable());
 
-        return redirect()->route('login')->withSuccess('Bitte prüfen Sie Ihren E-Mail Posteingang.');
+        return redirect()->route('login')->withSuccess(trans('laravel-user-verification::user-verification.please_check_your_inbox'));
     }
 
     /**
