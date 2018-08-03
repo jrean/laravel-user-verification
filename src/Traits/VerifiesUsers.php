@@ -46,7 +46,8 @@ trait VerifiesUsers
             auth()->loginUsingId($user->id);
         }
 
-        return redirect($this->redirectAfterVerification());
+        return redirect($this->redirectAfterVerification())
+            ->withSuccess(trans('laravel-user-verification::user-verification.validation_success'));
     }
 
     /**

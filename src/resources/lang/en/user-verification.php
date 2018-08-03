@@ -16,4 +16,5 @@ return [
     'verification_error_back_button' => 'Back',
     'already_verified' => 'Your E-Mail address is already validated.',
     'invalid_token' => 'Your token is invalid!',
+    'validation_success' => 'You successfully validated your account.',
 ];
