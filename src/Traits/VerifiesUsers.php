@@ -41,7 +41,8 @@ trait VerifiesUsers
         } catch (TokenMismatchException $e) {
             return redirect($this->redirectIfVerificationFails());
         } catch (TokenExpiredException $e) {
-            return redirect($this->redirectIfTokenExpired($e));
+            return redirect($this->redirectIfTokenExpired($e))
+                ->withError(trans('laravel-user-verification::user-verification.token_expired_error_header'));
         }
 
         if (config('user-verification.auto-login') === true) {

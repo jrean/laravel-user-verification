@@ -18,5 +18,5 @@ return [
     'token_expired_generate_new_token' => 'Request a new confirmation token',
     'token_expired_generate_new_token_action_text' => 'Request a new confirmation token',
     'please_check_your_inbox' => 'Please check your e-mail inbox',
-
+    'invalid_token' => 'Your token is invalid!',
 ];
