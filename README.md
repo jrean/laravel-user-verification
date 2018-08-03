@@ -358,6 +358,37 @@ Name of the default e-mail view.
 
 Name of the default table used for managing users.
 
+### Flash Messages
+
+The package provides translatable flash message for the four aforementioned redirects. To make them work in your application,
+you must define the redirect variables inside the `RegisterController`:
+
+```
+class RegisterController extends Controller
+{
+
+    use RegistersUsers, VerifiesUsers;
+
+    protected $redirectTo;
+
+    protected $redirectIfVerified;
+    
+    //
+
+    public function __construct()
+    {
+        $this->middleware('guest');
+
+        $this->redirectTo = route('login');
+        $this->redirectIfVerified = route('login');
+        //
+    }
+
+    //
+    
+}
+``` 
+
 ### Translations
 
 To customize the translations you may publish the files to your `resources/lang/vendor` folder using the following command:
