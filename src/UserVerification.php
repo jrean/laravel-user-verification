@@ -47,6 +47,10 @@ class UserVerification
     {
         $this->mailer = $mailer;
         $this->schema = $schema;
+
+        if (! $this->isCompliant()) {
+            throw new ModelNotCompliantException();
+        }
     }
 
     /**
@@ -85,10 +89,6 @@ class UserVerification
      */
     protected function saveToken(AuthenticatableContract $user, $token)
     {
-        if (! $this->isCompliant($user)) {
-            throw new ModelNotCompliantException();
-        }
-
         $user->verified = false;
 
         $user->verification_token = $token;
@@ -114,10 +114,6 @@ class UserVerification
         $name = null
     )
     {
-        if (! $this->isCompliant($user)) {
-            throw new ModelNotCompliantException();
-        }
-
         $this->emailVerificationLink($user, $subject, $from, $name);
 
         event(new VerificationEmailSent($user));
@@ -141,10 +137,6 @@ class UserVerification
         $name = null
     )
     {
-        if (! $this->isCompliant($user)) {
-            throw new ModelNotCompliantException();
-        }
-
         $this->emailQueueVerificationLink($user, $subject, $from, $name);
 
         event(new VerificationEmailSent($user));
@@ -170,10 +162,6 @@ class UserVerification
         $name = null
     )
     {
-        if (! $this->isCompliant($user)) {
-            throw new ModelNotCompliantException();
-        }
-
         $this->emailLaterVerificationLink($delay, $user, $subject, $from, $name);
 
         event(new VerificationEmailSent($user));
@@ -361,26 +349,12 @@ class UserVerification
      * Determine if the given model table has the verified and verification_token
      * columns.
      *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
      * @return  bool
      */
-    protected function isCompliant(AuthenticatableContract $user)
+    protected function isCompliant()
     {
-        return $this->hasColumn($user, 'verified')
-            && $this->hasColumn($user, 'verification_token')
-            ? true
-            : false;
-    }
+        $user = config('auth.providers.users.model', App\User::class);
 
-    /**
-     * Check if the given model talbe has the given column.
-     *
-     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
-     * @param  string  $column
-     * @return bool
-     */
-    protected function hasColumn(AuthenticatableContract $user, $column)
-    {
-        return $this->schema->hasColumn($user->getTable(), $column);
+        return $this->schema->hasColumns((new $user())->getTable(), ['verified', 'verification_token'])? true : false;
     }
 }
