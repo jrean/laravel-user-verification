@@ -275,7 +275,7 @@ class UserVerification
         if ($user === null) {
             throw new UserNotFoundException();
         }
-
+        $user = (object)$user;
         $user->table = $table;
 
         return $user;
