@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=7.1.3",
-        "illuminate/support": "5.8.*"
+        "php": ">=7.2.0",
+        "illuminate/support": "^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -24,7 +24,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "phpunit/phpunit": "^5.5",
+        "phpunit/phpunit": "^7.0",
         "fzaninotto/faker": "^1.6",
         "mockery/mockery": "^0.9.5",
         "satooshi/php-coveralls": "^1.0",
