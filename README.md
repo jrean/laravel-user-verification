@@ -7,20 +7,20 @@ easily handle a user verification and validate the e-mail.
 
 **This package is Laravel 8.0 compliant.**
 
-| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [5.0](https://github.com/jrean/laravel-user-verification/tree/5.0) | [6.0](https://github.com/jrean/laravel-user-verification/tree/6.0) | [7.0](https://github.com/jrean/laravel-user-verification/tree/7.0) | [8.0](https://github.com/jrean/laravel-user-verification/tree/8.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
-|---------|-----|-----|-----|-----|-----|-----|-----|-------|
-| 5.0.*   |  x  |     |     |     |     |     |     |       |
-| 5.1.*   |  x  |     |     |     |     |     |     |       |
-| 5.2.*   |  x  |     |     |     |     |     |     |       |
-| 5.3.*   |     |  x  |     |     |     |     |     |       |
-| 5.4.*   |     |     |  x  |     |     |     |     |       |
-| 5.5.*   |     |     |     |  x  |     |     |     |       |
-| 5.6.*   |     |     |     |     |  x  |     |     |       |
-| 5.7.*   |     |     |     |     |     |  x  |     |       |
-| 5.8.*   |     |     |     |     |     |  x  |     |       |
-| 6.0.*   |     |     |     |     |     |     |  x  |       |
-| 7.0.*   |     |     |     |     |     |     |     |   x   |
-| 8.0.*   |     |     |     |     |     |     |     |   x   |
+| laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [5.0](https://github.com/jrean/laravel-user-verification/tree/5.0) | [6.0](https://github.com/jrean/laravel-user-verification/tree/6.0) | [7.0](https://github.com/jrean/laravel-user-verification/tree/7.0) | [8.0](https://github.com/jrean/laravel-user-verification/tree/8.0) | [9.0](https://github.com/jrean/laravel-user-verification/tree/9.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master)
+|---------|-----|-----|-----|-----|-----|-----|-----|-------|-------|
+| 5.0.*   |  x  |     |     |     |     |     |     |       |       |
+| 5.1.*   |  x  |     |     |     |     |     |     |       |       |
+| 5.2.*   |  x  |     |     |     |     |     |     |       |       |
+| 5.3.*   |     |  x  |     |     |     |     |     |       |       |
+| 5.4.*   |     |     |  x  |     |     |     |     |       |       |
+| 5.5.*   |     |     |     |  x  |     |     |     |       |       |
+| 5.6.*   |     |     |     |     |  x  |     |     |       |       |
+| 5.7.*   |     |     |     |     |     |  x  |     |       |       |
+| 5.8.*   |     |     |     |     |     |  x  |     |       |       |
+| 6.0.*   |     |     |     |     |     |     |  x  |       |       |
+| 7.0.*   |     |     |     |     |     |     |     |       |   x   |
+| 8.0.*   |     |     |     |     |     |     |     |   x   |   x   |
 
 ## ABOUT
 
