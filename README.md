@@ -1,11 +1,11 @@
-**jrean/laravel-user-verification** is a PHP package built for Laravel 5.* & 6.* & 7.* to
+**jrean/laravel-user-verification** is a PHP package built for Laravel 5.* & 6.* & 7.* & 8.* to
 easily handle a user verification and validate the e-mail.
 
 [![Latest Stable Version](https://poser.pugx.org/jrean/laravel-user-verification/v/stable)](https://packagist.org/packages/jrean/laravel-user-verification) [![Total Downloads](https://poser.pugx.org/jrean/laravel-user-verification/downloads)](https://packagist.org/packages/jrean/laravel-user-verification) [![License](https://poser.pugx.org/jrean/laravel-user-verification/license)](https://packagist.org/packages/jrean/laravel-user-verification)
 
 ## VERSIONS
 
-**This package is Laravel 7.0 compliant.**
+**This package is Laravel 8.0 compliant.**
 
 | laravel/branch | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2) | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0) | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1) | [5.0](https://github.com/jrean/laravel-user-verification/tree/5.0) | [6.0](https://github.com/jrean/laravel-user-verification/tree/6.0) | [7.0](https://github.com/jrean/laravel-user-verification/tree/7.0) | [8.0](https://github.com/jrean/laravel-user-verification/tree/8.0) | [master](https://github.com/jrean/laravel-user-verification/tree/master) |
 |---------|-----|-----|-----|-----|-----|-----|-----|-------|
@@ -20,6 +20,7 @@ easily handle a user verification and validate the e-mail.
 | 5.8.*   |     |     |     |     |     |  x  |     |       |
 | 6.0.*   |     |     |     |     |     |     |  x  |       |
 | 7.0.*   |     |     |     |     |     |     |     |   x   |
+| 8.0.*   |     |     |     |     |     |     |     |   x   |
 
 ## ABOUT
 
