@@ -30,6 +30,39 @@ easily handle a user verification and validate the e-mail.
 - [x] Set the user as verified
 - [x] Relaunch the process anytime
 
+## Table of Contents
+
+- [INSTALLATION](#installation)
+  * [Add the Service Provider & Facade/Alias](#add-the-service-provider---facade-alias)
+- [CONFIGURATION](#configuration)
+  * [Migration](#migration)
+- [Middleware](#middleware)
+  * [Default middleware](#default-middleware)
+  * [Custom middleware](#custom-middleware)
+- [E-MAIL](#e-mail)
+  * [E-mail View](#e-mail-view)
+- [ERRORS](#errors)
+  * [Error View](#error-view)
+- [USAGE](#usage)
+  * [Routes](#routes)
+    + [Overriding package routes](#overriding-package-routes)
+  * [Traits](#traits)
+  * [Endpoints](#endpoints)
+  * [API](#api)
+  * [Facade](#facade)
+  * [Attributes/Properties](#attributes-properties)
+  * [Translations](#translations)
+  * [Auto-login](#auto-login)
+  * [Customize](#customize)
+- [GUIDELINES](#guidelines)
+  * [Example](#example)
+- [RELAUNCH THE PROCESS ANYTIME](#relaunch-the-process-anytime)
+- [LARAVEL SPARK](#laravel-spark)
+- [CONTRIBUTE](#contribute)
+- [LICENSE](#license)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
 ## INSTALLATION
 
 This project can be installed via [Composer](http://getcomposer.org). To get
