@@ -61,8 +61,6 @@ easily handle a user verification and validate the e-mail.
 - [CONTRIBUTE](#contribute)
 - [LICENSE](#license)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 ## INSTALLATION
 
 This project can be installed via [Composer](http://getcomposer.org). To get
