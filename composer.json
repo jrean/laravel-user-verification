@@ -1,7 +1,14 @@
 {
     "name": "jrean/laravel-user-verification",
     "description": "User Email Verification For Laravel",
-    "keywords": ["laravel", "framework", "user verification", "email verification", "user activation", "email activation"],
+    "keywords": [
+        "laravel",
+        "framework",
+        "user verification",
+        "email verification",
+        "user activation",
+        "email activation"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +18,7 @@
     ],
     "require": {
         "php": ">=7.2.0",
-        "illuminate/support": "^6.0 || ^7.0 || ^8.0"
+        "illuminate/support": "^6.0 || ^7.0 || ^8.0|^9.0"
     },
     "autoload": {
         "psr-4": {
@@ -25,18 +32,16 @@
     "prefer-stable": true,
     "require-dev": {
         "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-        "fzaninotto/faker": "^1.9",
+        "fzaninotto/faker": "^1.9|^1.5",
         "mockery/mockery": "^1.3",
         "satooshi/php-coveralls": "^2.0",
-        "friendsofphp/php-cs-fixer": "^1.12",
+        "friendsofphp/php-cs-fixer": "^1.12|^3.5",
         "sllh/php-cs-fixer-styleci-bridge": "^2.1"
     },
     "autoload-dev": {
-        "psr-4": {
-        }
+        "psr-4": []
     },
-    "scripts": {
-    },
+    "scripts": [],
     "extra": {
         "laravel": {
             "providers": [
