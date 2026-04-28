@@ -18,21 +18,21 @@ A PHP package built for Laravel to easily handle user verification and email val
 
 | Laravel Version | Package Version                                                                              |
 |-----------------|----------------------------------------------------------------------------------------------|
-| 5.0.* - 5.2.*   | [2.2](https://github.com/jrean/laravel-user-verification/tree/2.2)                           |
-| 5.3.*           | [3.0](https://github.com/jrean/laravel-user-verification/tree/3.0)                           |
-| 5.4.*           | [4.1](https://github.com/jrean/laravel-user-verification/tree/4.1)                           |
-| 5.5.*           | [5.0](https://github.com/jrean/laravel-user-verification/tree/5.0)                           |
-| 5.6.*           | [6.0](https://github.com/jrean/laravel-user-verification/tree/6.0)                           |
-| 5.7.* - 5.8.*   | [7.0](https://github.com/jrean/laravel-user-verification/tree/7.0)                           |
-| 6.0.*           | [8.0](https://github.com/jrean/laravel-user-verification/tree/8.0)                           |
+| 5.0.* - 5.2.*   | [2.2](https://github.com/jrean/laravel-user-verification/tree/v2.2.0)                           |
+| 5.3.*           | [3.0](https://github.com/jrean/laravel-user-verification/tree/v3.0.0)                           |
+| 5.4.*           | [4.1](https://github.com/jrean/laravel-user-verification/tree/v4.1.0)                           |
+| 5.5.*           | [5.0](https://github.com/jrean/laravel-user-verification/tree/v5.0.0)                           |
+| 5.6.*           | [6.0](https://github.com/jrean/laravel-user-verification/tree/v6.0.0)                           |
+| 5.7.* - 5.8.*   | [7.0](https://github.com/jrean/laravel-user-verification/tree/v7.0.0)                           |
+| 6.0.*           | [8.0](https://github.com/jrean/laravel-user-verification/tree/v8.0.0)                           |
 | 7.0.* - 11.0.*  | Use [master](https://github.com/jrean/laravel-user-verification/tree/master) or check below: |
 | 7.0.*           | [master](https://github.com/jrean/laravel-user-verification/tree/master)                     |
-| 8.0.*           | [9.0](https://github.com/jrean/laravel-user-verification/tree/9.0)                           |
-| 9.0.*           | [10.0](https://github.com/jrean/laravel-user-verification/tree/10.0)                         |
-| 10.0.*          | [11.0](https://github.com/jrean/laravel-user-verification/tree/11.0)                         |
-| 11.0.*          | [12.0](https://github.com/jrean/laravel-user-verification/tree/12.0)                         |
-| 12.0.*          | [13.0](https://github.com/jrean/laravel-user-verification/tree/13.0)                         |
-| 13.0.*          | [14.0](https://github.com/jrean/laravel-user-verification/tree/14.0)                         |
+| 8.0.*           | [9.0](https://github.com/jrean/laravel-user-verification/tree/v9.0.0)                           |
+| 9.0.*           | [10.0](https://github.com/jrean/laravel-user-verification/tree/v10.0.0)                         |
+| 10.0.*          | [11.0](https://github.com/jrean/laravel-user-verification/tree/v11.0.0)                         |
+| 11.0.*          | [12.0](https://github.com/jrean/laravel-user-verification/tree/v12.0.0)                         |
+| 12.0.*          | [13.0](https://github.com/jrean/laravel-user-verification/tree/v13.0.0)                         |
+| 13.0.*          | [14.0](https://github.com/jrean/laravel-user-verification/tree/v14.0.0)                         |
 
 **This package is now Laravel 13.0 compliant with v14.0.0.**
 
