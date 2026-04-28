@@ -32,8 +32,9 @@ A PHP package built for Laravel to easily handle user verification and email val
 | 10.0.*          | [11.0](https://github.com/jrean/laravel-user-verification/tree/11.0)                         |
 | 11.0.*          | [12.0](https://github.com/jrean/laravel-user-verification/tree/12.0)                         |
 | 12.0.*          | [13.0](https://github.com/jrean/laravel-user-verification/tree/13.0)                         |
+| 13.0.*          | [14.0](https://github.com/jrean/laravel-user-verification/tree/14.0)                         |
 
-**This package is now Laravel 12.0 compliant with v13.0.0.**
+**This package is now Laravel 13.0 compliant with v14.0.0.**
 
 ## Installation
 
