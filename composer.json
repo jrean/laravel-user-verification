@@ -12,13 +12,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Jean Ragouin",
-            "email": "go@askjong.com"
+            "name": "Jean R",
+            "email": "go@ask.com"
         }
     ],
     "require": {
         "php": ">=7.2.0",
-        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0"
+        "illuminate/support": "^6.0|^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0"
     },
     "autoload": {
         "psr-4": {
@@ -31,7 +31,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "phpunit/phpunit": "^7.0|^8.0|^9.0|^10.0|^11.0",
+        "phpunit/phpunit": "^7.0|^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
         "fzaninotto/faker": "^1.9|^1.5",
         "mockery/mockery": "^1.3",
         "satooshi/php-coveralls": "^2.0|^1.0",
